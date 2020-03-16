@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,8 @@ import { InboxComponent } from './components/inbox/inbox.component';
 import { SentComponent } from './components/sent/sent.component';
 import { DraftsComponent } from './components/drafts/drafts.component';
 import { StarredComponent } from './components/starred/starred.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -21,10 +24,13 @@ import { StarredComponent } from './components/starred/starred.component';
     InboxComponent,
     SentComponent,
     DraftsComponent,
-    StarredComponent
+    StarredComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule
   ],
