@@ -1,0 +1,24 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "root",
+    "password": "root",
+    "database": "postar_db",
+    "logging": true,
+    "synchronize": true,
+    "entities": [
+       "src/entity/**/*.ts"
+    ],
+    "migrations": [
+       "database/migrations/**/*.ts"
+    ],
+    "subscribers": [
+       "src/subscriber/**/*.ts"
+    ],
+    "cli": {
+       "entitiesDir": "src/entity",
+       "migrationsDir": "database/migrations",
+       "subscribersDir": "src/subscriber"
+    }
+ }

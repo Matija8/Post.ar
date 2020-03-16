@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+
+  postar_db:
+    image: postgres
+    container_name: postgres_postar
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postar_db
+    volumes:
+       - ./data/postgresql:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    links:
+        - postar_db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+       - ./data/pgadmin:/var/lib/pgadmin/data
+    restart: unless-stopped

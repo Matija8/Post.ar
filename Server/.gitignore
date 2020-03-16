@@ -1,0 +1,7 @@
+.vscode/
+
+# node
+node_modules/
+
+# docker
+docker/data

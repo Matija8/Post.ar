@@ -1,0 +1,32 @@
+import { createConnection } from "typeorm";
+import * as dotenv from "dotenv";
+
+import { Routes } from "./routes";
+import { logger } from "./helpers/Helpers";
+
+const express = require("express");
+const bodyParser = require("body-parser")
+
+createConnection().then(connection => {
+    // Load .env config
+    dotenv.config();
+
+    // Create express app
+    const app = express();
+
+    // Setup express app
+    app.use(bodyParser.json());
+    
+    // Register express routes
+    Routes.forEach(route => {
+        (app)[route.method](route.path, (req: Request, res: Response) =>
+            (new (route.controller as any))[route.handler](req, res)
+        )
+    });
+
+    // Start express server
+    app.listen(process.env.PORT);
+    logger.info(`Express server started at ${ process.env.PORT }`);
+}).catch(err => {
+    logger.fatal(err);
+});
