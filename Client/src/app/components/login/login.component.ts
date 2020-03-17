@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'postar-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   password: string;
   UserData: User;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -24,7 +25,13 @@ export class LoginComponent implements OnInit {
 
     this.auth.userLogin(this.UserData)
     .subscribe(
-      res => console.log(res),
+      res => {
+        console.log(res);
+        // save token to local storage
+        localStorage.setItem('token', res.token);
+
+        this.router.navigate(['/inbox']);
+      },
       err => console.log(err)
     );
 
