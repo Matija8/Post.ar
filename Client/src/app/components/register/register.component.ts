@@ -32,8 +32,8 @@ export class RegisterComponent implements OnInit {
       res => {
        console.log(res);
 
-       // save token to local storage
-       localStorage.setItem('token', res.token);
+       // save token to local storage, server not sending token for registration
+      //  localStorage.setItem('token', res.token);
 
        this.router.navigate(['/inbox']);
       },

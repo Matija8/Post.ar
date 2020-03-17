@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       res => {
         console.log(res);
         // save token to local storage
-        localStorage.setItem('token', res.token);
+        localStorage.setItem('token', res.data.token);
 
         this.router.navigate(['/inbox']);
       },
