@@ -6,7 +6,7 @@ import { DataValidator } from "../helpers/data-validator/DataValidator";
 import { logger, createResponse } from "../helpers/Helpers";
 import { User } from "../entity/User";
 
-import { Error, Success } from "../../StatusCodes.json";
+import { Error, Success } from "../StatusCodes.json";
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -19,7 +19,7 @@ export class UserController {
     private userRepository = getRepository(User);
 
     async register(request: Request, response: Response) {
-        logger.debug("/register");
+        logger.info("/register");
       
         let body = request.body;
 
@@ -39,7 +39,7 @@ export class UserController {
             await this.userRepository.insert({
                 username: body.username,
                 password: hash
-            })
+            });
         } catch (err) {
             createResponse(response, 400, 1001, Error[1001]);
             return;
@@ -49,7 +49,7 @@ export class UserController {
     }
 
     async login(request: Request, response: Response) {
-        logger.debug("/login");
+        logger.info("/login");
         
         let body = request.body;
         

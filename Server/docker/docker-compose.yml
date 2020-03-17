@@ -26,5 +26,5 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-       - ./data/pgadmin:/var/lib/pgadmin/data
+       - ./data/pgadmin:/var/lib/pgadmin
     restart: unless-stopped

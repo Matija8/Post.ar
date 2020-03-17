@@ -9,6 +9,5 @@
         "1000": "Invalid data, field missing or invalid in request",
         "1001": "User failed to register, username exists",
         "1002": "User failed to login"
-
     }
 }   
