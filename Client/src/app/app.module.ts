@@ -14,6 +14,7 @@ import { DraftsComponent } from './components/drafts/drafts.component';
 import { StarredComponent } from './components/starred/starred.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { RegisterComponent } from './components/register/register.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'postar-login',
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
   password: string;
   UserData: User;
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -20,6 +21,12 @@ export class LoginComponent implements OnInit {
   LogIn() {
     alert(this.email + ' ' + this.password);
     this.UserData = new User(this.email, this.password);
+
+    this.auth.userLogin(this.UserData)
+    .subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    );
 
   }
 

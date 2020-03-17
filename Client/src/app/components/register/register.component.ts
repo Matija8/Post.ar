@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class RegisterComponent implements OnInit {
   password: string;
 
   registeredUser: User;
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -23,6 +24,11 @@ export class RegisterComponent implements OnInit {
     // provera da li je korisnik vec registrovan
     alert(this.email + ' ' + this.password);
     this.registeredUser = new User(this.email, this.password);
+    this.auth.registerUser(this.registeredUser)
+    .subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    );
   }
 
 }
