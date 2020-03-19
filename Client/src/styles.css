@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global style variables */
+
+/* TODO:
+    1) add media querys for smaller devices,
+    2) dark mode (change primary/secondary color)
+*/
+
+
+:root {
+    --header-height: 60px;
+    --sidebar-width: 8rem;
+
+    /* TODO: font sizes*/
+    --font-size-medium: 16px;
+
+    /* TODO: dark mode*/
+    --background-primary-color: white;
+    --background-secondary-color: black;
+
+    --text-primary-color: black;
+    --text-secondary-color: black;
+
+}
+
+
+body {
+    background-color: var(--primary-background-color, white);
+    color: var(--text-primary-color, black);
+}

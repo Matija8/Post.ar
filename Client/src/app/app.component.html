@@ -4,10 +4,16 @@
 <main>
 
   <nav id="sidebar">
-    <a routerLink="/inbox" routerLinkActive="active">Inbox</a>
-    <a routerLink="/sent" routerLinkActive="active">Sent</a>
-    <a routerLink="/starred" routerLinkActive="active">Starred</a>
-    <a routerLink="/drafts" routerLinkActive="active">Drafts</a>
+
+    <button id="compose-button"> Compose </button>
+
+    <ul id="sidebar-links">
+      <a routerLink="/inbox" routerLinkActive="active">Inbox</a>
+      <a routerLink="/sent" routerLinkActive="active">Sent</a>
+      <a routerLink="/starred" routerLinkActive="active">Starred</a>
+      <a routerLink="/drafts" routerLinkActive="active">Drafts</a>
+    </ul>
+
   </nav>
 
   <div id="mail-list">
