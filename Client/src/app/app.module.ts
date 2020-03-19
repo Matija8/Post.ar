@@ -15,6 +15,7 @@ import { StarredComponent } from './components/starred/starred.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
+import { ComposeComponent } from './components/compose/compose.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AuthService } from './services/auth.service';
     DraftsComponent,
     StarredComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ComposeComponent
   ],
   imports: [
     BrowserModule,
