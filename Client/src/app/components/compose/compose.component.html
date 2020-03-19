@@ -1,6 +1,19 @@
 <div id="compose-container">
-    <!--
-    <div class="compose-item">compose item 1</div>
-    <div class="compose-item">compose item 2</div>
-    -->
+    <div class="compose-item-body">
+        <form class="form">
+          <div class="form-group">
+            <label for="">To:</label>
+            <input name="to" type="text" [(ngModel)]="this.to" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="">Subject</label>
+            <input name="subject" type="text" [(ngModel)]="this.subject" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="">Message</label>
+            <input name="subject" type="text" [(ngModel)]="this.msg" class="form-control" required>
+          </div>
+          <button (click)="send()" type="button" class="btn btn-primary float-left">Send</button>
+        </form>
+      </div>
 </div>

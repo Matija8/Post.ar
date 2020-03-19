@@ -6,10 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./compose.component.css']
 })
 export class ComposeComponent implements OnInit {
+  to = '';
+  subject = '';
+  msg = '';
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  send() {
+    console.log(`
+      send clicked:
+      to = ${this.to}
+      subject = ${this.subject}
+      msg = ${this.msg}`);
   }
 
 }

@@ -10,7 +10,10 @@
     justify-content: flex-end;
 }
 
-.compose-item {
+
+
+
+.compose-item-minimised {
     align-self: flex-end;
     float: right;
     background-color: var(--background-secondary-color, gray);
@@ -22,4 +25,9 @@
     border: 0;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+}
+
+.compose-item-body {
+    border: solid 1px black;
+    padding: 20px;
 }
