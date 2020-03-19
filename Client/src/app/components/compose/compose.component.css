@@ -1,0 +1,6 @@
+postar-compose {
+    position: absolute;
+    float: left;
+    bottom: 0;
+    z-index: 1;
+}

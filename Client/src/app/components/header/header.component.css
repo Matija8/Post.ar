@@ -1,3 +1,31 @@
-h1 {
+#header {
+    /* display: flex; */
+    height: 60px;
+    margin: 0;
     border-bottom: solid 0.1px black;
+    overflow: hidden;
+}
+
+h1 {
+    float: left;
+    margin: 0;
+}
+
+#login-links {
+    display: flex;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    float: right;
+}
+
+a {
+    margin: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    color: blue;
 }
