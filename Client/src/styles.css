@@ -15,10 +15,10 @@
 
     /* TODO: dark mode*/
     --background-primary-color: white;
-    --background-secondary-color: black;
+    --background-secondary-color: rgb(40,40,40);
 
     --text-primary-color: black;
-    --text-secondary-color: black;
+    --text-secondary-color: white;
 
 }
 

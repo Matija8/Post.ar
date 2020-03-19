@@ -1,8 +1,25 @@
-div {
+#compose-container {
     position: absolute;
     margin: 0;
     padding: 0;
-    left: var(--sidebar-width, 5rem);
+    left: 0;
     bottom: 0;
+    width: 95%;
     z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.compose-item {
+    align-self: flex-end;
+    float: right;
+    background-color: var(--background-secondary-color, gray);
+    color: var(--text-secondary-color, black);
+    display: block;
+    padding: 5px 10px;
+    margin: 0;
+    margin-left: 1px;
+    border: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
