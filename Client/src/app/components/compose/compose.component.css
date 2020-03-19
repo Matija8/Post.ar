@@ -1,6 +1,8 @@
-postar-compose {
+div {
     position: absolute;
-    float: left;
+    margin: 0;
+    padding: 0;
+    left: var(--sidebar-width, 5rem);
     bottom: 0;
     z-index: 1;
 }
