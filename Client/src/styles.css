@@ -24,6 +24,6 @@
 
 
 body {
-    background-color: var(--primary-background-color, white);
+    background-color: var(--background-primary-color, white);
     color: var(--text-primary-color, black);
 }
