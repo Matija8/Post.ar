@@ -1,10 +1,12 @@
 ## postar - server
 
-### Docker setup
+### Docker scripts
 
 ``` bash
-    cd docker/
-    docker-compose up -d
+    ./init.sh      # initialize docker data, start containers
+    ./start.sh     # start containers
+    ./restart.sh   # restart containers
+    ./stop.sh      # stop and delete containers
 ```
 
 ### Node build and start

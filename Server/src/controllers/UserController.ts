@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { DataValidator } from "../helpers/data-validator/DataValidator";
 import { logger, createResponse } from "../helpers/Helpers";
 import { User } from "../entity/User";
+import { UserManager } from "../helpers/user-manager/UserManager";
 
 import { Error, Success } from "../StatusCodes.json";
 
@@ -81,10 +82,14 @@ export class UserController {
 
         // Generate user token
         logger.debug("/login - generate user token");
+        const userId = uuidv4();
         const secret = uuidv4();
         const token = jwt.sign({ username: body.username }, secret, { expiresIn: "2h" });
 
-        createResponse(response, 200, 2001, Success[2001], { token: token });
+        logger.debug("/login - add new active user");
+        UserManager.add(userId, token, secret);
+
+        createResponse(response, 200, 2001, Success[2001], { token: userId + " " + token });
     }
 
 }
