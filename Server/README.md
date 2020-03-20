@@ -16,6 +16,9 @@
     npm start
 ```
 
+### Important notes
+  * Generate public private key pair and store private key in *src/keys/private.pem*
+
 ### Optional parameters
 
 ```javascript

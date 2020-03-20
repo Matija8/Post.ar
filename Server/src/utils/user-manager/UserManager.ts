@@ -33,6 +33,15 @@ class UserManagerService {
         delete this.activeUsers[userId];
     }
 
+    getUserData(userToken) {
+        try {
+            const tokens = userToken.split(" ");
+            return jwt.verify(tokens[2], this.activeUsers[tokens[1]].secret);
+        } catch(err) {
+            return null;
+        }
+    }
+
 }
 
 export const UserManager = new UserManagerService();

@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 
-import { DataValidator } from "../helpers/data-validator/DataValidator";
-import { logger, createResponse } from "../helpers/Helpers";
+import { DataValidator } from "../utils/data-validator/DataValidator";
+import { logger, createResponse } from "../utils/Utils";
 import { User } from "../entity/User";
-import { UserManager } from "../helpers/user-manager/UserManager";
+import { UserManager } from "../utils/user-manager/UserManager";
 
 import { Error, Success } from "../StatusCodes.json";
 
@@ -26,9 +26,9 @@ export class UserController {
 
         // Validate data
         logger.debug("/register - validate data");
-
-        if (this.dataValidator.validate(body, [ "username", "password" ])) {
-            createResponse(response, 400, 1000, Error[1000]);
+        let required = [ "name", "surname", "username", "password" ]
+        if (this.dataValidator.validate(body, required)) {
+            createResponse(response, 400, 1001, Error[1001]);
             return;
         }
 
@@ -39,10 +39,12 @@ export class UserController {
         try {
             await this.userRepository.insert({
                 username: body.username,
-                password: hash
+                password: hash,
+                name: body.name,
+                surname: body.surname,
             });
         } catch (err) {
-            createResponse(response, 400, 1001, Error[1001]);
+            createResponse(response, 400, 1002, Error[1002]);
             return;
         }
 
@@ -58,7 +60,7 @@ export class UserController {
         logger.debug("/login - validate data");
 
         if (this.dataValidator.validate(body, [ "username", "password" ])) {
-            createResponse(response, 400, 1000, Error[1000]);
+            createResponse(response, 400, 1001, Error[1001]);
             return;
         }
 
@@ -67,7 +69,7 @@ export class UserController {
         
         const user = await this.userRepository.findOne({ where: { username: body.username } });
         if (!user) {
-            createResponse(response, 400, 1002, Error[1002]);
+            createResponse(response, 400, 1003, Error[1003]);
             return;
         }
         
@@ -76,7 +78,7 @@ export class UserController {
 
         const match = await bcrypt.compare(body.password, user.password);
         if (!match) {
-            createResponse(response, 400, 1002, Error[1002]);
+            createResponse(response, 400, 1003, Error[1003]);
             return;
         }
 

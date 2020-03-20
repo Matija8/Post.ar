@@ -1,5 +1,5 @@
 import { Properties } from "./Properties";
-import { logger } from "../Helpers";
+import { logger } from "../Utils";
 import Schema from "validate";
 
 export class DataValidator {

@@ -2,7 +2,7 @@ import { createConnection } from "typeorm";
 import * as dotenv from "dotenv";
 
 import { Routes } from "./routes";
-import { logger } from "./helpers/Helpers";
+import { logger } from "./utils/Utils";
 
 const cors = require("cors");
 const express = require("express");

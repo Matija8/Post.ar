@@ -1,4 +1,5 @@
 import { UserController } from "./controllers/UserController";
+import { InboxController } from "./controllers/InboxController";
 
 export const Routes = [
     // User Controller Routes
@@ -13,6 +14,13 @@ export const Routes = [
         method: "post",
         path: "/login",
         handler: "login"
+    },
+    // Inbox Controller Routes
+    {
+        controller: InboxController,
+        method: "get",
+        path: "/getMail",
+        handler: "getMail"
     }
 
 ]

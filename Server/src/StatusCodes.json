@@ -2,12 +2,17 @@
     "Success":
     {
         "2000": "User registered successfully",
-        "2001": "User logged in successfully"
+        "2001": "User logged in successfully",
+        "2002": "Found user email"
     },
     "Error": 
     {
-        "1000": "Invalid data, field missing or invalid in request",
-        "1001": "User failed to register, username exists",
-        "1002": "User failed to login"
+        "1000": "Unauthorized access",
+        "1001": "Invalid data, field missing or invalid in request",
+        "1002": "User failed to register, username exists",
+        "1003": "User failed to login",
+        "1004": "User verification failed",
+        "1005": "Inbox is empty"
+
     }
 }   
