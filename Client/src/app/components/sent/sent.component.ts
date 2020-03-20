@@ -12,7 +12,12 @@ export class SentComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.sentMessages = [
+    this.sentMessages = this.getSentMessages();
+  }
+
+  getSentMessages(): Message[] {
+    // TODO: get from server via a service.
+    return [
       {
         id: 1,
         sentTo: 'Pera',

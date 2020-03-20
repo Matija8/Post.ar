@@ -11,7 +11,12 @@ export class InboxComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.inboxMessages = [
+    this.inboxMessages = this.getInboxMessages();
+  }
+
+  getInboxMessages(): Message[] {
+    // TODO: get from server via a service.
+    return [
       {
         id: 1,
         sender: 'Matija',

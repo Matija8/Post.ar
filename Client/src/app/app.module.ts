@@ -16,6 +16,10 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
 import { ComposeComponent } from './components/compose/compose.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { MainComponent } from './components/main/main.component';
+import { AuthGuard } from './services/auth.guard';
+import { BadURLComponent } from './components/bad-url/bad-url.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,10 @@ import { ComposeComponent } from './components/compose/compose.component';
     StarredComponent,
     LoginComponent,
     RegisterComponent,
-    ComposeComponent
+    ComposeComponent,
+    SidebarComponent,
+    MainComponent,
+    BadURLComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +44,7 @@ import { ComposeComponent } from './components/compose/compose.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
