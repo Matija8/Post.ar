@@ -18,6 +18,8 @@ import { AuthService } from './services/auth.service';
 import { ComposeComponent } from './components/compose/compose.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MainComponent } from './components/main/main.component';
+import { AuthGuard } from './services/auth.guard';
+import { BadURLComponent } from './components/bad-url/bad-url.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { MainComponent } from './components/main/main.component';
     RegisterComponent,
     ComposeComponent,
     SidebarComponent,
-    MainComponent
+    MainComponent,
+    BadURLComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,7 @@ import { MainComponent } from './components/main/main.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,26 +1,40 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { InboxComponent } from './components/inbox/inbox.component';
-import { SentComponent } from './components/sent/sent.component';
-import { StarredComponent } from './components/starred/starred.component';
-import { DraftsComponent } from './components/drafts/drafts.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { MainComponent } from './components/main/main.component';
+import { BadURLComponent } from './components/bad-url/bad-url.component';
+
+import { AuthGuard } from './services/auth.guard';
 
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
-  { path: 'inbox', component: InboxComponent },
-  { path: 'sent', component: SentComponent },
-  { path: 'starred', component: StarredComponent },
-  { path: 'drafts', component: DraftsComponent },
-  // path: inbox/:id i isto za ostale
   {
     path: '',
+    canActivate: [AuthGuard],
     redirectTo: '/inbox',
     pathMatch: 'full'
-  }
+  },
+  { path: 'inbox',
+    canActivate: [AuthGuard],
+    component: MainComponent
+  },
+  { path: 'sent',
+    canActivate: [AuthGuard],
+    component: MainComponent
+  },
+  { path: 'starred',
+    canActivate: [AuthGuard],
+    component: MainComponent
+  },
+  { path: 'drafts',
+    canActivate: [AuthGuard],
+    component: MainComponent
+  },
+  { path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent},
+  // path: inbox/:id i isto za ostale
+  { path: '**', component: BadURLComponent }
 ];
 
 @NgModule({
