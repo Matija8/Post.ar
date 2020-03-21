@@ -11,6 +11,9 @@ export class Mail {
     message: Inbox;
     
     @Column({ nullable: false })
+    from: string;
+
+    @Column({ nullable: false })
     isRead: boolean;
 
     @Column({ nullable: false })

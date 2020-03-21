@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
+import * as fs from "fs";
 
-import { DataValidator } from "../utils/data-validator/DataValidator";
+import { PayloadValidator } from "../utils/payload-validator/PayloadValidator";
 import { logger, createResponse } from "../utils/Utils";
 import { User } from "../entity/User";
-import { UserManager } from "../utils/user-manager/UserManager";
+import { SessionManager } from "../utils/session-manager/SessionManager";
 
 import { Error, Success } from "../StatusCodes.json";
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+require("dotenv").config();
 
 export class UserController {
-
-    private dataValidator = new DataValidator();
 
     // Repositories
     private userRepository = getRepository(User);
@@ -27,7 +27,7 @@ export class UserController {
         // Validate data
         logger.debug("/register - validate data");
         let required = [ "name", "surname", "username", "password" ]
-        if (this.dataValidator.validate(body, required)) {
+        if (PayloadValidator.validate(body, required)) {
             createResponse(response, 400, 1001, Error[1001]);
             return;
         }
@@ -59,7 +59,7 @@ export class UserController {
         // Validate data
         logger.debug("/login - validate data");
 
-        if (this.dataValidator.validate(body, [ "username", "password" ])) {
+        if (PayloadValidator.validate(body, [ "username", "password" ])) {
             createResponse(response, 400, 1001, Error[1001]);
             return;
         }
@@ -82,16 +82,22 @@ export class UserController {
             return;
         }
 
-        // Generate user token
-        logger.debug("/login - generate user token");
-        const userId = uuidv4();
-        const secret = uuidv4();
-        const token = jwt.sign({ username: body.username }, secret, { expiresIn: "2h" });
+        // Generate user session
+        logger.debug("/login - generate user session");
 
-        logger.debug("/login - add new active user");
-        UserManager.add(userId, token, secret);
+        const sessionId = uuidv4();
+        const userData = { username: user.username, name: user.name, surname: user.surname };
 
-        createResponse(response, 200, 2001, Success[2001], { token: userId + " " + token });
+        SessionManager.add(sessionId, userData);
+        response.cookie("SESSIONID", sessionId);
+
+        // Encrypt and send user data
+        logger.debug("/login - encrypt and send user data");
+        const privateKey = fs.readFileSync("./src/keys/private.pem").toString();
+        const key = { key: privateKey, passphrase: process.env.SECRET }; 
+        const encrypted = crypto.privateEncrypt(key, Buffer.from(userData.toString()));
+        
+        createResponse(response, 200, 2001, Success[2001], encrypted.toString("hex"));
     }
 
 }

@@ -2,7 +2,7 @@ import { Properties } from "./Properties";
 import { logger } from "../Utils";
 import Schema from "validate";
 
-export class DataValidator {
+class PayloadValidatorModel {
 
     validate(data: any, requestedProperties: any): boolean {
         const schemaObject = {};
@@ -24,4 +24,6 @@ export class DataValidator {
         return false;
     }
 
-} 
+}
+
+export const PayloadValidator = new PayloadValidatorModel();

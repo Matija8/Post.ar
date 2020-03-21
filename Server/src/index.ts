@@ -6,7 +6,8 @@ import { logger } from "./utils/Utils";
 
 const cors = require("cors");
 const express = require("express");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 createConnection().then(connection => {
     // Load .env config
@@ -16,6 +17,7 @@ createConnection().then(connection => {
     const app = express();
 
     // Setup express app
+    app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(cors({ origin: [ "http://localhost:4200" ], credentials: true }));
 
