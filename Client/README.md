@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PostarClient
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
@@ -30,7 +29,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 # Project 02-Postar
 
-Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke će biti enkriptovane korišćenjem algoritama sa simetričnim ključevima, a kao i dodatni vid zaštite biće korišćeni i asimetrčni ključevi za verifikaciju pošte svakog klijenta. Tehnologije koje će biti korišćene su NodeJS, TypeScript, MongoDB, Angular ... 
+Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke će biti enkriptovane korišćenjem algoritama sa simetričnim ključevima, a kao i dodatni vid zaštite biće korišćeni i asimetrčni ključevi za verifikaciju pošte svakog klijenta. Tehnologije koje će biti korišćene su NodeJS, TypeScript, PostgreSQL, Angular ... 
 
 ## Developers
 
@@ -39,4 +38,4 @@ Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke ć
 - [Stefan Mirić, 333/2015](https://gitlab.com/stefanmiric)
 - [Matija Miličević, 133/2015](https://gitlab.com/Matija8)
 - [Matija Kovačević, 270/2015](https://gitlab.com/mkovacev)
->>>>>>> 8a1807982928092d7ca1c9e4a3fc0befbce2b651
+- 
