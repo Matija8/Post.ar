@@ -38,4 +38,3 @@ Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke ć
 - [Stefan Mirić, 333/2015](https://gitlab.com/stefanmiric)
 - [Matija Miličević, 133/2015](https://gitlab.com/Matija8)
 - [Matija Kovačević, 270/2015](https://gitlab.com/mkovacev)
-- 
