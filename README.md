@@ -1,7 +1,6 @@
-
 # Project 02-Postar
 
-Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke će biti enkriptovane korišćenjem algoritama sa simetričnim ključevima, a kao i dodatni vid zaštite biće korišćeni i asimetrčni ključevi za verifikaciju pošte svakog klijenta. Tehnologije koje će biti korišćene su NodeJS, TypeScript, MongoDB, Angular ... 
+Postar je mail klijent veb aplikacija koja koristi https protokol. Sve poruke će biti enkriptovane korišćenjem algoritama sa simetričnim ključevima, a kao i dodatni vid zaštite biće korišćeni i asimetrčni ključevi za verifikaciju pošte svakog klijenta. Tehnologije koje će biti korišćene su NodeJS, TypeScript, PostgreSQL, Angular ... 
 
 ## Developers
 
