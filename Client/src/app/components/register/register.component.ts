@@ -11,9 +11,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
+  name: string;
+  surname: string;
   email: string;
   password: string;
-
   registeredUser: User;
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -21,23 +22,28 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser() {
+    // TODO:
     // validacija podataka
     // provera da li je korisnik vec registrovan
-
-    alert(this.email + ' ' + this.password);
-    this.registeredUser = new User(this.email, this.password);
+    this.registeredUser = new User(this.name, this.surname, this.email, this.password);
 
     this.auth.registerUser(this.registeredUser)
     .subscribe(
       res => {
-       console.log(res);
+        console.log(res);
 
-       // save token to local storage, server not sending token for registration
-      //  localStorage.setItem('token', res.token);
+        // save token to local storage, server not sending token for registration
+        //  localStorage.setItem('token', res.token);
 
-       this.router.navigate(['/inbox']);
+        // TODO: login + set loggedInUserData
+
+        alert('You have successfuly registered!\nYou will now be redirected to the login page');
+        this.router.navigate(['/login'])
+        .then(() => alert(`You can log in now`));
       },
-      err => console.log(err)
+      err => {
+        console.log(err);
+      }
     );
   }
 

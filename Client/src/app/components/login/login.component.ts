@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/User';
+import { LoginData } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,6 @@ export class LoginComponent implements OnInit {
 
   email: string;
   password: string;
-  UserData: User;
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -20,19 +19,22 @@ export class LoginComponent implements OnInit {
   }
 
   LogIn() {
-    alert(this.email + ' ' + this.password);
-    this.UserData = new User(this.email, this.password);
-
-    this.auth.userLogin(this.UserData)
+    const loginData: LoginData = { email: this.email, password: this.password };
+    this.auth.userLogin(loginData)
     .subscribe(
-      res => {
+      (res: any) => {
+        // TODO: set response and error types (interface response...)
         console.log(res);
         // save token to local storage
         localStorage.setItem('token', res.data.token);
 
+        alert(`Welcome`);
         this.router.navigate(['/inbox']);
       },
-      err => console.log(err)
+      (err: any) => {
+        alert(`Sorry, couldn't login...`);
+        console.log(err);
+      }
     );
 
   }
