@@ -2,7 +2,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { MainComponent } from './components/main/main.component';
+import { InboxComponent } from './components/inbox/inbox.component';
+import { SentComponent } from './components/sent/sent.component';
+import { StarredComponent } from './components/starred/starred.component';
+import { DraftsComponent } from './components/drafts/drafts.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
 
 import { AuthGuard } from './services/auth.guard';
@@ -17,19 +20,19 @@ const routes: Routes = [
   },
   { path: 'inbox',
     canActivate: [AuthGuard],
-    component: MainComponent
+    component: InboxComponent
   },
   { path: 'sent',
     canActivate: [AuthGuard],
-    component: MainComponent
+    component: SentComponent
   },
   { path: 'starred',
     canActivate: [AuthGuard],
-    component: MainComponent
+    component: StarredComponent
   },
   { path: 'drafts',
     canActivate: [AuthGuard],
-    component: MainComponent
+    component: DraftsComponent
   },
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},

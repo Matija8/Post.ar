@@ -8,9 +8,21 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
-  constructor(public router: Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  shouldSidebarRender() {
+    if (
+      this.router.url.startsWith('/inbox')
+      || this.router.url.startsWith('/sent')
+      || this.router.url.startsWith('/starred')
+      || this.router.url.startsWith('/drafts')
+    ) {
+      return true;
+    }
+    return false;
   }
 
 }

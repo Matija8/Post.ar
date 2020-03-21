@@ -1,14 +1,11 @@
 <main>
 
-    <postar-sidebar></postar-sidebar>
+    <postar-sidebar *ngIf="shouldSidebarRender()"></postar-sidebar>
 
-    <div id="mail-list">
-        <div *ngIf="router.url.startsWith('/inbox')"> <postar-inbox></postar-inbox> </div>
-        <div *ngIf="router.url.startsWith('/sent')"> <postar-sent></postar-sent> </div>
-        <div *ngIf="router.url.startsWith('/starred')"> <postar-starred></postar-starred> </div>
-        <div *ngIf="router.url.startsWith('/drafts')"> <postar-drafts></postar-drafts> </div>
+    <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
+        <router-outlet #routerOutlet="outlet" ></router-outlet>
     </div>
 
-    <postar-compose></postar-compose>
+    <postar-compose *ngIf="shouldSidebarRender()"></postar-compose>
 
 </main>
