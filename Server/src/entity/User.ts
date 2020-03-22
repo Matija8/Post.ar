@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import { Inbox } from "./Inbox";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { InboxMail } from "./InboxMail";
 
 @Entity()
 export class User {
-    
+
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -32,8 +33,7 @@ export class User {
     })
     surname: string;
 
-    @OneToOne(type => Inbox)
-    @JoinColumn()
-    inbox: Inbox;
+    @OneToMany(type => InboxMail, inbox => inbox.user)
+    inbox: InboxMail[];
 
 }

@@ -19,14 +19,14 @@ export const Routes = [
     {
         controller: InboxController,
         method: "get",
-        path: "/getMail",
-        handler: "getMail"
+        path: "/inbox",
+        handler: "inbox"
     },
     {
         controller: InboxController,
-        method: "get",
-        path: "/getMail",
-        handler: "getMail"
+        method: "post",
+        path: "/send",
+        handler: "send"
     }
 
 ]

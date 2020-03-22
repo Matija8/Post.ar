@@ -1,15 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne } from "typeorm";
-import { Inbox } from "./Inbox";
+import { User } from "./User";
 
 @Entity()
-export class Mail {
+export class InboxMail {
     
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(type => Inbox, inbox => inbox.messages)
-    message: Inbox;
-    
+    @ManyToOne(type => User, user => user.inbox)
+    user: User;
+
     @Column({ nullable: false })
     from: string;
 
@@ -17,7 +17,7 @@ export class Mail {
     isRead: boolean;
 
     @Column({ nullable: false })
-    content: string;
+    text: string;
 
     @Column({ nullable: false })
     timestamp: string;

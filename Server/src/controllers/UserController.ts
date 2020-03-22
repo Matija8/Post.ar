@@ -3,11 +3,11 @@ import { getRepository } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from "fs";
 
+// Utils
 import { PayloadValidator } from "../utils/payload-validator/PayloadValidator";
 import { logger, createResponse } from "../utils/Utils";
 import { User } from "../entity/User";
 import { SessionManager } from "../utils/session-manager/SessionManager";
-
 import { Error, Success } from "../StatusCodes.json";
 
 const bcrypt = require("bcrypt");
@@ -24,8 +24,7 @@ export class UserController {
       
         let body = request.body;
 
-        // Validate data
-        logger.debug("/register - validate data");
+        logger.debug("/register - validate payload");
         let required = [ "name", "surname", "username", "password" ]
         if (PayloadValidator.validate(body, required)) {
             createResponse(response, 400, 1001, Error[1001]);
@@ -44,6 +43,7 @@ export class UserController {
                 surname: body.surname,
             });
         } catch (err) {
+            logger.fatal(err);
             createResponse(response, 400, 1002, Error[1002]);
             return;
         }
@@ -56,8 +56,7 @@ export class UserController {
         
         let body = request.body;
         
-        // Validate data
-        logger.debug("/login - validate data");
+        logger.debug("/login - validate payload");
 
         if (PayloadValidator.validate(body, [ "username", "password" ])) {
             createResponse(response, 400, 1001, Error[1001]);
@@ -86,16 +85,16 @@ export class UserController {
         logger.debug("/login - generate user session");
 
         const sessionId = uuidv4();
-        const userData = { username: user.username, name: user.name, surname: user.surname };
+        user.password = null;
 
-        SessionManager.add(sessionId, userData);
+        SessionManager.add(sessionId, user);
         response.cookie("SESSIONID", sessionId);
 
         // Encrypt and send user data
         logger.debug("/login - encrypt and send user data");
         const privateKey = fs.readFileSync("./src/keys/private.pem").toString();
         const key = { key: privateKey, passphrase: process.env.SECRET }; 
-        const encrypted = crypto.privateEncrypt(key, Buffer.from(userData.toString()));
+        const encrypted = crypto.privateEncrypt(key, Buffer.from(user.toString()));
         
         createResponse(response, 200, 2001, Success[2001], encrypted.toString("hex"));
     }

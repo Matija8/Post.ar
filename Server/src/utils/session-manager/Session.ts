@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 const moment = require("moment");
 
-import { UserModel } from "./UserModel";
+import { User } from "../../entity/User";
 
 export class Session {
 
@@ -9,7 +9,7 @@ export class Session {
 
     private validUntil: Moment
 
-    constructor(public sessionId: string, public user: UserModel) {
+    constructor(public sessionId: string, public user: User) {
         this.validUntil = moment().add(Session.VALID_HOURS, "hours");
     }
 

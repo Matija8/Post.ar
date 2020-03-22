@@ -1,11 +1,11 @@
 import { Session } from "./Session";
-import { UserModel } from "./UserModel";
+import { User } from "../../entity/User";
 
 class SessionManagerModel {
 
     private sessions: {[key: string]: Session} = {};
 
-    add(sessionId: string, user: UserModel) {
+    add(sessionId: string, user: User) {
         this.sessions[sessionId] = new Session(sessionId, user);
     }
 
