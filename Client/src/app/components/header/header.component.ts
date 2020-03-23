@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChangeThemeService } from '../../services/change-theme.service';
 
 @Component({
   selector: 'postar-header',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private changeThemeService: ChangeThemeService) { }
 
   ngOnInit(): void {
+  }
+
+  toggleTheme() {
+    this.changeThemeService.toggleDarkMode();
   }
 
 }

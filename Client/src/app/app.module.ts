@@ -20,6 +20,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MainComponent } from './components/main/main.component';
 import { AuthGuard } from './services/auth.guard';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
+import { ChangeThemeService } from './services/change-theme.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { BadURLComponent } from './components/bad-url/bad-url.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, ChangeThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
