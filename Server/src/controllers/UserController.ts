@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
-import * as fs from "fs";
 
 // Utils
 import { PayloadValidator } from "../utils/payload-validator/PayloadValidator";
@@ -9,10 +8,10 @@ import { logger, createResponse } from "../utils/Utils";
 import { User } from "../entity/User";
 import { SessionManager } from "../utils/session-manager/SessionManager";
 import { Error, Success } from "../StatusCodes.json";
+import { KeyStore } from "../utils/KeyStore";
 
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-require("dotenv").config();
 
 export class UserController {
 
@@ -90,13 +89,28 @@ export class UserController {
         SessionManager.add(sessionId, user);
         response.cookie("SESSIONID", sessionId);
 
-        // Encrypt and send user data
+        // Create response
         logger.debug("/login - encrypt and send user data");
-        const privateKey = fs.readFileSync("./src/keys/private.pem").toString();
-        const key = { key: privateKey, passphrase: process.env.SECRET }; 
-        const encrypted = crypto.privateEncrypt(key, Buffer.from(user.toString()));
         
-        createResponse(response, 200, 2001, Success[2001], encrypted.toString("hex"));
+        const userData = { username: user.username, name: user.name, surname: user.surname };
+        
+        // Encrypt user data
+        const secret = crypto.randomBytes(16).toString("hex");
+        
+        const cipher = crypto.createCipher("aes256", secret);
+        let encrypted = cipher.update(JSON.stringify(userData), "utf8", "hex");
+        encrypted += cipher.final("hex");
+
+        // Encrypt secret
+        const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(secret))
+                                  .toString("hex");
+        
+        // Create signature
+        const sign = crypto.createSign("RSA-SHA256");
+        sign.update(JSON.stringify(userData));
+        const signature = sign.sign(KeyStore.privateKey, "hex");
+
+        createResponse(response, 200, 2001, Success[2001], { data: encrypted, hash: signature, secret: superSecret });
     }
 
 }

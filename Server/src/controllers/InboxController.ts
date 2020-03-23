@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { readFileSync } from "fs";
 
 // Utils
 import { PayloadValidator } from "../utils/payload-validator/PayloadValidator";
@@ -11,6 +10,7 @@ import { Success, Error } from "../StatusCodes.json";
 // Entities
 import { User } from "../entity/User";
 import { InboxMail } from "../entity/InboxMail";
+import { KeyStore } from "../utils/KeyStore";
 
 const crypto = require("crypto");
 
@@ -43,12 +43,33 @@ export class InboxController {
             return;
         }
 
-        logger.debug("/inbox - encrypt data");
-        const privateKey = readFileSync("./src/keys/private.pem").toString();
-        const key = { key: privateKey, passphrase: process.env.SECRET }; 
-        const encrypted = crypto.privateEncrypt(key, Buffer.from(user.inbox.toString()));
+        logger.debug("/inbox - encrypt user data");
+        let messages = [];
+        for (const message of user.inbox) {
+            messages.push({ 
+                from: message.from,
+                isRead: message.isRead,
+                timestamp: message.timestamp
+            });
+        }
+        
+        // Encrypt  data
+        const secret = crypto.randomBytes(16).toString("hex");
+        
+        const cipher = crypto.createCipher("aes256", secret);
+        let encrypted = cipher.update(JSON.stringify(messages), "utf8", "hex");
+        encrypted += cipher.final("hex");
 
-        createResponse(response, 200, 2002, Success[2002],{ data: encrypted.toString("hex") });
+        // Encrypt secret
+        const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(secret))
+                                  .toString("hex");
+        
+        // Create signature
+        const sign = crypto.createSign("RSA-SHA256");
+        sign.update(JSON.stringify(messages));
+        const signature = sign.sign(KeyStore.privateKey, "hex");
+
+        createResponse(response, 200, 2002, Success[2002],{ data: encrypted, hash: signature, secret: superSecret });
     }
     
     // TODO: update user's sent mail, encrypt messages
@@ -75,13 +96,16 @@ export class InboxController {
             return;
         }
 
-        logger.debug("/send - ger recipient");
+        logger.debug("/send - get recipient");
         let recipient = await this.userRepository.findOne({ where: { username: body.recipient }});
         if (!recipient) {
             createResponse(response, 400, 1006, Error[1006]);
             return;
         }
         
+        logger.debug("/send - encrypt message");
+        // ...
+
         logger.debug("/send - save email to recipient inbox");
         try {
             await this.inboxRepository.insert({
