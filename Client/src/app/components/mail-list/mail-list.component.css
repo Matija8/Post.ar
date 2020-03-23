@@ -1,0 +1,24 @@
+.mail-list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 0.5px black;
+    padding: 5px;
+    background-color: var(--background-color1, white);
+}
+
+.left {
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.right {
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+select {
+    font-size: var(--font-size-M, 16px);
+}

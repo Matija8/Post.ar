@@ -1,2 +1,4 @@
-<h3 *ngIf="sentByMe"> {{ msg.sentTo }} </h3>
-<h3 *ngIf="!sentByMe"> {{ msg.sender }} </h3>
+<div class="mail-item">
+    <div class="mail-item-title" *ngIf="sentByMe"> {{ msg.sentTo }} </div>
+    <div class="mail-item-title" *ngIf="!sentByMe"> {{ msg.sender }} </div>
+</div>

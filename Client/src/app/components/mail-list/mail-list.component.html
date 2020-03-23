@@ -1,5 +1,20 @@
-Mail list
+<div class="mail-list-header">
+
+  <div class="left">
+    <select id="filter-mail" name="filter-mail">
+      <option value="All">All</option>
+      <option value="None">None</option>
+      <option value="Read">Read</option>
+      <option value="Unread">Unread</option>
+    </select>
+  </div>
+
+  <div class="right">
+    <div>postar</div>
+  </div>
+
+</div>
+
 <postar-mail-item
   *ngFor="let msg of messagesList" [msg]=msg>
-
 </postar-mail-item>

@@ -11,19 +11,21 @@
     --sidebar-width: 8rem;
 
     /* TODO: font sizes*/
-    --font-size-medium: 16px;
+    --font-size-S: 10px;
+    --font-size-M: 14px;
+    --font-size-L: 22px;
 
     /* TODO: dark mode*/
-    --background-primary-color: white;
-    --background-secondary-color: rgb(40,40,40);
+    --background-color1: rgb(200,200,200);
+    --background-color2: rgb(224,224,224);
 
-    --text-primary-color: black;
-    --text-secondary-color: white;
+    --text-color1: black;
+    --text-color2: white;
 
 }
 
 
 body {
-    background-color: var(--background-primary-color, white);
-    color: var(--text-primary-color, black);
+    background-color: var(--background-color1, white);
+    color: var(--text-color1, black);
 }

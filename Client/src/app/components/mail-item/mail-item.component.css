@@ -1,0 +1,8 @@
+.mail-item {
+    border: solid 0.3px black;
+    padding: 2px;
+}
+
+.mail-item-title {
+    font-size: var(--font-size-L);
+}

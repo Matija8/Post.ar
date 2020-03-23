@@ -10,6 +10,7 @@
     float: left;
     width: var(--sidebar-width, 5rem);
     height: 100%; /*100vh*/
+    background-color: var(--background-color1, white);
 }
 
 
@@ -20,6 +21,7 @@
     border-radius: 15px;
     padding: 5px;
     border: solid 1px black;
+    background-color: white;
 }
 
 #compose-button:hover {

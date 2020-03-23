@@ -30,4 +30,6 @@
 .compose-item-body {
     border: solid 1px black;
     padding: 20px;
+    color: black;
+    background-color: white;
 }
