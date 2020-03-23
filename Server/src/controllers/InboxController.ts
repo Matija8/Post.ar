@@ -10,7 +10,7 @@ import { Success, Error } from "../StatusCodes.json";
 // Entities
 import { User } from "../entity/User";
 import { InboxMail } from "../entity/InboxMail";
-import { KeyStore } from "../utils/KeyStore";
+import { secretar } from "../utils/Secretar";
 
 const crypto = require("crypto");
 
@@ -53,23 +53,9 @@ export class InboxController {
             });
         }
         
-        // Encrypt  data
-        const secret = crypto.randomBytes(16).toString("hex");
-        
-        const cipher = crypto.createCipher("aes256", secret);
-        let encrypted = cipher.update(JSON.stringify(messages), "utf8", "hex");
-        encrypted += cipher.final("hex");
+        const encrypted = secretar.crypt(messages);
 
-        // Encrypt secret
-        const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(secret))
-                                  .toString("hex");
-        
-        // Create signature
-        const sign = crypto.createSign("RSA-SHA256");
-        sign.update(JSON.stringify(messages));
-        const signature = sign.sign(KeyStore.privateKey, "hex");
-
-        createResponse(response, 200, 2002, Success[2002],{ data: encrypted, hash: signature, secret: superSecret });
+        createResponse(response, 200, 2002, Success[2002], encrypted);
     }
     
     // TODO: update user's sent mail, encrypt messages

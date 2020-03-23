@@ -8,10 +8,9 @@ import { logger, createResponse } from "../utils/Utils";
 import { User } from "../entity/User";
 import { SessionManager } from "../utils/session-manager/SessionManager";
 import { Error, Success } from "../StatusCodes.json";
-import { KeyStore } from "../utils/KeyStore";
+import { secretar } from "../utils/Secretar";
 
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 
 export class UserController {
 
@@ -95,22 +94,9 @@ export class UserController {
         const userData = { username: user.username, name: user.name, surname: user.surname };
         
         // Encrypt user data
-        const secret = crypto.randomBytes(16).toString("hex");
-        
-        const cipher = crypto.createCipher("aes256", secret);
-        let encrypted = cipher.update(JSON.stringify(userData), "utf8", "hex");
-        encrypted += cipher.final("hex");
+        const encrypted = secretar.crypt(userData);
 
-        // Encrypt secret
-        const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(secret))
-                                  .toString("hex");
-        
-        // Create signature
-        const sign = crypto.createSign("RSA-SHA256");
-        sign.update(JSON.stringify(userData));
-        const signature = sign.sign(KeyStore.privateKey, "hex");
-
-        createResponse(response, 200, 2001, Success[2001], { data: encrypted, hash: signature, secret: superSecret });
+        createResponse(response, 200, 2001, Success[2001], encrypted);
     }
 
 }
