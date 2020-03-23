@@ -5,9 +5,17 @@ import { Injectable } from '@angular/core';
 })
 export class ChangeThemeService {
 
-  private static activeTheme = 'default';
+  private static activeTheme: string;
 
-  private modes: { [key: string]: {[key: string]: string} } = {
+  get storedTheme() {
+    return localStorage.getItem('theme');
+  }
+
+  set storedTheme(newTheme: string) {
+    localStorage.setItem('theme', newTheme);
+  }
+
+  private themes: { [key: string]: {[key: string]: string} } = {
     default: {
       '--background-color1': 'rgb(200,200,200)',
       '--background-color2': 'rgb(224,224,224)',
@@ -18,17 +26,22 @@ export class ChangeThemeService {
     },
   };
 
-  constructor() { }
+  constructor() {
+    this.storedTheme = this.storedTheme === null ? 'default' : this.storedTheme;
+    ChangeThemeService.activeTheme = this.storedTheme;
+    this.changeTheme(ChangeThemeService.activeTheme);
+  }
 
-  private changeMode(newTheme: string): void {
+  private changeTheme(newTheme: string): void {
     const root = document.documentElement;
-    const cssValues = this.modes[newTheme];
+    const cssValues = this.themes[newTheme];
     if (cssValues === undefined) {
-      console.log('change-theme.service: changeMode-cssValues = undefined!');
+      console.log('change-theme.service: cssValues = undefined!');
       return;
     }
 
     ChangeThemeService.activeTheme = newTheme;
+    this.storedTheme = newTheme;
     for (const [key, value] of Object.entries(cssValues)) {
       root.style.setProperty(key, value);
     }
@@ -36,9 +49,9 @@ export class ChangeThemeService {
 
   public toggleDarkMode(): void {
     if (ChangeThemeService.activeTheme === 'default') {
-      this.changeMode('dark');
+      this.changeTheme('dark');
     } else {
-      this.changeMode('default');
+      this.changeTheme('default');
     }
   }
 }
