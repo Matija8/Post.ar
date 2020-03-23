@@ -46,7 +46,8 @@ export class InboxController {
         logger.debug("/inbox - encrypt user data");
         let messages = [];
         for (const message of user.inbox) {
-            messages.push({ 
+            messages.push({
+                id: message.id,
                 from: message.from,
                 isRead: message.isRead,
                 timestamp: message.timestamp
