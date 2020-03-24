@@ -9,6 +9,7 @@
 :root {
     --header-height: 60px;
     --sidebar-width: 8rem;
+    --compose-item-width: 250px;
 
     /* TODO: font sizes*/
     --font-size-S: 10px;

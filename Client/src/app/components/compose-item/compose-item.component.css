@@ -3,20 +3,20 @@
     flex-direction: column;
     align-items: flex-end;
     height: auto;
-    width: 15%;
     margin: 0;
     margin-left: 25px;
     z-index: 1;
 }
 
 .compose-item-minimized {
+    width: var(--compose-item-width, 250px);
     bottom:0;
     margin: 0;
-    width: 100%;
     background-color: darkslategrey;
 }
 
 .compose-item-medium {
+    width: var(--compose-item-width, 250px);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
