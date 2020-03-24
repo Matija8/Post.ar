@@ -15,12 +15,13 @@ import { StarredComponent } from './components/starred/starred.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
-import { ComposeComponent } from './components/compose/compose.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MainComponent } from './components/main/main.component';
 import { AuthGuard } from './services/auth.guard';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
 import { ChangeThemeService } from './services/change-theme.service';
+import { ComposeComponent } from './components/compose/compose.component';
+import { ComposeItemComponent } from './components/compose-item/compose-item.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ChangeThemeService } from './services/change-theme.service';
     ComposeComponent,
     SidebarComponent,
     MainComponent,
-    BadURLComponent
+    BadURLComponent,
+    ComposeItemComponent
   ],
   imports: [
     BrowserModule,

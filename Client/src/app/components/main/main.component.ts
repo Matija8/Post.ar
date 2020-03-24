@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'postar-main',
@@ -9,6 +10,8 @@ import { Router } from '@angular/router';
 export class MainComponent implements OnInit {
 
   constructor(private router: Router) { }
+
+  AddComposeEvent: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
   }
@@ -23,6 +26,10 @@ export class MainComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  addCompose() {
+    this.AddComposeEvent.next();
   }
 
 }

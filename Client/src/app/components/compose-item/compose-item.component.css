@@ -1,0 +1,46 @@
+.compose-item-minimised {
+    align-self: flex-end;
+    float: right;
+    background-color: var(--background-color2, gray);
+    color: var(--font-color1, black);
+    display: block;
+    padding: 5px 10px;
+    margin: 0;
+    margin-left: 1px;
+    border: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.compose-item-medium {
+    background-color: white;
+    height: 100%;
+    border-bottom: hidden;
+    margin: 0;
+    border: 0.5px gray;
+    margin-left: 25px;
+    z-index: 1;
+}
+
+.compose-item-menubar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: darkslategrey;
+    padding: 1px;
+}
+
+.compose-menubar-button {
+    background-color: white;
+}
+
+.compose-item-body {
+    margin: 0;
+    margin-bottom: 0;
+    padding: 20px;
+    color: black;
+    background-color: white;
+}
+
+.compose-send-btn {
+    margin-bottom: 10px;
+}

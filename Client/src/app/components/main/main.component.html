@@ -1,11 +1,17 @@
 <main>
 
-    <postar-sidebar *ngIf="shouldSidebarRender()"></postar-sidebar>
+    <postar-sidebar
+        *ngIf="shouldSidebarRender()"
+        (addComposeItemEvent)="addCompose()">
+    </postar-sidebar>
 
     <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
         <router-outlet #routerOutlet="outlet" ></router-outlet>
     </div>
 
-    <postar-compose *ngIf="shouldSidebarRender()"></postar-compose>
+    <postar-compose
+        *ngIf="shouldSidebarRender()"
+        [signalFromParent]="AddComposeEvent.asObservable()">
+    </postar-compose>
 
 </main>

@@ -7,29 +7,6 @@
     width: 95%;
     z-index: 1;
     display: flex;
-    justify-content: flex-end;
-}
-
-
-
-
-.compose-item-minimised {
-    align-self: flex-end;
-    float: right;
-    background-color: var(--background-secondary-color, gray);
-    color: var(--text-secondary-color, black);
-    display: block;
-    padding: 5px 10px;
-    margin: 0;
-    margin-left: 1px;
-    border: 0;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.compose-item-body {
-    border: solid 1px black;
-    padding: 20px;
-    color: black;
-    background-color: white;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
 }
