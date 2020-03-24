@@ -10,6 +10,7 @@ import { Success, Error } from "../StatusCodes.json";
 // Entities
 import { User } from "../entity/User";
 import { InboxMail } from "../entity/InboxMail";
+import { SentMail } from "../entity/SentMail";
 import { secretar } from "../utils/Secretar";
 
 const crypto = require("crypto");
@@ -19,6 +20,7 @@ export class InboxController {
     // Repositories
     private userRepository = getRepository(User);
     private inboxRepository = getRepository(InboxMail)
+    private sentRepository = getRepository(SentMail)
 
     async inbox(request: Request, response: Response) {
         logger.info("/inbox");
@@ -93,7 +95,7 @@ export class InboxController {
         logger.debug("/send - encrypt message");
         // ...
 
-        logger.debug("/send - save email to recipient inbox");
+        logger.debug("/send - update inbox and sent mails");
         try {
             await this.inboxRepository.insert({
                 from: session.user.username,
@@ -101,7 +103,14 @@ export class InboxController {
                 isRead: false,
                 timestamp: new Date().getTime().toString(),
                 user: recipient
-            });
+            })
+            await this.sentRepository.insert({
+                text: body.text,
+                timestamp: new Date().getTime().toString(),
+                to: recipient.username,
+                user: session.user
+            })
+            ;
         } catch (err) {
             logger.fatal(err);
             createResponse(response, 400, 1006, Error[1006]);
