@@ -12,15 +12,9 @@ export class ComposeComponent implements OnInit, OnDestroy {
   private signalSubscription: Subscription;
 
   private MAX_OPEN = 3;
+  private open = 0;
+  private lastId = 0;
   public openEditors = new Map<number, any>();
-
-  public freeIds = ((max: number): number[] => {
-    const freeIds = [];
-    for (let i = 0; i < max; i++) {
-      freeIds.push(i);
-    }
-    return freeIds;
-  })(this.MAX_OPEN);
 
   constructor() { }
 
@@ -35,16 +29,22 @@ export class ComposeComponent implements OnInit, OnDestroy {
   }
 
   addEditor(): void {
-    console.log(this.freeIds);
-    if (this.freeIds.length <= 0) {
+    if (this.open >= this.MAX_OPEN) {
       return;
     }
-    this.openEditors.set(this.freeIds.pop(), { to: '', subject: '', msg: '' } );
+    this.open++;
+    this.openEditors.set(this.lastId++, { to: '', subject: '', msg: '' } );
   }
 
   closeEditor(id: number): void {
+    if (this.open <= 0) {
+      return;
+    }
     this.openEditors.delete(id);
-    this.freeIds.push(id);
+    this.open--;
+    if (this.open === 0) {
+      this.lastId = 0;
+    }
   }
 
 }
