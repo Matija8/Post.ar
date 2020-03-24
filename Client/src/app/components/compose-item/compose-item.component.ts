@@ -29,4 +29,12 @@ export class ComposeItemComponent implements OnInit {
     this.closeEvent.emit(this.id);
   }
 
+  changeSize(newSize: string) {
+    const sizes = Object.freeze(['normal', 'minimized', /*'maximized'*/]);
+    if ( !sizes.includes(newSize) ) {
+      return;
+    }
+    this.data.size = newSize;
+  }
+
 }

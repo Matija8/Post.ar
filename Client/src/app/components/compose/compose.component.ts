@@ -33,7 +33,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
       return;
     }
     this.open++;
-    this.openEditors.set(this.lastId++, { to: '', subject: '', msg: '' } );
+    this.openEditors.set(this.lastId++, { to: '', subject: '', msg: '' , size: 'normal'} );
   }
 
   closeEditor(id: number): void {
@@ -42,6 +42,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
     }
     this.openEditors.delete(id);
     this.open--;
+    // if msg,to... != '' => save as a draft
     if (this.open === 0) {
       this.lastId = 0;
     }
