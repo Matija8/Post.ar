@@ -7,8 +7,10 @@ import { SentComponent } from './components/sent/sent.component';
 import { StarredComponent } from './components/starred/starred.component';
 import { DraftsComponent } from './components/drafts/drafts.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 import { AuthGuard } from './services/auth.guard';
+import { LoggedInGuard } from './services/logged-in.guard';
 
 
 const routes: Routes = [
@@ -34,8 +36,17 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: DraftsComponent
   },
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
+  { path: 'login',
+    canActivate: [LoggedInGuard],
+    component: LoginComponent
+  },
+  { path: 'register',
+    component: RegisterComponent
+  },
+  { path: 'logout',
+    canActivate: [AuthGuard],
+    component: LogoutComponent
+  },
   // path: inbox/:id i isto za ostale
   { path: '**', component: BadURLComponent }
 ];

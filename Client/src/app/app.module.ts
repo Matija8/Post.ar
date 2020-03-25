@@ -22,6 +22,7 @@ import { BadURLComponent } from './components/bad-url/bad-url.component';
 import { ChangeThemeService } from './services/change-theme.service';
 import { ComposeComponent } from './components/compose/compose.component';
 import { ComposeItemComponent } from './components/compose-item/compose-item.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ComposeItemComponent } from './components/compose-item/compose-item.com
     SidebarComponent,
     MainComponent,
     BadURLComponent,
-    ComposeItemComponent
+    ComposeItemComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

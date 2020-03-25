@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData } from '../models/User';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,12 @@ export class AuthService {
   }
 
   userLogin(user: LoginData): any {
-    return this.http.post(this.loginUrl, {username : user.email, password : user.password });
+    // TODO: get data from server
+    return of({data: 'some-token-value'});
+  }
+
+  userLogout(): void {
+    localStorage.removeItem('token');
   }
 
   loggedIn() {
