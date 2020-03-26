@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData } from '../models/User';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +11,21 @@ export class AuthService {
   private registerUrl = 'http://localhost:8000/register';
   private loginUrl = 'http://localhost:8000/login';
 
+  private userDataSource: BehaviorSubject<User>;
+  currentUserData: Observable<User>;
+
   httpOptions = {
     headers : new HttpHeaders({
       'Content-type' : 'application/json'
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.userDataSource = new BehaviorSubject<User>(null);
+    this.userDataSource.next(null);
+    this.currentUserData = this.userDataSource.asObservable();
+
+  }
 
   registerUser(user: User): any {
     return this.http.post(this.registerUrl, {
@@ -29,16 +37,30 @@ export class AuthService {
   }
 
   userLogin(user: LoginData): any {
-    // TODO: get data from server
-    return of({data: 'some-token-value'});
+    const loginDataFromServerOrCookie = { data:
+      {
+        token: 'some-token-value',
+        user: {name: 'Pera', surname: 'Peric', email: 'pera@postar.com', password: 'Veoma sigurna sifra*789' },
+      }
+    };
+    const data = loginDataFromServerOrCookie.data;
+
+    localStorage.setItem('token', data.token);
+
+    // Updating currentUserData.
+    this.userDataSource.next(data.user);
+
+    return of( data );
   }
 
   userLogout(): void {
+    // Updating currentUserData.
+    this.userDataSource.next(null);
     localStorage.removeItem('token');
   }
 
   loggedIn() {
-    return !!localStorage.getItem('token');
+    return !!this.userDataSource.getValue();
   }
 
 
