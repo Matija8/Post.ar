@@ -22,7 +22,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     this.userDataSource = new BehaviorSubject<User>(null);
-    this.userDataSource.next(null);
+    const loggedInDataFromCookie = new User('Pera', 'Peric', 'pera@postar.com', 'TODO: Ovako necemo cuvati sifru, ovo je privremeno');
+    this.userDataSource.next(loggedInDataFromCookie);
     this.currentUserData = this.userDataSource.asObservable();
 
   }
@@ -47,14 +48,12 @@ export class AuthService {
 
     localStorage.setItem('token', data.token);
 
-    // Updating currentUserData.
     this.userDataSource.next(data.user);
 
     return of( data );
   }
 
   userLogout(): void {
-    // Updating currentUserData.
     this.userDataSource.next(null);
     localStorage.removeItem('token');
   }

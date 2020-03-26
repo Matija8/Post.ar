@@ -6,7 +6,11 @@
         <a id="header-title" [routerLink]="['/']">Postar</a>
     </h1>
 
-    <ul class="login-links">
+    <ul *ngIf="userData !== null" class="login-links" style="align-items: center;">
+        <h5> Welcome {{userData.name}} </h5>
+    </ul>
+
+    <ul *ngIf="userData === null" class="login-links">
         <button (click)="toggleTheme()">change theme</button>
         <a routerLink="/login" routerLinkActive="active">Login</a>
         <a routerLink="/register" routerLinkActive="active">Register</a>
