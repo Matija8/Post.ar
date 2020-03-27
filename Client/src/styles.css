@@ -1,8 +1,7 @@
 /* Global style variables */
 
 /* TODO:
-    1) add media querys for smaller devices,
-    2) dark mode (change primary/secondary color)
+    1) add media querys for smaller devices
 */
 
 
@@ -11,12 +10,10 @@
     --sidebar-width: 8rem;
     --compose-item-width: 250px;
 
-    /* TODO: font sizes*/
     --font-size-S: 10px;
     --font-size-M: 14px;
     --font-size-L: 22px;
 
-    /* TODO: dark mode*/
     --background-color1: rgb(200,200,200);
     --background-color2: rgb(224,224,224);
 
@@ -26,9 +23,23 @@
 }
 
 
+a {
+    text-decoration: none;
+    color:inherit;
+}
+
+a:hover {
+    text-decoration: none;
+    color:inherit;
+}
+
+
 body {
     background-color: var(--background-color1, white);
     color: var(--text-color1, black);
+    padding: 0;
+    margin: 0;
+    /* transition: background 500ms ease-in-out, color 1000ms ease-in-out; */
 }
 
 .theme-default {

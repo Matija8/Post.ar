@@ -19,14 +19,13 @@ export class ChangeThemeService {
 
   constructor() {
     ChangeThemeService.activeTheme = this.storedTheme;
-    this.changeTheme(ChangeThemeService.activeTheme);
+    document.body.classList.add(ChangeThemeService.activeTheme);
   }
 
   private changeTheme(newTheme: Theme): void {
-    document.body.classList.remove(ChangeThemeService.activeTheme);
+    document.body.classList.replace(ChangeThemeService.activeTheme, newTheme);
     ChangeThemeService.activeTheme = newTheme;
     this.storedTheme = newTheme;
-    document.body.classList.add(newTheme);
   }
 
   public toggleDarkMode(): void {

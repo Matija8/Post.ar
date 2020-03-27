@@ -1,19 +1,24 @@
 <div id="header">
 
-    <div class='padding'></div>
+    <div class='header-left'>
+    </div>
 
     <h1>
         <a id="header-title" [routerLink]="['/']">Postar</a>
     </h1>
 
-    <ul *ngIf="userData !== null" class="login-links" style="align-items: center;">
-        <h5> Welcome {{userData.name}} </h5>
-    </ul>
-
-    <ul *ngIf="userData === null" class="login-links">
+    <div class='header-right'>
         <button (click)="toggleTheme()">change theme</button>
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-        <a routerLink="/register" routerLinkActive="active">Register</a>
-    </ul>
+
+        <ul *ngIf="userData !== null" class="login-links" style="align-items: center;">
+            <a routerLink="/logout" routerLinkActive="active">Logout</a>
+        </ul>
+
+        <ul *ngIf="userData === null" class="login-links">
+            <a routerLink="/login" routerLinkActive="active">Login</a>
+            <a routerLink="/register" routerLinkActive="active">Register</a>
+        </ul>
+
+    </div>
 
 </div>

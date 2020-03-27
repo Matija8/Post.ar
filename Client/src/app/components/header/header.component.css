@@ -8,8 +8,18 @@
 }
 
 
-.padding {
+.header-left {
     flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 }
 
 
@@ -54,4 +64,10 @@ ul > a {
 
 ul > a:hover {
     color: blue;
+}
+
+button {
+    align-self: center;
+    height: fit-content;
+    padding: 4px;
 }
