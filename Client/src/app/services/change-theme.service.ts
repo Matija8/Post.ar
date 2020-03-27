@@ -1,57 +1,39 @@
 import { Injectable } from '@angular/core';
 
+type Theme = 'theme-default' | 'theme-dark' | 'theme-funky';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ChangeThemeService {
 
-  private static activeTheme: string;
+  private static activeTheme: Theme;
 
-  get storedTheme() {
-    return localStorage.getItem('theme');
+  private get storedTheme(): Theme {
+    return localStorage.getItem('theme') as Theme;
   }
 
-  set storedTheme(newTheme: string) {
+  private set storedTheme(newTheme: Theme) {
     localStorage.setItem('theme', newTheme);
   }
 
-  private themes: { [key: string]: {[key: string]: string} } = {
-    default: {
-      '--background-color1': 'rgb(200,200,200)',
-      '--background-color2': 'rgb(224,224,224)',
-    },
-    dark: {
-      '--background-color1': 'gray',
-      '--background-color2': 'rgb(180,180,180)',
-    },
-  };
-
   constructor() {
-    this.storedTheme = this.storedTheme === null ? 'default' : this.storedTheme;
     ChangeThemeService.activeTheme = this.storedTheme;
     this.changeTheme(ChangeThemeService.activeTheme);
   }
 
-  private changeTheme(newTheme: string): void {
-    const root = document.documentElement;
-    const cssValues = this.themes[newTheme];
-    if (cssValues === undefined) {
-      console.log('change-theme.service: cssValues = undefined!');
-      return;
-    }
-
+  private changeTheme(newTheme: Theme): void {
+    document.body.classList.remove(ChangeThemeService.activeTheme);
     ChangeThemeService.activeTheme = newTheme;
     this.storedTheme = newTheme;
-    for (const [key, value] of Object.entries(cssValues)) {
-      root.style.setProperty(key, value);
-    }
+    document.body.classList.add(newTheme);
   }
 
   public toggleDarkMode(): void {
-    if (ChangeThemeService.activeTheme === 'default') {
-      this.changeTheme('dark');
+    if (ChangeThemeService.activeTheme === 'theme-default') {
+      this.changeTheme('theme-dark');
     } else {
-      this.changeTheme('default');
+      this.changeTheme('theme-default');
     }
   }
 }

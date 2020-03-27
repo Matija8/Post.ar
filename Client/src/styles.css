@@ -30,3 +30,19 @@ body {
     background-color: var(--background-color1, white);
     color: var(--text-color1, black);
 }
+
+.theme-default {
+    --background-color1: rgb(200,200,200);
+    --background-color2: rgb(224,224,224);
+}
+
+
+.theme-dark {
+    --background-color1: gray;
+    --background-color2: rgb(180,180,180);
+}
+
+.theme-funky {
+    --background-color1: yellow;
+    --background-color2: green;
+}
