@@ -18,6 +18,9 @@ export class ChangeThemeService {
   }
 
   constructor() {
+    if (this.storedTheme === null) {
+      this.storedTheme = 'theme-default';
+    }
     ChangeThemeService.activeTheme = this.storedTheme;
     document.body.classList.add(ChangeThemeService.activeTheme);
   }
