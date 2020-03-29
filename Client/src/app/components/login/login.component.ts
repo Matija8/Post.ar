@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginData } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'postar-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   email: string;
   password: string;
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
   }
@@ -25,6 +26,9 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         // TODO: set response and error types (interface response...)
         console.log(res);
+        this.cookieService.set('username' , res.payload.username);
+        this.cookieService.set('name' , res.payload.name);
+        this.cookieService.set('surname', res.payload.surname);
 
         alert(`Welcome`);
         this.router.navigate(['/inbox']);

@@ -23,6 +23,7 @@ import { ChangeThemeService } from './services/change-theme.service';
 import { ComposeComponent } from './components/compose/compose.component';
 import { ComposeItemComponent } from './components/compose-item/compose-item.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,14 @@ import { LogoutComponent } from './components/logout/logout.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService, AuthGuard, ChangeThemeService],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthService,
+    AuthGuard,
+    ChangeThemeService,
+    CookieService
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
