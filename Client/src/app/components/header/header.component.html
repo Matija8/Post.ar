@@ -10,13 +10,9 @@
     <div class='header-right'>
         <button (click)="toggleTheme()">change theme</button>
 
-        <ul *ngIf="userData !== null" class="login-links" style="align-items: center;">
+        <div *ngIf="userData !== null" id="show-menu" #showMenu></div>
+        <ul *ngIf="userData !== null" id="dropdown-menu" #menu>
             <a routerLink="/logout" routerLinkActive="active">Logout</a>
-        </ul>
-
-        <ul *ngIf="userData === null" class="login-links">
-            <a routerLink="/login" routerLinkActive="active">Login</a>
-            <a routerLink="/register" routerLinkActive="active">Register</a>
         </ul>
 
     </div>

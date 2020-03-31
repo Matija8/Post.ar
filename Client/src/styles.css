@@ -8,6 +8,8 @@
 :root {
     --header-height: 60px;
     --sidebar-width: 8rem;
+    --dropdown-menu-width: 11rem;
+    --dropdown-menu-circile-radius: 2.1rem;
     --compose-item-width: 250px;
 
     --font-size-S: 10px;
@@ -20,6 +22,7 @@
     --text-color1: black;
     --text-color2: white;
 
+    --border-color1: black;
 }
 
 

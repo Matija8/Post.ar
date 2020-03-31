@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { ChangeThemeService } from '../../services/change-theme.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/User';
@@ -9,9 +9,12 @@ import { Subscription } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('showMenu') showMenu: ElementRef;
+  @ViewChild('menu') menu: ElementRef;
   userData: User = null;
   authSubscription: Subscription;
+  private toggleMenu: () => void = null;
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService) { }
 
@@ -19,11 +22,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSubscription = this.auth.currentUserData.subscribe(data => this.userData = data);
   }
 
-  ngOnDestroy() {
-    this.authSubscription.unsubscribe();
+  ngAfterViewInit(): void {
+    const showMenu = this.showMenu.nativeElement as HTMLElement;
+    const menu = this.menu.nativeElement as HTMLElement;
+    if (!menu || !showMenu) {
+      return;
+    }
+    let newMenuStyle = { display: 'none', opacity: '0' };
+    this.toggleMenu = () => {
+      newMenuStyle = newMenuStyle.display !== 'none' ? { display: 'none', opacity: '0' } : { display: 'flex', opacity: '1' };
+      [menu.style.display, menu.style.opacity] = [newMenuStyle.display, newMenuStyle.opacity];
+    };
+    showMenu.addEventListener('click', this.toggleMenu);
   }
 
-  toggleTheme() {
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
+    const showMenu = this.showMenu.nativeElement as HTMLElement;
+    if (!(showMenu && this.toggleMenu)) {
+      return;
+    }
+    showMenu.removeEventListener('click', this.toggleMenu);
+  }
+
+  toggleTheme(): void {
     this.changeThemeService.toggleDarkMode();
   }
 
