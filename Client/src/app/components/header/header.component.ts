@@ -28,10 +28,10 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!menu || !showMenu) {
       return;
     }
-    let newMenuStyle = { display: 'none', opacity: '0' };
+    let newMenuStyle = { display: 'none'};
     this.toggleMenu = () => {
-      newMenuStyle = newMenuStyle.display !== 'none' ? { display: 'none', opacity: '0' } : { display: 'flex', opacity: '1' };
-      [menu.style.display, menu.style.opacity] = [newMenuStyle.display, newMenuStyle.opacity];
+      newMenuStyle = newMenuStyle.display !== 'none' ? { display: 'none' } : { display: 'flex' };
+      menu.style.display = newMenuStyle.display;
     };
     showMenu.addEventListener('click', this.toggleMenu);
   }
