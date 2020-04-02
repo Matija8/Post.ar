@@ -3,8 +3,11 @@
     {
         "2000": "User registered successfully",
         "2001": "User logged in successfully",
-        "2002": "Found user email",
-        "2003": "Email sent successfully"
+        "2002": "Found user's inbox mail",
+        "2003": "Email sent successfully",
+        "2004": "Found user's drafts",
+        "2005": "Found user's sent mail",
+        "2006": "Successfully saved as draft"
     },
     "Error": 
     {
@@ -14,7 +17,9 @@
         "1003": "User failed to login",
         "1004": "User verification failed",
         "1005": "Failed to get list of contents of user's inbox",
-        "1006": "Failed to send email"
-
+        "1006": "Failed to send email",
+        "1007": "Failed to get list of contents of user's drafts",
+        "1008": "Failed to save draft",
+        "1009": "Failed to get list of contents of user's sent mail"
     }
 }   

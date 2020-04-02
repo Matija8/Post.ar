@@ -2,7 +2,7 @@ import { createConnection } from "typeorm";
 import * as dotenv from "dotenv";
 
 import { Routes } from "./routes";
-import { logger } from "./utils/Utils";
+import { logger } from "./utils/Logger";
 
 const cors = require("cors");
 const express = require("express");
@@ -29,7 +29,7 @@ createConnection().then(connection => {
 
     // Start express server
     app.listen(process.env.PORT);
-    logger.info(`Express server started at ${ process.env.PORT }`);
+    logger.info("success", `express server started at ${ process.env.PORT } port`);
 }).catch(err => {
-    logger.fatal(err);
+    logger.fatal("startup_error", err);
 });

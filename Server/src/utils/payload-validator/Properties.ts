@@ -7,5 +7,4 @@ export const Properties = {
 
     recipient: { type: String, required: true },
     text: { type: String, required: true }
-    
 }

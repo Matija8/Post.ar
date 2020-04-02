@@ -1,9 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { InboxMail } from "./InboxMail";
+
+import { Inbox } from "./mail/Inbox";
+import { Sent } from "./mail/Sent";
+import { Drafts } from "./mail/Drafts";
 
 @Entity()
 export class User {
-
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,8 +18,7 @@ export class User {
     username: string;
 
     @Column({
-        nullable: false,
-        length: 64
+        nullable: false
     })
     password: string;
 
@@ -33,7 +34,13 @@ export class User {
     })
     surname: string;
 
-    @OneToMany(type => InboxMail, inbox => inbox.user)
-    inbox: InboxMail[];
+    @OneToMany(type => Inbox, inbox => inbox.user)
+    inbox: Inbox[];
+
+    @OneToMany(type => Sent, sent => sent.user)
+    sent: Sent[];
+
+    @OneToMany(type => Drafts, drafts => drafts.user)
+    drafts: Drafts[];
 
 }

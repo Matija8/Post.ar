@@ -9,9 +9,3 @@ export function createResponse(response: Response, status: number, statusCode: n
         payload: data
     });
 }
-
-// Logger
-const log4js = require("log4js").getLogger();
-log4js.level = "debug";
-
-export const logger = log4js; 
