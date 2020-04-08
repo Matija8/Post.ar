@@ -24,18 +24,17 @@ export class LoginComponent implements OnInit {
     this.auth.userLogin(loginData)
     .subscribe(
       (res: any) => {
-        // TODO: set response and error types (interface response...)
-        console.log(res);
-        this.cookieService.set('username' , res.payload.username);
+        console.log(`Response from userLogin:\n${res}`);
+        /* this.cookieService.set('username' , res.payload.username);
         this.cookieService.set('name' , res.payload.name);
-        this.cookieService.set('surname', res.payload.surname);
+        this.cookieService.set('surname', res.payload.surname); */
 
         alert(`Welcome`);
         this.router.navigate(['/inbox']);
       },
       (err: any) => {
+        console.log(`Error from userLogin:\n${err}`);
         alert(`Sorry, couldn't login...`);
-        console.log(err);
       }
     );
 

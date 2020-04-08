@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User, LoginData } from '../models/User';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { User, LoginData, RegisterData } from '../models/User';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -23,16 +23,12 @@ export class AuthService {
 
   constructor(private http: HttpClient, private cookieService: CookieService) {
     this.userDataSource = new BehaviorSubject<User>(null);
-    // const loggedInDataFromCookie = new User('Pera', 'Peric', 'pera@postar.com', 'TODO: Ovako necemo cuvati sifru, ovo je privremeno');
-    // this.userDataSource.next(loggedInDataFromCookie);
     this.currentUserData = this.userDataSource.asObservable();
-
+    this.userDataSource.next(null);
   }
 
-  // REGISTER
-  // posting name, surname, username, password to server
 
-  registerUser(user: User): any {
+  registerUser(user: RegisterData): Observable<object> {
     return this.http.post(this.registerUrl, {
       name: user.name,
       surname: user.surname,
@@ -41,37 +37,33 @@ export class AuthService {
     }, this.httpOptions);
   }
 
-  // LOGIN
-  // posting username, password to server
-  userLogin(user: LoginData): any {
-    // const loginDataFromServerOrCookie = { data:
-    //   {
-    //     token: 'some-token-value',
-    //     user: {name: 'Pera', surname: 'Peric', email: 'pera@postar.com', password: 'Veoma sigurna sifra*789' },
-    //   }
-    // };
-    // const data = loginDataFromServerOrCookie.data;
 
-    // localStorage.setItem('token', data.token);
+  userLogin(user: LoginData): Observable<object> {
+    const response = this.http.post(this.loginUrl, {
+      username: user.email,
+      password: user.password
+    }, this.httpOptions);
 
-    // this.userDataSource.next(data.user);
+    response.subscribe(
+      (res: any) => {
 
-    // return of( data );
+        // TODO: get from res.
+        const data = {name: 'Pera', surname: 'Peric', email: 'asd'};
+        this.userDataSource.next(data);
+      },
+      (err: any) => {
+        // Handled in login.component.ts's subscription.
+      }
+    );
 
-
-    this.http.post(this.loginUrl,
-      {
-        username: user.email,
-        password: user.password
-      }, this.httpOptions);
+    return response;
   }
 
   userLogout(): void {
     this.userDataSource.next(null);
-    localStorage.removeItem('token');
   }
 
-  loggedIn() {
+  loggedIn(): boolean {
     return !!this.userDataSource.getValue();
   }
 
