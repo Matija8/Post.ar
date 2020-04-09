@@ -10,8 +10,8 @@
     <div class='header-right'>
         <button (click)="toggleTheme()">change theme</button>
 
-        <div *ngIf="userData !== null" id="show-menu" #showMenu></div>
-        <ul *ngIf="userData !== null" id="dropdown-menu" #menu>
+        <div id="show-menu" #showMenu></div>
+        <ul id="dropdown-menu" #menu>
             <a routerLink="/logout" routerLinkActive="active">Logout</a>
         </ul>
 

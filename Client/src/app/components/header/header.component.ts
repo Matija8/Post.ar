@@ -19,10 +19,32 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService) { }
 
   ngOnInit(): void {
-    this.authSubscription = this.auth.currentUserData.subscribe(data => this.userData = data);
+    this.authSubscription = this.auth.currentUserData
+    .subscribe((data => {
+      if (this.showMenu && this.showMenu.nativeElement) {
+        this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
+      }
+      this.userData = data;
+    }));
   }
 
   ngAfterViewInit(): void {
+    this.addToggleMenuListener();
+    if (this.showMenu && this.showMenu.nativeElement) {
+      this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
+    this.removeToggleMenuListener();
+  }
+
+  toggleTheme(): void {
+    this.changeThemeService.toggleDarkMode();
+  }
+
+  private addToggleMenuListener() {
     const showMenu = this.showMenu.nativeElement as HTMLElement;
     const menu = this.menu.nativeElement as HTMLElement;
     if (!menu || !showMenu) {
@@ -36,17 +58,12 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     showMenu.addEventListener('click', this.toggleMenu);
   }
 
-  ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
+  private removeToggleMenuListener() {
     const showMenu = this.showMenu.nativeElement as HTMLElement;
     if (!(showMenu && this.toggleMenu)) {
       return;
     }
     showMenu.removeEventListener('click', this.toggleMenu);
-  }
-
-  toggleTheme(): void {
-    this.changeThemeService.toggleDarkMode();
   }
 
 }

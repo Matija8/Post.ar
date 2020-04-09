@@ -52,6 +52,7 @@ button {
     min-width: var(--dropdown-menu-circile-radius);
     width: var(--dropdown-menu-circile-radius);
     height: var(--dropdown-menu-circile-radius);
+    visibility: hidden;
     display: inline-block;
     vertical-align: middle;
     margin-right: 20px;

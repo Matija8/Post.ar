@@ -52,7 +52,7 @@ export class AuthService {
         this.userDataSource.next(data);
       },
       (err: any) => {
-        // Handled in login.component.ts's subscription.
+        console.log(err);
       }
     );
 
