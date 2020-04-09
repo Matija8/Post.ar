@@ -44,6 +44,8 @@ button {
 }
 
 #show-menu {
+    visibility: hidden;
+    display: inline-block;
     content: ' ';
     background-color: var(--background-color2);
     border: 1px solid var(--border-color1);
@@ -52,13 +54,13 @@ button {
     min-width: var(--dropdown-menu-circile-radius);
     width: var(--dropdown-menu-circile-radius);
     height: var(--dropdown-menu-circile-radius);
-    visibility: hidden;
-    display: inline-block;
     vertical-align: middle;
     margin-right: 20px;
 }
 
 #dropdown-menu {
+    visibility: hidden;
+    display: flex;
     position: absolute;
     width: var(--dropdown-menu-width);
     top: var(--header-height);
@@ -70,9 +72,12 @@ button {
     border-radius: 8px;
     margin-right: 3px;
 
-    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     padding: 0.5rem;
+}
+
+#dropdown-menu > a {
+    cursor: pointer;
 }

@@ -15,60 +15,44 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('menu') menu: ElementRef;
   userData: User = null;
   authSubscription: Subscription;
-  private toggleMenu: () => void = null;
+  menuVisible = false;
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.authSubscription = this.auth.currentUserData
     .subscribe((data => {
-      if (this.showMenu && this.showMenu.nativeElement) {
-        const userIsLoggedIn = this.auth.loggedIn();
-        this.showMenu.nativeElement.style.visibility = userIsLoggedIn ? 'visible' : 'hidden';
-        if (!userIsLoggedIn) {
-          this.menu.nativeElement.style.display = 'none';
-        }
-      }
       this.userData = data;
+
+      this.menuVisible = false;
+      if (this.menu && this.menu.nativeElement) {
+        this.menu.nativeElement.style.visibility = 'hidden';
+      }
+      if (this.showMenu && this.showMenu.nativeElement) {
+        this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
+      }
     }));
   }
 
   ngAfterViewInit(): void {
-    this.addToggleMenuListener();
-    if (this.showMenu && this.showMenu.nativeElement) {
-      this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
-    }
   }
 
   ngOnDestroy(): void {
     this.authSubscription.unsubscribe();
-    this.removeToggleMenuListener();
   }
 
   toggleTheme(): void {
     this.changeThemeService.toggleDarkMode();
   }
 
-  private addToggleMenuListener() {
+  showMenuClick() {
     const showMenu = this.showMenu.nativeElement as HTMLElement;
     const menu = this.menu.nativeElement as HTMLElement;
     if (!menu || !showMenu) {
       return;
     }
-    let newMenuStyle = { display: 'none'};
-    this.toggleMenu = () => {
-      newMenuStyle = newMenuStyle.display !== 'none' ? { display: 'none' } : { display: 'flex' };
-      menu.style.display = newMenuStyle.display;
-    };
-    showMenu.addEventListener('click', this.toggleMenu);
-  }
-
-  private removeToggleMenuListener() {
-    const showMenu = this.showMenu.nativeElement as HTMLElement;
-    if (!(showMenu && this.toggleMenu)) {
-      return;
-    }
-    showMenu.removeEventListener('click', this.toggleMenu);
+    menu.style.visibility = this.menuVisible ? 'hidden' : 'visible';
+    this.menuVisible = !this.menuVisible;
   }
 
   logOut() {

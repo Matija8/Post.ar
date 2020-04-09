@@ -10,7 +10,7 @@
     <div class='header-right'>
         <button (click)="toggleTheme()">change theme</button>
 
-        <div id="show-menu" #showMenu></div>
+        <div id="show-menu" (click)="showMenuClick()" #showMenu></div>
         <ul id="dropdown-menu" #menu>
             <a (click)="logOut()">Logout</a>
         </ul>
