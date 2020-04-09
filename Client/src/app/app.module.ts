@@ -22,7 +22,6 @@ import { BadURLComponent } from './components/bad-url/bad-url.component';
 import { ChangeThemeService } from './services/change-theme.service';
 import { ComposeComponent } from './components/compose/compose.component';
 import { ComposeItemComponent } from './components/compose-item/compose-item.component';
-import { LogoutComponent } from './components/logout/logout.component';
 import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
@@ -41,8 +40,7 @@ import { CookieService } from 'ngx-cookie-service';
     SidebarComponent,
     MainComponent,
     BadURLComponent,
-    ComposeItemComponent,
-    LogoutComponent
+    ComposeItemComponent
   ],
   imports: [
     BrowserModule,

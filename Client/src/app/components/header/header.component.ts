@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChangeThemeService } from '../../services/change-theme.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/User';
@@ -16,13 +17,17 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   authSubscription: Subscription;
   private toggleMenu: () => void = null;
 
-  constructor(private changeThemeService: ChangeThemeService, private auth: AuthService) { }
+  constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.authSubscription = this.auth.currentUserData
     .subscribe((data => {
       if (this.showMenu && this.showMenu.nativeElement) {
-        this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
+        const userIsLoggedIn = this.auth.loggedIn();
+        this.showMenu.nativeElement.style.visibility = userIsLoggedIn ? 'visible' : 'hidden';
+        if (!userIsLoggedIn) {
+          this.menu.nativeElement.style.display = 'none';
+        }
       }
       this.userData = data;
     }));
@@ -64,6 +69,11 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     showMenu.removeEventListener('click', this.toggleMenu);
+  }
+
+  logOut() {
+    this.auth.userLogout();
+    this.router.navigate(['/login']);
   }
 
 }
