@@ -23,6 +23,7 @@ import { ChangeThemeService } from './services/change-theme.service';
 import { ComposeComponent } from './components/compose/compose.component';
 import { ComposeItemComponent } from './components/compose-item/compose-item.component';
 import { CookieService } from 'ngx-cookie-service';
+import { GetMailService } from './services/mail-services/get-mail.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { CookieService } from 'ngx-cookie-service';
     AuthService,
     AuthGuard,
     ChangeThemeService,
-    CookieService
+    CookieService,
+    GetMailService
   ],
   bootstrap: [
     AppComponent

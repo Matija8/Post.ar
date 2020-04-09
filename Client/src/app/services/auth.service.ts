@@ -24,7 +24,6 @@ export class AuthService {
   constructor(private http: HttpClient, private cookieService: CookieService) {
     this.userDataSource = new BehaviorSubject<User>(null);
     this.currentUserData = this.userDataSource.asObservable();
-    this.userDataSource.next(null);
   }
 
 
