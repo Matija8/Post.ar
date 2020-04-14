@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 const moment = require("moment");
 
-import { User } from "../../entity/User";
+import { User } from "../../entity/user";
 
 export class Session {
 

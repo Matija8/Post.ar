@@ -35,4 +35,4 @@
 >+ **Response fields**: ``{ }``
 >+ **Error codes**: ``1000, 1001, 1006``
 
-### Important note, for error codes, see ***src/StatusCodes.json***
+### Important note, for error codes, see ``src/status-codes.json``

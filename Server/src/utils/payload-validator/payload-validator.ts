@@ -1,8 +1,10 @@
-import { Properties } from "./Properties";
-import { logger } from "../Logger";
+import { Properties } from "./properties";
+import { Logger } from "../logger";
 import Schema from "validate";
 
 class PayloadValidatorModel {
+
+    private logger = new Logger("payload-validator");
 
     validate(data: any, requestedProperties: any): boolean {
         const schemaObject = {};
@@ -13,9 +15,9 @@ class PayloadValidatorModel {
         const errors = schema.validate({ ...data });
         
         if (errors.length != 0) {
-            logger.fatal("PayloadValidator", "inavlid payload errors" );
+            this.logger.fatal("inavlid payload errors" );
             for (const error of errors)
-                logger.error("PayloadValidator", `property '${ error.path }' is required`);
+                this.logger.error(`property '${ error.path }' is required`);
 
             return true;
         }

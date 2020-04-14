@@ -1,10 +1,10 @@
-import { UserController } from "./controllers/UserController";
-import { InboxController } from "./controllers/InboxController";
-import { SentController } from "./controllers/SentController";
-import { DraftController } from "./controllers/DraftController";
+import { UserController } from "./controllers/user-controller";
+import { InboxController } from "./controllers/inbox-controller";
+import { SentController } from "./controllers/sent-controller";
+import { DraftController } from "./controllers/draft-controller";
 
 export const Routes = [
-    // User Controller Routes
+    // user controller routes
     {
         controller: UserController,
         method: "post",
@@ -17,7 +17,7 @@ export const Routes = [
         path: "/login",
         handler: "login"
     },
-    // Inbox Controller Routes
+    // inbox controller routes
     {
         controller: InboxController,
         method: "get",
@@ -30,14 +30,14 @@ export const Routes = [
         path: "/send",
         handler: "send"
     },
-    // Sent Controller Routes
+    // sent controller routes
     {
         controller: SentController,
         method: "get",
         path: "/sentMail",
         handler: "sentMail"
     },
-    // Drafts Controller Routes
+    // drafts controller routes
     {
         controller: DraftController,
         method: "get",

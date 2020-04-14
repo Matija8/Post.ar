@@ -1,5 +1,5 @@
-import { Session } from "./Session";
-import { User } from "../../entity/User";
+import { Session } from "./session";
+import { User } from "../../entity/user";
 
 class SessionManagerModel {
 

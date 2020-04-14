@@ -2,9 +2,9 @@
   "name": "postar-node",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "main.ts",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/main.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
-import { Inbox } from "./mail/Inbox";
-import { Sent } from "./mail/Sent";
-import { Drafts } from "./mail/Drafts";
+import { Inbox } from "./mail/inbox";
+import { Sent } from "./mail/sent";
+import { Drafts } from "./mail/drafts";
 
 @Entity()
 export class User {
