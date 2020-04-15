@@ -59,7 +59,7 @@ export class SentController {
         }
         
         this.logger.debug("encrypt user's sent mail", "/sentMail");
-        const encrypted = secretar.crypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
+        const encrypted = secretar.encrypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
         if (!encrypted) {
             createResponse(response, 400, 1010, error[1010]);
             this.logger.info("done", "/sentMail");

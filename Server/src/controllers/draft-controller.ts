@@ -62,10 +62,10 @@ export class DraftController {
         }
         
         this.logger.debug("encrypt drafts", "/drafts");
-        const encrypted = secretar.crypt({ total: drafts.length, data: JSON.stringify(drafts) });
+        const encrypted = secretar.encrypt({ total: drafts.length, data: JSON.stringify(drafts) });
         if (!encrypted) {
             createResponse(response, 400, 1010, error[1010]);
-            this.logger.info("done", "/sentMail");
+            this.logger.info("done", "/drafts");
             return;
         }
 

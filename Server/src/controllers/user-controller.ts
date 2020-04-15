@@ -103,7 +103,7 @@ export class UserController {
         const userData = { username: user.username, name: user.name, surname: user.surname };
         
         // encrypt user data
-        const encrypted = secretar.crypt(userData);
+        const encrypted = secretar.encrypt(userData);
         if (!encrypted) {
             createResponse(response, 400, 1010, error[1010]);
             this.logger.info("done", "/login");

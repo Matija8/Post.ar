@@ -9,8 +9,8 @@ class KeyStoreModel {
     };
 
     public publicKey = {
-            key: fs.readFileSync("./src/keys/public.pem").toString(),
-            passphrase: process.env.PUBLIC_SECRET
+        key: fs.readFileSync("./src/keys/public.pem").toString(),
+        passphrase: process.env.PUBLIC_SECRET
     }
 
 }

@@ -5,7 +5,7 @@
     "username": "postgres",
     "password": "root",
     "database": "postar_db",
-    "logging": true,
+    "logging": false,
     "synchronize": true,
     "entities": [
         "src/entity/**/*.ts"

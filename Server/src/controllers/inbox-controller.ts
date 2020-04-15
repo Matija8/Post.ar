@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository, getConnection } from "typeorm";
+import { getRepository, getManager } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
 // utils
@@ -18,14 +18,9 @@ import { Sent } from "../entity/mail/sent";
 export class InboxController {
 
     private logger = new Logger("inbox-controller");
-    private querryRunner = getConnection().createQueryRunner();
 
     // repositories
     private userRepository  = getRepository(User);
-
-    constructor() {
-        this.querryRunner.connect();
-    }
 
     async inbox(request: Request, response: Response) {
         this.logger.info("start", "/inbox");
@@ -66,7 +61,13 @@ export class InboxController {
         }
         
         this.logger.debug("encrypt mail list", "/inbox");
-        const encrypted = secretar.crypt({ total: messages.length, data: JSON.stringify(messages) });
+        const encrypted = secretar.encrypt({ total: messages.length, data: JSON.stringify(messages) });
+        if (!encrypted) {
+            createResponse(response, 400, 1010, error[1010]);
+            this.logger.info("done", "/inbox");
+            return;
+        }
+
         createResponse(response, 200, 2002, success[2002], encrypted);
         this.logger.info("done", "/inbox");
     }
@@ -107,36 +108,33 @@ export class InboxController {
         }
 
         this.logger.debug("update inbox and sent mail", "/send");
-        await this.querryRunner.startTransaction();
         try {
-            await this.querryRunner.manager.insert(Inbox, {
-                message_id: uuidv4(),
-                from: session.user.username,
-                text: body.text,
-                isRead: false,
-                timestamp: new Date().getTime().toString(),
-                user: recipient
-            });
+            await getManager().transaction(async entityManager => {
+                await entityManager.insert(Inbox, {
+                    message_id: uuidv4(),
+                    from: session.user.username,
+                    text: body.text,
+                    isRead: false,
+                    timestamp: new Date().getTime().toString(),
+                    user: recipient
+                });
 
-            await this.querryRunner.manager.insert(Sent, {
-                message_id: uuidv4(),
-                text: body.text,
-                timestamp: new Date().getTime().toString(),
-                to: recipient.username,
-                user: session.user
+                await entityManager.insert(Sent, {
+                    message_id: uuidv4(),
+                    text: body.text,
+                    timestamp: new Date().getTime().toString(),
+                    to: recipient.username,
+                    user: session.user
+                });
             });
-
-            this.querryRunner.commitTransaction();
-        } catch (err) {
-            this.querryRunner.rollbackTransaction();
-            this.logger.fatal(err, "/send");
             
+            createResponse(response, 200, 2003, success[2003]);
+            this.logger.info("done", "/send");
+        } catch (err) {
+            this.logger.fatal(err, "/send");
             createResponse(response, 400, 1006, error[1006]);
             return;
         }
-
-        createResponse(response, 200, 2003, success[2003]);
-        this.logger.info("done", "/send");
     }
 
 }
