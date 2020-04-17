@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SMessage } from 'src/app/models/Messages';
-import { GetMailService } from '../../services/mail-services/get-mail.service';
+import { GetMailService } from '../../../services/mail-services/get-mail.service';
 
 @Component({
   selector: 'postar-sent',

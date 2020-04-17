@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { InboxComponent } from './components/inbox/inbox.component';
-import { SentComponent } from './components/sent/sent.component';
-import { StarredComponent } from './components/starred/starred.component';
-import { DraftsComponent } from './components/drafts/drafts.component';
+import { InboxComponent } from './components/folders/inbox/inbox.component';
+import { SentComponent } from './components/folders/sent/sent.component';
+import { StarredComponent } from './components/folders/starred/starred.component';
+import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
-import { OpenMailItemComponent } from './components/mailView/open-mail-item/open-mail-item.component';
+import { OpenMailItemComponent } from './components/mail-view/open-mail-item/open-mail-item.component';
 
-import { AuthGuard } from './services/auth.guard';
-import { LoggedInGuard } from './services/logged-in.guard';
+import { AuthGuard } from './services/guards/auth.guard';
+import { LoggedInGuard } from './services/guards/logged-in.guard';
 
 
 const routes: Routes = [

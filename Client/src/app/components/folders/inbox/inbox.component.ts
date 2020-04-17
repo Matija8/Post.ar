@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RMessage } from '../../models/Messages';
-import { GetMailService } from '../../services/mail-services/get-mail.service';
+import { RMessage } from '../../../models/Messages';
+import { GetMailService } from '../../../services/mail-services/get-mail.service';
 
 @Component({
   selector: 'postar-inbox',
