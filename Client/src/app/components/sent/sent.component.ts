@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from 'src/app/models/Messages';
+import { SMessage } from 'src/app/models/Messages';
+import { GetMailService } from '../../services/mail-services/get-mail.service';
 
 @Component({
   selector: 'postar-sent',
@@ -8,28 +9,11 @@ import { Message } from 'src/app/models/Messages';
 })
 export class SentComponent implements OnInit {
 
-  sentMessages: Message[];
-  constructor() { }
+  sentMessages: SMessage[];
+  constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.sentMessages = this.getSentMessages();
+    this.sentMessages = this.getMail.getSentMessages();
   }
 
-  getSentMessages(): Message[] {
-    // TODO: get from server via a service.
-    return [
-      {
-        id: 1,
-        sentTo: 'Pera',
-        cc: 'Angular',
-        messageText: 'Neka veeeeelika poruka'
-      },
-      {
-        id: 2,
-        sentTo: 'Luka',
-        cc: 'Angular1',
-        messageText: 'jos neka velika poruka'
-      }
-    ];
-  }
 }

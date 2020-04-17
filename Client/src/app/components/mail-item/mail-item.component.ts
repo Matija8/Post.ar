@@ -1,5 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { Message, isReceived, isSent } from 'src/app/models/Messages';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'postar-mail-item',
@@ -11,20 +12,10 @@ export class MailItemComponent implements OnInit {
 
   @Input() msg: Message;
   sentByMe = false;
-  // napraviti enum
-  constructor() { }
+
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
-    this.checkMsg();
-  }
-
-  checkMsg() {
-    if (isReceived(this.msg)) {
-      this.sentByMe = false;
-      return;
-    } else if (isSent(this.msg)) {
-      this.sentByMe = true;
-      return;
-    }
+    this.sentByMe = !(isReceived(this.msg));
   }
 }

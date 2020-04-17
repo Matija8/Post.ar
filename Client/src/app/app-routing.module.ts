@@ -7,6 +7,7 @@ import { SentComponent } from './components/sent/sent.component';
 import { StarredComponent } from './components/starred/starred.component';
 import { DraftsComponent } from './components/drafts/drafts.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
+import { OpenMailItemComponent } from './components/mailView/open-mail-item/open-mail-item.component';
 
 import { AuthGuard } from './services/auth.guard';
 import { LoggedInGuard } from './services/logged-in.guard';
@@ -23,9 +24,17 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: InboxComponent
   },
+  { path: 'inbox/:id',
+    canActivate: [AuthGuard],
+    component: OpenMailItemComponent
+  },
   { path: 'sent',
     canActivate: [AuthGuard],
     component: SentComponent
+  },
+  { path: 'sent/:id',
+    canActivate: [AuthGuard],
+    component: OpenMailItemComponent
   },
   { path: 'starred',
     canActivate: [AuthGuard],

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from '../../models/Messages';
+import { RMessage } from '../../models/Messages';
+import { GetMailService } from '../../services/mail-services/get-mail.service';
+
 @Component({
   selector: 'postar-inbox',
   templateUrl: './inbox.component.html',
@@ -7,28 +9,12 @@ import { Message } from '../../models/Messages';
 })
 export class InboxComponent implements OnInit {
 
-  inboxMessages: Message[];
-  constructor() { }
+  inboxMessages: RMessage[];
+  constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.inboxMessages = this.getInboxMessages();
+    // TODO: subscribe to an observable from getMail and get inbox that way
+    this.inboxMessages = this.getMail.getInboxMessages();
   }
 
-  getInboxMessages(): Message[] {
-    // TODO: get from server via a service.
-    return [
-      {
-        id: 1,
-        sender: 'Matija',
-        cc: 'Angular',
-        messageText: 'Neka veeeeelika poruka'
-      },
-      {
-        id: 2,
-        sender: 'Stefan',
-        cc: 'Angular1',
-        messageText: 'jos neka velika poruka'
-      }
-    ];
-  }
 }
