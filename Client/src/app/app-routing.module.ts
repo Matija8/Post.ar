@@ -24,17 +24,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: InboxComponent
   },
-  { path: 'inbox/:id',
-    canActivate: [AuthGuard],
-    component: OpenMailItemComponent
-  },
   { path: 'sent',
     canActivate: [AuthGuard],
     component: SentComponent
-  },
-  { path: 'sent/:id',
-    canActivate: [AuthGuard],
-    component: OpenMailItemComponent
   },
   { path: 'starred',
     canActivate: [AuthGuard],
@@ -51,7 +43,14 @@ const routes: Routes = [
   { path: 'register',
     component: RegisterComponent
   },
-  // path: inbox/:id i isto za ostale
+  { path: 'drafts/:msgId',
+    canActivate: [AuthGuard],
+    component: DraftsComponent
+  },
+  { path: ':folder/:msgId',
+    canActivate: [AuthGuard],
+    component: OpenMailItemComponent
+  },
   { path: '**', component: BadURLComponent }
 ];
 

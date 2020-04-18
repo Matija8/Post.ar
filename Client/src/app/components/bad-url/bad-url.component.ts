@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'postar-bad-url',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BadURLComponent implements OnInit {
 
-  constructor() { }
+  public loggedIn: boolean;
+
+  constructor(private auth: AuthService) {
+    this.loggedIn = auth.loggedIn();
+  }
 
   ngOnInit(): void {
   }

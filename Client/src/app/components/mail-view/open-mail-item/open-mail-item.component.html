@@ -1,1 +1,7 @@
-<p>open-mail-item works!</p>
+<!-- TODO: add subject to message model... -->
+<h2 *ngIf="this.msg.sender">  {{ this.msg.sender }} </h2>
+<h2 *ngIf="this.msg.sentTo">  {{ this.msg.sentTo }} </h2>
+<h4>  {{ this.msg.cc }} </h4>
+<p>
+    {{ this.msg.messageText }}
+</p>

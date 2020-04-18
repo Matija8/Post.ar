@@ -1,1 +1,3 @@
-<h1> 404 - Bad URL! </h1>
+<h1> 404 - Page not found! </h1>
+<h3 *ngIf="this.loggedIn" [routerLink]="['inbox']">Inbox</h3>
+<h3 *ngIf="!this.loggedIn" [routerLink]="['login']">Login</h3>

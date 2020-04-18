@@ -14,14 +14,14 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('showMenu') showMenu: ElementRef;
   @ViewChild('menu') menu: ElementRef;
   userData: User = null;
-  authSubscription: Subscription;
+  authSubscription: Subscription = null;
   menuVisible = false;
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.authSubscription = this.auth.currentUserData
-    .subscribe((data => {
+    .subscribe(data => {
       this.userData = data;
 
       this.menuVisible = false;
@@ -31,14 +31,16 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.showMenu && this.showMenu.nativeElement) {
         this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
       }
-    }));
+    });
   }
 
   ngAfterViewInit(): void {
   }
 
   ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
+    if (this.authSubscription !== null) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   toggleTheme(): void {

@@ -9,11 +9,11 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AuthService {
 
-  private registerUrl = 'http://localhost:8000/register';
-  private loginUrl = 'http://localhost:8000/login';
+  private readonly registerUrl = 'http://localhost:8000/register';
+  private readonly loginUrl = 'http://localhost:8000/login';
 
-  private userDataSource: BehaviorSubject<User>;
-  currentUserData: Observable<User>;
+  private readonly userDataSource: BehaviorSubject<User>;
+  public readonly currentUserData: Observable<User>;
 
   httpOptions = {
     headers : new HttpHeaders({
