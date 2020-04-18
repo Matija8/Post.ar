@@ -17,14 +17,15 @@ export class InboxComponent implements OnInit, OnDestroy {
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.inboxSubscription = this.getMail.inboxCache.subscribe(
+    const inbox = this.getMail.folders.inbox;
+    this.inboxSubscription = inbox.observable.subscribe(
       (messages: RMessage[]): void => {
         this.inboxMessages = messages;
       }
     );
     if (InboxComponent.firstTime) {
       InboxComponent.firstTime = false;
-      this.getMail.refreshInbox();
+      inbox.refresh();
     }
   }
 

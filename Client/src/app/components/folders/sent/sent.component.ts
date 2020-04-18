@@ -17,14 +17,15 @@ export class SentComponent implements OnInit, OnDestroy {
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.sentMsgSubscription = this.getMail.sentMsgCache.subscribe(
+    const sent = this.getMail.folders.sent;
+    this.sentMsgSubscription = sent.observable.subscribe(
       (messages: SMessage[]): void => {
         this.sentMessages = messages;
       }
     );
     if (SentComponent.firstTime) {
       SentComponent.firstTime = false;
-      this.getMail.refreshSent();
+      sent.refresh();
     }
   }
 
