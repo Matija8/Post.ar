@@ -101,14 +101,14 @@ export class GetMailService {
       {
         id: 1,
         sentTo: 'Pera',
-        cc: 'Angular',
-        messageText: 'Neka veeeeelika poruka'
+        cc: 'cc, blabla',
+        messageText: 'Ovo je za testiranje'
       },
       {
         id: 2,
         sentTo: 'Luka',
         cc: 'Angular1',
-        messageText: 'jos neka velika poruka'
+        messageText: 'Testiranje x2'
       }
     ]);
   }

@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     if (this.authSubscription !== null) {
       this.authSubscription.unsubscribe();
+      this.authSubscription = null;
     }
   }
 
