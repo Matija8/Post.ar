@@ -1,0 +1,67 @@
+:root {
+    /* these are the default css variables */
+
+    --background-color-outer: rgb(200,200,200);
+    --background-color-inner: rgb(220,220,220);
+    --background-color-link-hover: rgb(130, 150, 200);
+
+    --font-size-S: 10px;
+    --font-size-M: 14px;
+    --font-size-L: 22px;
+
+    --text-color1: black;
+    --text-color2: white;
+
+    --border-color1: black;
+
+}
+
+body {
+    /* these values can also be changed in custom themes */
+
+    /* body */
+    background-color: var(--background-color-inner);
+    color: var(--text-color1);
+
+    /* ui */
+
+        /* header */
+        --header-height: 60px;
+        --header-background-color: var(--background-color-outer);
+        --header-button-background-color: var(--background-color-inner);
+        --header-showMenu-background-color: var(--background-color-inner);
+
+            /* dropdown menu */
+            --dropdown-menu-width: 11rem;
+            --dropdown-menu-circile-radius: 2.1rem;
+            --dropdown-menu-background-color: var(--background-color-inner);
+            --dropdown-menu-text-color: var(--text-color1);
+            --dropdown-menu-border-color: black;
+
+        /* sidebar */
+        --sidebar-width: 8rem;
+        --sidebar-background-color: var(--header-background-color);
+        --sidebar-composeBtn-background-color: white;
+        --sidebar-link-hover-background-color: var(--background-color-link-hover);
+
+        /* main */
+
+    /* /ui */
+
+    /* compose */
+    --compose-item-width: 250px;
+}
+
+
+.theme-dark {
+
+    --background-color-outer: rgb(50, 50, 50);
+    --background-color-inner: rgb(120, 120, 120);
+    --background-color-link-hover: rgb(120, 50, 50);
+
+
+    --text-color1: rgb(220, 220, 220);
+    --text-color2: black;
+
+    --border-color1: white;
+}

@@ -5,7 +5,6 @@
     align-items: center;
     border: solid 0.5px black;
     padding: 5px;
-    background-color: var(--background-color1, white);
 }
 
 .left {
@@ -20,5 +19,5 @@
 }
 
 select {
-    font-size: var(--font-size-M, 16px);
+    font-size: var(--font-size-M);
 }

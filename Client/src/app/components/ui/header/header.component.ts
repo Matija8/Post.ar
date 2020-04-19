@@ -35,6 +35,9 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (this.showMenu && this.showMenu.nativeElement) {
+      this.showMenu.nativeElement.style.visibility = this.auth.loggedIn() ? 'visible' : 'hidden';
+    }
   }
 
   ngOnDestroy(): void {

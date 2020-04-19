@@ -1,55 +1,53 @@
-#header {
+:host {
     display: flex;
-
     height: var(--header-height);
     margin: 0;
-    border-bottom: solid 0.1px black;
-    overflow: hidden;
+    background-color: var(--header-background-color);
 }
 
 
-.header-left {
-    flex: 1;
+#header-left, #header-center, #header-right {
     display: flex;
     align-items: center;
+}
+
+
+#header-left {
+    flex: 1;
     justify-content: flex-start;
 }
 
 
-.header-right {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-
-h1 {
-    display: flex;
+#header-center {
     flex: 2;
     height: 100%;
     margin: 0;
     padding: 0;
-    align-items: center;
     justify-content: center;
 }
 
 
+#header-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+
 button {
-    background-color: var(--background-color2);
+    background-color: var(--header-button-background-color);
     align-self: center;
     height: fit-content;
     padding: 4px;
     margin-right: 20px;
 }
 
+
 #show-menu {
     visibility: hidden;
     display: inline-block;
     content: ' ';
-    background-color: var(--background-color2);
+    background-color: var(--header-showMenu-background-color);
     border: 1px solid var(--border-color1);
-    /*box-shadow: 0 0 0.5px 0px gray inset, 0 0 0.5px 0px gray;*/
     border-radius: 50%;
     min-width: var(--dropdown-menu-circile-radius);
     width: var(--dropdown-menu-circile-radius);
@@ -57,6 +55,11 @@ button {
     vertical-align: middle;
     margin-right: 20px;
 }
+
+#show-menu:hover {
+    cursor: pointer;
+}
+
 
 #dropdown-menu {
     visibility: hidden;
@@ -66,8 +69,9 @@ button {
     top: var(--header-height);
     right: 0;
     z-index: 2;
-    background: var(--background-color2);
-    border: 1px solid var(--border-color1);
+    background-color: var(--dropdown-menu-background-color);
+    border: 1px solid var(--dropdown-menu-border-color);
+    color: var(--dropdown-menu-text-color);
 
     border-radius: 8px;
     margin-right: 3px;
@@ -78,6 +82,6 @@ button {
     padding: 0.5rem;
 }
 
-#dropdown-menu > a {
+#dropdown-menu a {
     cursor: pointer;
 }

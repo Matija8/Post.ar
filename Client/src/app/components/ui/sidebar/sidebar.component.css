@@ -1,16 +1,12 @@
-#sidebar {
+:host {
 
     display: flex;
     flex-direction: column;
 
-    /* background-color: purple; */
-    /* border-top: solid black 1px; */
-    border-right: solid black 1px;
-
     float: left;
     width: var(--sidebar-width, 5rem);
-    height: 100%; /*100vh*/
-    background-color: var(--background-color1, white);
+    height: 100%;
+    background-color: var(--sidebar-background-color);
 }
 
 
@@ -21,7 +17,7 @@
     border-radius: 15px;
     padding: 5px;
     border: solid 1px black;
-    background-color: white;
+    background-color: var(--sidebar-composeBtn-background-color);
 }
 
 #compose-button:hover {
@@ -45,7 +41,7 @@
 }
 
 #sidebar-links a:hover {
-    background-color: gray;
+    background-color: var(--sidebar-link-hover-background-color);
     text-decoration: none;
     cursor: pointer;
 }

@@ -1,0 +1,19 @@
+a {
+    text-decoration: none;
+    color:inherit;
+}
+
+a:hover {
+    text-decoration: none;
+    color:inherit;
+    cursor: pointer;
+}
+
+
+body {
+    padding: 0;
+    margin: 0;
+    transition: background 500ms ease-in-out, color 200ms ease-in-out;
+}
+
+

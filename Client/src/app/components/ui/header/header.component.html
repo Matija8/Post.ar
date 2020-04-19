@@ -1,20 +1,17 @@
-<div id="header">
 
-    <div class='header-left'>
-    </div>
+<div id="header-left">
+</div>
 
-    <h1>
-        <a id="header-title" [routerLink]="['/']">Postar</a>
-    </h1>
+<div id="header-center">
+    <h1><a id="header-title" [routerLink]="['/']">Postar</a></h1>
+</div>
 
-    <div class='header-right'>
-        <button (click)="toggleTheme()">change theme</button>
+<div id="header-right">
+    <button (click)="toggleTheme()">change theme</button>
 
-        <div id="show-menu" (click)="showMenuClick()" #showMenu></div>
-        <ul id="dropdown-menu" #menu>
-            <a (click)="logOut()">Logout</a>
-        </ul>
-
-    </div>
+    <div id="show-menu" (click)="showMenuClick()" #showMenu></div>
+    <ul id="dropdown-menu" #menu>
+        <a (click)="logOut()">Logout</a>
+    </ul>
 
 </div>
