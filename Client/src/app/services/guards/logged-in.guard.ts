@@ -14,7 +14,7 @@ export class LoggedInGuard implements CanActivate {
     if (!this.auth.loggedIn()) {
       return true;
     } else {
-      this.router.navigate(['/logout']);
+      this.router.navigate(['/inbox']);
     }
     return false;
   }
