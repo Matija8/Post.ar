@@ -4,27 +4,31 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+
+import { AppComponent } from './components/app-root/app.component';
 import { HeaderComponent } from './components/ui/header/header.component';
+import { SidebarComponent } from './components/ui/sidebar/sidebar.component';
+import { MainComponent } from './components/ui/main/main.component';
 import { MailListComponent } from './components/mail-view/mail-list/mail-list.component';
 import { MailItemComponent } from './components/mail-view/mail-item/mail-item.component';
+import { OpenMailItemComponent } from './components/mail-view/open-mail-item/open-mail-item.component';
 import { InboxComponent } from './components/folders/inbox/inbox.component';
 import { SentComponent } from './components/folders/sent/sent.component';
 import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { StarredComponent } from './components/folders/starred/starred.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { AuthService } from './services/auth.service';
-import { SidebarComponent } from './components/ui/sidebar/sidebar.component';
-import { MainComponent } from './components/ui/main/main.component';
-import { AuthGuard } from './services/guards/auth.guard';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
-import { ChangeThemeService } from './services/change-theme.service';
-import { ComposeComponent } from './components/compose/compose.component';
-import { ComposeItemComponent } from './components/compose-item/compose-item.component';
+import { ComposeComponent } from './components/compose/compose-controller/compose.component';
+import { ComposeItemComponent } from './components/compose/compose-item/compose-item.component';
+
+import { AuthService } from './services/mail-services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GetMailService } from './services/mail-services/get-mail.service';
-import { OpenMailItemComponent } from './components/mail-view/open-mail-item/open-mail-item.component';
+import { ChangeThemeService } from './services/ui-services/change-theme.service';
+
+import { AuthGuard } from './services/guards/auth.guard';
+import { LoggedInGuard } from './services/guards/logged-in.guard';
 
 @NgModule({
   declarations: [
@@ -52,11 +56,12 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
     HttpClientModule
   ],
   providers: [
-    AuthService,
-    AuthGuard,
-    ChangeThemeService,
     CookieService,
-    GetMailService
+    AuthService,
+    GetMailService,
+    ChangeThemeService,
+    AuthGuard,
+    LoggedInGuard,
   ],
   bootstrap: [
     AppComponent
