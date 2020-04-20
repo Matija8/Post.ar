@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         /* this.cookieService.set('username' , res.payload.username);
         this.cookieService.set('name' , res.payload.name);
         this.cookieService.set('surname', res.payload.surname); */
-        
+
         const userData = this.secretar.decrypt(
           res.payload.data,
           res.payload.secret,

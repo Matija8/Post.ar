@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as forge from 'node-forge';
+import { pki, util, cipher, md as forgeMd } from 'node-forge';
 
 import PrivateKey from 'src/keys/private.json';
 import PublicKey from 'src/keys/public.json';
@@ -10,35 +10,35 @@ import PublicKey from 'src/keys/public.json';
 })
 export class SecretarService {
 
-	constructor() { }
+  constructor() { }
 
-	decrypt(data: string, secret: string, hash: string) {
-		try {
-			const pk = forge.pki.decryptRsaPrivateKey(PrivateKey.key, PrivateKey.passphrase);
-		
-			let key = pk.decrypt(forge.util.hexToBytes(secret), 'RSA-OAEP');
-			key = JSON.parse(key);
+  decrypt(data: string, secret: string, hash: string) {
+    try {
+      const pk = pki.decryptRsaPrivateKey(PrivateKey.key, PrivateKey.passphrase);
 
-			const decipher = forge.cipher.createDecipher('AES-CBC', forge.util.hexToBytes(key.key));
-      decipher.start({iv: forge.util.hexToBytes(key.iv)});
-      decipher.update(forge.util.createBuffer(forge.util.hexToBytes(data)));
+      let key = pk.decrypt(util.hexToBytes(secret), 'RSA-OAEP');
+      key = JSON.parse(key);
+
+      const decipher = cipher.createDecipher('AES-CBC', util.hexToBytes(key.key));
+      decipher.start({iv: util.hexToBytes(key.iv)});
+      decipher.update(util.createBuffer(util.hexToBytes(data)));
       decipher.finish();
-			const decrypted = JSON.parse(decipher.output.toString());
+      const decrypted = JSON.parse(decipher.output.toString());
 
-      const publicKey = forge.pki.publicKeyFromPem(PublicKey.key);
+      const publicKey = pki.publicKeyFromPem(PublicKey.key);
 
-      const md = forge.md.sha256.create();
+      const md = forgeMd.sha256.create();
       md.update(decipher.output.toString());
-      
+
       const result = publicKey.verify(
         md.digest().getBytes(),
-        forge.util.hexToBytes(hash)
+        util.hexToBytes(hash)
       );
-      
-			return result ? decrypted : undefined;
-		} catch (err) {
+
+      return result ? decrypted : undefined;
+    } catch (err) {
       console.log(err);
-			return undefined;
-		}
-	}
+      return undefined;
+    }
+  }
 }
