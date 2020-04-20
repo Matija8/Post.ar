@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { SecretarService } from '../secretar/secretar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,12 @@ export class AuthService {
     })
   };
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {
+  constructor(
+    private http: HttpClient,
+    private secretar: SecretarService,
+    private cookieService: CookieService
+  ) {
+    // TODO: get user data on start (keep me logged in...)
     this.userDataSource = new BehaviorSubject<User>(null);
     this.currentUserData = this.userDataSource.asObservable();
   }
@@ -45,10 +51,12 @@ export class AuthService {
 
     response.subscribe(
       (res: any) => {
-
-        // TODO: get from res.
-        const data = {name: 'Pera', surname: 'Peric', email: 'asd'};
-        this.userDataSource.next(data);
+        const userData = this.secretar.decrypt(
+          res.payload.data,
+          res.payload.secret,
+          res.payload.hash
+        );
+        this.userDataSource.next(userData);
       },
       (err: any) => {
         console.log(err);

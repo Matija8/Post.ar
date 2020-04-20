@@ -14,12 +14,14 @@ export class LoginComponent implements OnInit {
 
   email: string;
   password: string;
+  public warning = {visibility: 'hidden'};
 
   constructor(
     private auth: AuthService, private router: Router,
     private cookieService: CookieService, private secretar: SecretarService) { }
 
   ngOnInit(): void {
+    this.warning.visibility = 'hidden';
   }
 
   LogIn() {
@@ -27,29 +29,11 @@ export class LoginComponent implements OnInit {
     this.auth.userLogin(loginData)
     .subscribe(
       (res: any) => {
-        console.log(`Response from userLogin:\n${res}`);
-
-        // NOTE: vi ne postavljate kolacice, samo ih saljete pri svakom sledecem zahtevu
-        // sve sto zelite da cuvate => session ili local storage
-
-        /* this.cookieService.set('username' , res.payload.username);
-        this.cookieService.set('name' , res.payload.name);
-        this.cookieService.set('surname', res.payload.surname); */
-
-        const userData = this.secretar.decrypt(
-          res.payload.data,
-          res.payload.secret,
-          res.payload.hash
-        );
-
-        console.log(userData);
-
-        alert(`Welcome`);
         this.router.navigate(['/inbox']);
       },
       (err: any) => {
-        console.log(`Error from userLogin:\n${err}`);
-        alert(`Sorry, couldn't login...`);
+        console.log('Error from userLogin:', err);
+        this.warning.visibility = 'visible';
       }
     );
 

@@ -8,14 +8,17 @@
         <div class="card-body">
           <form class="form">
             <div class="form-group">
-              <label for="">Email</label>
-              <input id="email" name="email" type="text" [(ngModel)]="this.email" class="form-control" required>
+              <label>Email</label>
+              <input name="email" type="text" [(ngModel)]="this.email" class="form-control" required>
             </div>
             <div class="form-group">
-              <label for="">Password</label>
-              <input id="password" name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
+              <label>Password</label>
+              <input name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
+              <p class="login-warning" [ngStyle]="warning">
+                Failed to log in!
+              </p>
             </div>
-            <button (click)="LogIn()" type="button" class="btn btn-primary float-left">Log In</button>
+            <button (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
             <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>
           </form>
         </div>
