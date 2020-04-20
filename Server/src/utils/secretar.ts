@@ -11,14 +11,19 @@ class SecretarModel {
         try {
             data = JSON.stringify(data);
 
-            const secret = crypto.randomBytes(16).toString("hex");
+            const key = crypto.randomBytes(16);
+            const iv  = crypto.randomBytes(16);
                 
-            const cipher = crypto.createCipher("aes256", secret);
+            const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
             let encrypted = cipher.update(data, "utf8", "hex");
             encrypted += cipher.final("hex");
     
-            // encrypt secret
-            const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(secret))
+            // encrypt key
+            const keyData = JSON.stringify({
+                key: key.toString("hex"),
+                iv:  iv.toString("hex") 
+            });
+            const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(keyData))
                                       .toString("hex");
             
             // create signature
