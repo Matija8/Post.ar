@@ -19,6 +19,8 @@
     "@angular/platform-browser": "^9.0.7",
     "@angular/platform-browser-dynamic": "^9.0.7",
     "@angular/router": "^9.0.7",
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.5.0",
     "ngx-cookie-service": "^3.0.3",
     "node-forge": "^0.9.1",
     "rxjs": "~6.5.4",

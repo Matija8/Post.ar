@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginData } from 'src/app/models/User';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';

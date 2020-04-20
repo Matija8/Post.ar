@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../mail-services/auth.service';
 
 @Injectable({
   providedIn: 'root'

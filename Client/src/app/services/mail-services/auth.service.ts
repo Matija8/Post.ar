@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User, LoginData, RegisterData } from '../models/User';
+import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 

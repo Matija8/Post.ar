@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChangeThemeService } from '../../../services/change-theme.service';
-import { AuthService } from '../../../services/auth.service';
+import { ChangeThemeService } from '../../../services/ui-services/change-theme.service';
+import { AuthService } from '../../../services/mail-services/auth.service';
 import { User } from '../../../models/User';
 import { Subscription } from 'rxjs';
 
