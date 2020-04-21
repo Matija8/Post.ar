@@ -9,8 +9,12 @@
 <div id="header-right">
     <button (click)="toggleTheme()">change theme</button>
 
-    <div id="show-menu" (click)="showMenuClick()" #showMenu></div>
-    <ul id="dropdown-menu" #menu>
+    <div id="show-menu" [style.visibility]="showMenuBtnVisibile"
+        (click)="dropdownHidden=!dropdownHidden" class="unselectable"
+    >
+        {{ letter }}
+    </div>
+    <ul id="dropdown-menu" [hidden]="dropdownHidden">
         <a (click)="logOut()">Logout</a>
     </ul>
 
