@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { LoginData } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { SecretarService } from 'src/app/services/secretar/secretar.service';
 
 @Component({
   selector: 'postar-login',
@@ -17,8 +15,7 @@ export class LoginComponent implements OnInit {
   public warning = {visibility: 'hidden'};
 
   constructor(
-    private auth: AuthService, private router: Router,
-    private cookieService: CookieService, private secretar: SecretarService) { }
+    private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.warning.visibility = 'hidden';

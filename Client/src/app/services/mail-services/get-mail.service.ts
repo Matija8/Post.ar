@@ -16,7 +16,8 @@ export class GetMailService {
   private readonly httpOptions = {
     headers : new HttpHeaders({
       'Content-type' : 'application/json'
-    })
+    }),
+    withCredentials: true
   };
 
   private readonly inboxStream = new BehaviorSubject<RMessage[]>(null);
@@ -57,18 +58,17 @@ export class GetMailService {
 
 
   private refreshInbox() {
-    // TODO: send session id using cookies
     this.http.get(this.INBOX_URL, this.httpOptions).subscribe(
       (res: any) => {
-        console.log(`get-mail: refreshInbox: ${res}`);
-        // TODO: Set as inboxSource value. Can't now because cookies are not set (recives 401 from server)
+        console.log('get-mail: refreshInbox:', res);
+        // TODO: Set as inboxSource value. Can't now because servers return 400 error code (can't find user)
         // this.inboxSource.next();
       },
       (err: any) => {
-        console.log(err);
+        console.log('get-mail: refreshInbox error:', err);
       }
     );
-    // TODO: remove this after fixing cookies and setting data inside http.get
+    // TODO: remove this after fixing http get
     this.inboxStream.next([
       {
         id: 1,
@@ -96,7 +96,7 @@ export class GetMailService {
         console.log(err);
       }
     );
-    // TODO: remove this after fixing cookies and setting data inside http.get
+    // TODO: remove this after fixing http get
     this.sentStream.next([
       {
         id: 1,

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
 import { SecretarService } from '../secretar/secretar.service';
 
 @Injectable({
@@ -19,13 +18,13 @@ export class AuthService {
   httpOptions = {
     headers : new HttpHeaders({
       'Content-type' : 'application/json'
-    })
+    }),
+    withCredentials: true
   };
 
   constructor(
     private http: HttpClient,
-    private secretar: SecretarService,
-    private cookieService: CookieService
+    private secretar: SecretarService
   ) {
     // TODO: get user data on start (keep me logged in...)
     this.userDataSource = new BehaviorSubject<User>(null);
