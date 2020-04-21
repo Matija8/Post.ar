@@ -9,6 +9,9 @@
     bottom: 0;
     height: 100%;
     width: 100%;
-    margin: 0px;
-    margin-top: var(--header-height);
+    margin: var(--header-height) 0;
+}
+
+h3 {
+    cursor: pointer;
 }
