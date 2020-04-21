@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email: string;
-  password: string;
-  public warning = {visibility: 'hidden'};
+  public email: string;
+  public password: string;
+  public warning: 'hidden'|'visible';
 
   constructor(
     private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.warning.visibility = 'hidden';
+    this.warning = 'hidden';
   }
 
   LogIn() {
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       },
       (err: any) => {
         console.log('Error from userLogin:', err);
-        this.warning.visibility = 'visible';
+        this.warning = 'visible';
       }
     );
 

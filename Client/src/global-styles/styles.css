@@ -17,6 +17,11 @@ body {
 }
 
 
+.login-warning {
+    color: rgb(250, 10, 10)
+}
+
+
 .unselectable {
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */

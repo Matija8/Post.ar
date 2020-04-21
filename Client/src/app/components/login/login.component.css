@@ -1,8 +1,4 @@
-.postar-center {
-    /* TODO: center nicely */
-    margin-top: calc( 2 * var(--header-height, 60px) );
-}
-
-.login-warning {
-    color: rgb(250, 20, 20)
+:host {
+    display: block;
+    margin-top: calc( 2 * var(--header-height) );
 }

@@ -1,28 +1,24 @@
-<div class="postar-center">
-  <div class="row">
-    <div class="col-md-6 mx-auto">
-      <div class="card">
-        <div class="card-header">
-          <h3>Log In</h3>
+<div class="col-md-6 mx-auto">
+  <div class="card">
+    <div class="card-header">
+      <h3>Log In</h3>
+    </div>
+    <div class="card-body">
+      <form class="form">
+        <div class="form-group">
+          <label>Email</label>
+          <input name="email" type="text" [(ngModel)]="this.email" class="form-control" required>
         </div>
-        <div class="card-body">
-          <form class="form">
-            <div class="form-group">
-              <label>Email</label>
-              <input name="email" type="text" [(ngModel)]="this.email" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
-              <p class="login-warning" [ngStyle]="warning">
-                Failed to log in!
-              </p>
-            </div>
-            <button (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
-            <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>
-          </form>
+        <div class="form-group">
+          <label>Password</label>
+          <input name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
+          <p class="login-warning" [style.visibility]="warning">
+            Failed to log in!
+          </p>
         </div>
-      </div>
+        <button (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
+        <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>
+      </form>
     </div>
   </div>
 </div>

@@ -11,37 +11,44 @@ import { AuthService } from 'src/app/services/mail-services/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  registrationData: RegisterData;
-  constructor(private auth: AuthService, private router: Router) { }
+  public name: string;
+  public surname: string;
+  public email: string;
+  public password: string;
+  public retypePassword: string;
+
+  public warning: 'hidden'|'visible';
+
+  constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.warning = 'hidden';
   }
 
   registerUser() {
-    this.registrationData = {
+    const registrationData: RegisterData = {
       name: this.name,
       surname: this.surname,
       email: this.email,
       password: this.password
     };
-
-    this.auth.registerUser(this.registrationData)
+    this.auth.registerUser(registrationData)
     .subscribe(
       (res: any) => {
-        console.log(`Response from registerUser:\n${res}`);
+        console.log('Response from registerUser:', res);
         alert('You have successfuly registered!\nYou will now be redirected to the login page');
         this.router.navigate(['/login'])
         .then(() => alert(`You can log in now`));
       },
       (err: any) => {
-        console.log(`Error from registerUser:\n${err}`);
-        alert(`Sorry, failed to register...`);
+        console.log('Error from registerUser:', err);
+        this.warning = 'visible';
       }
     );
+  }
+
+  validParams() {
+    return (this.name && this.surname && this.email && this.password && this.password === this.retypePassword);
   }
 
 }

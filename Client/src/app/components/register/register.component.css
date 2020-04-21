@@ -1,4 +1,4 @@
-.postar-center {
-    /* TODO: center nicely */
-    margin-top: calc( 2 * var(--header-height, 60px) );
+:host {
+    display: block;
+    margin-top: var(--header-height);
 }
