@@ -11,10 +11,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  authSubscription: Subscription = null;
-  showMenuBtnVisibile: 'visible'|'hidden' = this.auth.loggedIn() ? 'visible' : 'hidden';
-  dropdownHidden = true;
-  letter = ' ';
+  private authSubscription: Subscription = null;
+  public showMenuBtnVisibile: 'visible'|'hidden' = this.auth.loggedIn() ? 'visible' : 'hidden';
+  public dropdownHidden = true;
+  public letter = ' ';
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
