@@ -14,7 +14,10 @@ export class Drafts {
     message_id: string;
     
     @Column({ nullable: false })
-    text: string;
+    subject: string;
+    
+    @Column({ nullable: false })
+    content: string;
 
     @Column({ nullable: false })
     timestamp: string;

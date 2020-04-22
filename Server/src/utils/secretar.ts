@@ -11,10 +11,10 @@ class SecretarModel {
         try {
             data = JSON.stringify(data);
 
-            const key = crypto.randomBytes(16);
-            const iv  = crypto.randomBytes(16);
+            const key = crypto.randomBytes(32);
+            const iv = crypto.randomBytes(16);
                 
-            const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
+            const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
             let encrypted = cipher.update(data, "utf8", "hex");
             encrypted += cipher.final("hex");
     
@@ -36,27 +36,6 @@ class SecretarModel {
             this.logger.fatal(err);
             return undefined;
         }
-    }
-
-    decrypt(data: string, secret: string, hash: string) {
-        let aesSecret = crypto.privateDecrypt(KeyStore.privateKey, Buffer.from(secret, "hex")).toString();
-
-        const decipher = crypto.createDecipher("aes256", aesSecret);
-        let decrypted = decipher.update(data, "hex", "utf8");
-        decrypted += decipher.final("utf8");
-
-        const verifier = crypto.createVerify("SHA256");
-        verifier.update(data);
-        verifier.end();
-
-        try {
-            decrypted = JSON.parse(decrypted);
-        } catch (err) {
-            this.logger.fatal(err);
-            return undefined;
-        }
-
-        return verifier.verify(KeyStore.publicKey, hash, "hex") ? decrypted : undefined;
     }
 
 }

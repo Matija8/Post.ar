@@ -17,12 +17,18 @@ export class Inbox {
     from: string;
     
     @Column({ nullable: false })
-    isRead: boolean;
+    is_read: boolean;
     
     @Column({ nullable: false })
-    text: string;
+    is_starred: boolean;
+
+    @Column({ nullable: false })
+    subject: string;
+
+    @Column({ nullable: false })
+    content: string;
 
     @Column({ nullable: false })
     timestamp: string;
-    
+
 }

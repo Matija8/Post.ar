@@ -28,7 +28,7 @@ export class UserController {
         let body = request.body;
 
         this.logger.debug("validate payload", "/register");
-        let required = [ "name", "surname", "username", "password" ];
+        let required = ["name", "surname", "username", "password"];
         if (PayloadValidator.validate(body, required)) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/register");
@@ -41,7 +41,7 @@ export class UserController {
 
         try {
             await this.userRepository.insert({
-                username: body.username,
+                username: `${body.username}@post.ar`,
                 password: hash,
                 name: body.name,
                 surname: body.surname,
@@ -62,7 +62,7 @@ export class UserController {
         let body = request.body;
         
         this.logger.debug("validate payload", "/login");
-        if (PayloadValidator.validate(body, [ "username", "password" ])) {
+        if (PayloadValidator.validate(body, ["username", "password"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/login");
             return;

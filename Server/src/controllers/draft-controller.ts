@@ -56,7 +56,8 @@ export class DraftController {
         for (const draft of user.drafts) {
             drafts.push({
                 message_id: draft.message_id,
-                text: draft.text,
+                subject: draft.subject,
+                content: draft.content,
                 from: draft.timestamp
             });
         }
@@ -87,14 +88,17 @@ export class DraftController {
         const body = request.body;
 
         this.logger.debug("validate payload", "/saveDraft");
-        if (PayloadValidator.validate(body, [ "text" ])) {
+        if (PayloadValidator.validate(body, ["subject", "content"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/saveDraft");
             return;
         }
 
         this.logger.debug("get user", "/saveDraft");
-        let user = await this.userRepository.findOne({ where: { username: session.user.username }, relations: [ "drafts" ]  });
+        let user = await this.userRepository.findOne({ 
+            where: { username: session.user.username },
+            relations: [ "drafts" ] 
+        });
         if (!user) {
             createResponse(response, 400, 1004, error[1004]);
             this.logger.info("done", "/saveDraft");
@@ -105,7 +109,8 @@ export class DraftController {
         try {
             await this.draftsRepository.insert({
                 message_id: uuidv4(),
-                text: body.text,
+                subject: body.subject || "No Subject",
+                content: body.content,
                 timestamp: new Date().getTime().toString(),
                 user: user
             });
@@ -117,6 +122,50 @@ export class DraftController {
         
         createResponse(response, 200, 2006, success[2006]);
         this.logger.info("done", "/saveDraft");
+    }
+
+    async discardDraft(request: Request, response: Response) {
+        this.logger.info("start", "/discardDraft");
+
+        this.logger.debug("validate user", "/discardDraft");
+        const session = SessionManager.find(request.cookies["SESSIONID"]);
+        if (!session) {
+            createResponse(response, 401, 1000, error[1000]);
+            this.logger.info("done", "/discardDraft");
+            return;
+        }
+
+        const body = request.body;
+
+        this.logger.debug("validate payload", "/discardDraft");
+        if (PayloadValidator.validate(body, ["messageId"])) {
+            createResponse(response, 400, 1001, error[1001]);
+            this.logger.info("done", "/discardDraft");
+            return;
+        }
+
+        this.logger.debug("get user", "/discardDraft");
+        let user = await this.userRepository.findOne({
+            where: { username: session.user.username },
+            relations: [ "drafts" ] 
+        });
+        if (!user) {
+            createResponse(response, 400, 1004, error[1004]);
+            this.logger.info("done", "/discardDraft");
+            return;
+        }
+
+        this.logger.debug("discard draft", "/discardDraft");
+        try {
+            await this.draftsRepository.delete({ message_id: body.messageId });
+        } catch (err) {
+            createResponse(response, 400, 1016, error[1016]);
+            this.logger.fatal(err, "/discardDraft");
+            return;
+        }
+        
+        createResponse(response, 200, 2011, success[2011]);
+        this.logger.info("done", "/discardDraft");
     }
 
 }

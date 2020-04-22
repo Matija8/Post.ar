@@ -17,7 +17,13 @@ export class Sent {
     to: string;
 
     @Column({ nullable: false })
-    text: string;
+    is_starred: boolean;
+
+    @Column({ nullable: false })
+    subject: string;
+
+    @Column({ nullable: false })
+    content: string;
 
     @Column({ nullable: false })
     timestamp: string;

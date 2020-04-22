@@ -2,6 +2,7 @@ import { UserController } from "./controllers/user-controller";
 import { InboxController } from "./controllers/inbox-controller";
 import { SentController } from "./controllers/sent-controller";
 import { DraftController } from "./controllers/draft-controller";
+import { StarredController } from "./controllers/starred-controler";
 
 export const Routes = [
     // user controller routes
@@ -34,8 +35,8 @@ export const Routes = [
     {
         controller: SentController,
         method: "get",
-        path: "/sentMail",
-        handler: "sentMail"
+        path: "/sent",
+        handler: "sent"
     },
     // drafts controller routes
     {
@@ -49,5 +50,30 @@ export const Routes = [
         method: "post",
         path: "/saveDraft",
         handler: "saveDraft"
+    },
+    {
+        controller: DraftController,
+        method: "post",
+        path: "/discardDraft",
+        handler: "discardDraft"
+    },
+    // starred controller routes
+    {
+        controller: StarredController,
+        method: "get",
+        path: "/starred",
+        handler: "starred"
+    },
+    {
+        controller: StarredController,
+        method: "post",
+        path: "/starMessage",
+        handler: "starMessage"
+    },
+    {
+        controller: StarredController,
+        method: "post",
+        path: "/removeStarredMessage",
+        handler: "removeStarredMessage"
     }
 ]
