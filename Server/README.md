@@ -22,3 +22,5 @@
     // swich typeorm logging, in ormconfig.json
     "logging": false
 ```
+
+## See **``api.md``** for more details about server API
