@@ -147,27 +147,27 @@ export class InboxController {
         }
     }
     
-    async readMessage(request: Request, response: Response) {
-        this.logger.info("start", "/readMessage");
+    async markAsRead(request: Request, response: Response) {
+        this.logger.info("start", "/markAsRead");
         
-        this.logger.debug("validate user", "/readMessage");
+        this.logger.debug("validate user", "/markAsRead");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/readMessage");
+            this.logger.info("done", "/markAsRead");
             return;
         }
 
-        this.logger.debug("validate payload", "/readMessage");
+        this.logger.debug("validate payload", "/markAsRead");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageIds"])) {
             createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/readMessage");
+            this.logger.info("done", "/markAsRead");
             return;
         }
 
         try {
-            this.logger.debug("update read messages", "/readMessage");
+            this.logger.debug("update read messages", "/markAsRead");
             getManager().transaction(async entityManager => {
                 for (const messageId of body.messageIds)
                     await entityManager.update(Inbox,
@@ -177,13 +177,52 @@ export class InboxController {
             });
         } catch (err) {
             createResponse(response, 400, 1011, error[1011]);
-            this.logger.fatal(err, "/readMessage");
-            this.logger.info("done", "/readMessage");
+            this.logger.fatal(err, "/markAsRead");
+            this.logger.info("done", "/markAsRead");
             return;
         }
         
         createResponse(response, 200, 2007, success[2007]);
-        this.logger.info("done", "/readMessage");
+        this.logger.info("done", "/markAsRead");
+    }
+
+    async markAsUnread(request: Request, response: Response) {
+        this.logger.info("start", "/markAsUnread");
+        
+        this.logger.debug("validate user", "/markAsUnread");
+        const session = SessionManager.find(request.cookies["SESSIONID"]);
+        if (!session) {
+            createResponse(response, 401, 1000, error[1000]);
+            this.logger.info("done", "/markAsUnread");
+            return;
+        }
+
+        this.logger.debug("validate payload", "/markAsUnread");
+        const body = request.body;
+        if (PayloadValidator.validate(body, ["messageIds"])) {
+            createResponse(response, 400, 1001, error[1001]);
+            this.logger.info("done", "/markAsUnread");
+            return;
+        }
+
+        try {
+            this.logger.debug("update read messages", "/markAsUnread");
+            getManager().transaction(async entityManager => {
+                for (const messageId of body.messageIds)
+                    await entityManager.update(Inbox,
+                        { message_id: messageId },
+                        { is_read: false }
+                    );
+            });
+        } catch (err) {
+            createResponse(response, 400, 1017, error[1017]);
+            this.logger.fatal(err, "/markAsUnread");
+            this.logger.info("done", "/markAsUnread");
+            return;
+        }
+        
+        createResponse(response, 200, 2012, success[2012]);
+        this.logger.info("done", "/markAsUnread");
     }
 
 }

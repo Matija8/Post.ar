@@ -8,11 +8,12 @@
         "2004": "Found user's drafts",
         "2005": "Found user's sent mail",
         "2006": "Successfully saved message as draft",
-        "2007": "Successfully updated read messages",
+        "2007": "Successfully updated messages as read",
         "2008": "Found starred messages",
         "2009": "Successfully saved starred message",
         "2010": "Successfully removed starred message",
-        "2011": "Successfully discarded message as draft"
+        "2011": "Successfully discarded message as draft",
+        "2012": "Successfully updated messages as unread"
     },
     "error": 
     {
@@ -27,11 +28,12 @@
         "1008": "Failed to save draft",
         "1009": "Failed to get list of contents of user's sent mail",
         "1010": "Unexpected error, please try again later",
-        "1011": "Failed to update read messages",
+        "1011": "Failed to update messages as read",
         "1012": "Failed to get starred messages",
         "1013": "Invalid message type",
         "1014": "Failed to save starred message",
         "1015": "Failed to remove starred message",
-        "1016": "Failed to discard message as draft"
+        "1016": "Failed to discard message as draft",
+        "1017": "Failed to update messages as unread"
     }
 }   

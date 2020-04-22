@@ -36,8 +36,16 @@
 >+ **Error codes**: ``1000, 1001, 1006``
 
 
-> ``/readMessage``
->+ **Description:** Update message read field
+> ``/markAsRead``
+>+ **Description:** Notify that messages has been read
+>+ **Method**: *post*
+>+ **Required fields**: *messageIds*: ``array<string>``
+>+ **Response fields**: ``{ }``
+>+ **Error codes**: ``1000, 1001, 1011``
+
+
+> ``/markAsUnread``
+>+ **Description:** Update messages as unread
 >+ **Method**: *post*
 >+ **Required fields**: *messageIds*: ``array<string>``
 >+ **Response fields**: ``{ }``
@@ -103,4 +111,5 @@
 >+ **Error codes**: ``1000, 1001, 1013, 1015``
 
 
-### Important note, for error codes, see ``src/status-codes.json``
+## Important notes
+- For more details about error codes see ``src/status-codes.json``

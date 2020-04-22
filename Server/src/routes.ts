@@ -31,6 +31,18 @@ export const Routes = [
         path: "/send",
         handler: "send"
     },
+    {
+        controller: InboxController,
+        method: "post",
+        path: "/markAsRead",
+        handler: "markAsRead"
+    },
+    {
+        controller: InboxController,
+        method: "post",
+        path: "/markAsUnread",
+        handler: "markAsUnread"
+    },
     // sent controller routes
     {
         controller: SentController,
