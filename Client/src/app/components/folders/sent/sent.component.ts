@@ -10,23 +10,17 @@ import { Subscription } from 'rxjs';
 })
 export class SentComponent implements OnInit, OnDestroy {
 
-  static firstTime = true;
   sentMessages: SMessage[];
   sentMsgSubscription: Subscription = null;
 
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    const sent = this.getMail.folders.sent;
-    this.sentMsgSubscription = sent.observable.subscribe(
+    this.sentMsgSubscription = this.getMail.folders.sent.contents.subscribe(
       (messages: SMessage[]): void => {
         this.sentMessages = messages;
       }
     );
-    if (SentComponent.firstTime) {
-      SentComponent.firstTime = false;
-      sent.refresh();
-    }
   }
 
   ngOnDestroy(): void {

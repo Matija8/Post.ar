@@ -11,22 +11,24 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
 
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
+import { FolderGuard } from './services/guards/folder.guard';
 
 
 const routes: Routes = [
-  {
-    path: '',
+  { path: '',
     canActivate: [AuthGuard],
     redirectTo: '/inbox',
     pathMatch: 'full'
   },
   { path: 'inbox',
-    canActivate: [AuthGuard],
-    component: InboxComponent
+    canActivate: [FolderGuard],
+    component: InboxComponent,
+    data: {folderName: 'inbox'}
   },
   { path: 'sent',
-    canActivate: [AuthGuard],
-    component: SentComponent
+    canActivate: [FolderGuard],
+    component: SentComponent,
+    data: {folderName: 'sent'}
   },
   { path: 'starred',
     canActivate: [AuthGuard],

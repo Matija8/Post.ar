@@ -10,23 +10,17 @@ import { Subscription } from 'rxjs';
 })
 export class InboxComponent implements OnInit, OnDestroy {
 
-  static firstTime = true;
   inboxMessages: RMessage[];
   inboxSubscription: Subscription = null;
 
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    const inbox = this.getMail.folders.inbox;
-    this.inboxSubscription = inbox.observable.subscribe(
+    this.inboxSubscription = this.getMail.folders.inbox.contents.subscribe(
       (messages: RMessage[]): void => {
         this.inboxMessages = messages;
       }
     );
-    if (InboxComponent.firstTime) {
-      InboxComponent.firstTime = false;
-      inbox.refresh();
-    }
   }
 
   ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Message } from '../../../models/Messages';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'postar-open-mail-item',
@@ -13,25 +14,34 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
 
   public msg: Message;
   private msgId: number;
-  private folder: string;
+  private folderName: string;
   private paramMapSubscription: Subscription = null;
+  private folderSubscription: Subscription = null;
 
   constructor(private getMail: GetMailService , private route: ActivatedRoute, private router: Router) {
     this.paramMapSubscription = this.route.paramMap.subscribe(params => {
       this.msgId = Number(params.get('msgId'));
-      this.folder = params.get('folder');
-      if (!this.getMail.validFolder(this.folder)) {
+      this.folderName = params.get('folder');
+      // TODO: this should be in a guard (routing)
+      if (!this.getMail.validFolder(this.folderName)) {
         router.navigate(['inbox']);
       }
     });
+    this.folderSubscription = this.getMail.folders[this.folderName].contents.pipe(
+      map(messages => messages.find(message => message.id === this.msgId))
+    ).subscribe(
+      message => {
+        if (!message) {
+          router.navigate(['inbox']);
+        }
+        this.msg = message;
+      }
+    );
   }
 
   ngOnInit(): void {
-    const msg = this.getMail.getMsgById(this.msgId, this.folder);
-    if (!msg) {
+    if (!this.msg) {
       this.router.navigate(['inbox']);
-    } else {
-      this.msg = msg;
     }
   }
 
