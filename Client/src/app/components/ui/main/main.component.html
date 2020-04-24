@@ -2,7 +2,7 @@
 
     <postar-sidebar
         *ngIf="shouldSidebarRender()"
-        (addComposeItemEvent)="addCompose()">
+        (addCompose)="addComposeSubject.next()">
     </postar-sidebar>
 
     <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
@@ -11,7 +11,7 @@
 
     <postar-compose
         *ngIf="shouldSidebarRender()"
-        [signalFromParent]="AddComposeEvent.asObservable()">
+        [signalFromParent]="addComposeSubject.asObservable()">
     </postar-compose>
 
 </main>

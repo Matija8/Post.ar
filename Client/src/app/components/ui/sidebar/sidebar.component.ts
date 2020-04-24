@@ -6,15 +6,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  @Output() addComposeItemEvent = new EventEmitter<void>();
+  @Output() addCompose = new EventEmitter<void>();
 
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  composeButtonClick() {
-    this.addComposeItemEvent.emit();
   }
 
 }

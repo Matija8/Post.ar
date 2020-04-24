@@ -10,13 +10,15 @@ import { Subscription } from 'rxjs';
 })
 export class InboxComponent implements OnInit, OnDestroy {
 
-  inboxMessages: RMessage[];
-  inboxSubscription: Subscription = null;
+  private folder = this.getMail.folders.inbox;
+  private inboxSubscription: Subscription = null;
+
+  public inboxMessages: RMessage[];
 
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.inboxSubscription = this.getMail.folders.inbox.contents.subscribe(
+    this.inboxSubscription = this.folder.contents.subscribe(
       (messages: RMessage[]): void => {
         this.inboxMessages = messages;
       }
@@ -26,7 +28,12 @@ export class InboxComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.inboxSubscription !== null) {
       this.inboxSubscription.unsubscribe();
+      this.inboxSubscription = null;
     }
+  }
+
+  refreshFolder(): void {
+    this.folder.refreshFolder();
   }
 
 }

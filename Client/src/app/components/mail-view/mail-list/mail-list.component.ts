@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Message } from 'src/app/models/Messages';
 
 @Component({
@@ -7,9 +7,10 @@ import { Message } from 'src/app/models/Messages';
   styleUrls: ['./mail-list.component.css']
 })
 export class MailListComponent implements OnInit {
-
+  @Output() refresh = new EventEmitter<void>();
   @Input() messagesList: Message[];
-  constructor() { }
+
+  constructor() {}
 
   ngOnInit(): void {
   }

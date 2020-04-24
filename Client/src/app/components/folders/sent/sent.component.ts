@@ -10,13 +10,15 @@ import { Subscription } from 'rxjs';
 })
 export class SentComponent implements OnInit, OnDestroy {
 
-  sentMessages: SMessage[];
-  sentMsgSubscription: Subscription = null;
+  private folder = this.getMail.folders.sent;
+  private sentMsgSubscription: Subscription = null;
+
+  public sentMessages: SMessage[];
 
   constructor(private getMail: GetMailService) {}
 
   ngOnInit(): void {
-    this.sentMsgSubscription = this.getMail.folders.sent.contents.subscribe(
+    this.sentMsgSubscription = this.folder.contents.subscribe(
       (messages: SMessage[]): void => {
         this.sentMessages = messages;
       }
@@ -26,7 +28,12 @@ export class SentComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.sentMsgSubscription !== null) {
       this.sentMsgSubscription.unsubscribe();
+      this.sentMsgSubscription = null;
     }
+  }
+
+  refreshFolder(): void {
+    this.folder.refreshFolder();
   }
 
 }

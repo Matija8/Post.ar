@@ -1,2 +1,5 @@
-<postar-mail-list [messagesList]=sentMessages>
+
+<postar-mail-list
+    [messagesList]=sentMessages
+    (refresh)="refreshFolder()">
 </postar-mail-list>

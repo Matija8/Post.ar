@@ -24,10 +24,12 @@ export class Folder {
     this.stream.subscribe( messages => this.folderActivated = !!messages );
   }
 
+  // TODO: delete this after testing.
+  private testMsg: Message[] = [];
+
   public refreshFolder() {
     // TODO: delete id and test msg after testing.
     let id = 0;
-    let testMsg: Message[] = [];
     this.http.get(this.GET_REQUEST_URL, this.httpOptions).subscribe(
       (res: any) => {
         const data = this.secretar.decrypt(
@@ -36,24 +38,24 @@ export class Folder {
           res.payload.hash
         );
         console.log('Folder refresh data: ', data);
-        testMsg = testMsg.concat([{
+        this.testMsg = this.testMsg.concat([{
           id: id++,
           sender: 'Sendera simulira random broj izmedju 0 i 10: ' + String(Math.floor(Math.random() * 20)),
           cc: String(Math.floor(Math.random() * 10) + 20) + ' je nasumicni broj od 20 do 30',
           messageText: String(Math.floor(Math.random() * 10)) + ' je nasumicni broj od 0 do 10'
         }]);
-        this.stream.next(testMsg);
+        this.stream.next(this.testMsg);
       },
       (err: any) => {
         console.log(err.error.statusCode);
         if ([1005, 1009].includes(err.error.statusCode)) {
-          testMsg = testMsg.concat([{
+          this.testMsg = this.testMsg.concat([{
             id: id++,
             sender: 'Sendera simulira random broj izmedju 0 i 20: ' + String(Math.floor(Math.random() * 20)),
             cc: String(Math.floor(Math.random() * 10) + 20) + ' je nasumicni broj od 20 do 30',
             messageText: String(Math.floor(Math.random() * 10)) + ' je nasumicni broj od 0 do 10'
           }]);
-          this.stream.next(testMsg);
+          this.stream.next(this.testMsg);
         } else {
           console.log('Folder refresh error: ', err);
         }
