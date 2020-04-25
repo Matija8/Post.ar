@@ -25,6 +25,7 @@ import { ComposeItemComponent } from './components/compose/compose-item/compose-
 import { AuthService } from './services/mail-services/auth.service';
 import { GetMailService } from './services/mail-services/get-mail.service';
 import { ChangeThemeService } from './services/ui-services/change-theme.service';
+import { CookieService } from 'ngx-cookie-service';
 
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
@@ -58,6 +59,7 @@ import { LoggedInGuard } from './services/guards/logged-in.guard';
     AuthService,
     GetMailService,
     ChangeThemeService,
+    CookieService,
     AuthGuard,
     LoggedInGuard,
   ],

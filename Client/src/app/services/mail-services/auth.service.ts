@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { SecretarService } from '../secretar/secretar.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private secretar: SecretarService
+    private secretar: SecretarService,
+    private cookie: CookieService,
   ) {
     // TODO: get user data on start (keep me logged in...)
     this.userDataSource = new BehaviorSubject<User>(null);
@@ -67,6 +69,7 @@ export class AuthService {
 
   userLogout(): void {
     this.userDataSource.next(null);
+    this.cookie.delete('SESSIONID');
   }
 
   loggedIn(): boolean {
