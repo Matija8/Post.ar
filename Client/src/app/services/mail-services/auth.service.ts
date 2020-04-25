@@ -4,6 +4,7 @@ import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { SecretarService } from '../secretar/secretar.service';
 import { CookieService } from 'ngx-cookie-service';
+import { GetMailService } from './get-mail.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class AuthService {
     private http: HttpClient,
     private secretar: SecretarService,
     private cookie: CookieService,
+    private getMail: GetMailService
   ) {
     // TODO: get user data on start (keep me logged in...)
     this.userDataSource = new BehaviorSubject<User>(null);
@@ -70,6 +72,8 @@ export class AuthService {
   userLogout(): void {
     this.userDataSource.next(null);
     this.cookie.delete('SESSIONID');
+    Object.values(this.getMail.folders)
+      .forEach(folder => folder.emptyFolder());
   }
 
   loggedIn(): boolean {

@@ -63,6 +63,10 @@ export class Folder {
     );
   }
 
+  public emptyFolder(): void {
+    this.stream.next(null);
+  }
+
   public waitForActivation(): Observable<boolean> {
     if (!this.folderActivated) {
       this.refreshFolder();
