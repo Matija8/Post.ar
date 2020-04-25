@@ -1,7 +1,9 @@
 export interface Message {
   id: number;
+  subject?: string;
   cc: string;
   messageText: string;
+  is_starred?: boolean;
   sender?: string;
   sentTo?: string;
 }

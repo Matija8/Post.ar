@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { EditorData, EditorMessage } from '../../../models/Compose';
+import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
+
 
 @Component({
   selector: 'postar-compose',
@@ -9,14 +12,14 @@ import { Observable, Subscription } from 'rxjs';
 export class ComposeComponent implements OnInit, OnDestroy {
 
   @Input() signalFromParent: Observable<void>;
-  private signalSubscription: Subscription;
+  private signalSubscription: Subscription = null;
 
   private MAX_OPEN = 3;
   private open = 0;
   private lastId = 0;
-  public openEditors = new Map<number, any>();
+  public openEditors = new Map<number, EditorData>();
 
-  constructor() { }
+  constructor(private sendMail: SendMailService) {}
 
   ngOnInit(): void {
     this.signalSubscription = this.signalFromParent.subscribe(() => {
@@ -25,7 +28,10 @@ export class ComposeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.signalSubscription.unsubscribe();
+    if (this.signalSubscription !== null) {
+      this.signalSubscription.unsubscribe();
+      this.signalSubscription = null;
+    }
   }
 
   addEditor(): void {
@@ -33,7 +39,10 @@ export class ComposeComponent implements OnInit, OnDestroy {
       return;
     }
     this.open++;
-    this.openEditors.set(this.lastId++, { to: '', subject: '', msg: '' , size: 'normal'} );
+    this.openEditors.set(this.lastId++, {
+      msg: {  to: '', cc: '', bcc: '', subject: '', messageText: ''},
+      size: 'normal'
+    } );
   }
 
   closeEditor(id: number): void {
@@ -46,6 +55,10 @@ export class ComposeComponent implements OnInit, OnDestroy {
     if (this.open === 0) {
       this.lastId = 0;
     }
+  }
+
+  onSend(message: EditorMessage): void {
+    this.sendMail.send(message);
   }
 
 }

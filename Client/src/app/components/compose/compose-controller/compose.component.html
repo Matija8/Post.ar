@@ -3,8 +3,9 @@
   <postar-compose-item
     *ngFor="let editor of openEditors | keyvalue;"
     [id]="editor.key"
-    [data]="editor.value"
-    (closeEvent)="closeEditor($event)">
+    [editorData]="editor.value"
+    (closeEvent)="closeEditor($event)"
+    (send)="onSend($event)">
   </postar-compose-item>
 
 </div>

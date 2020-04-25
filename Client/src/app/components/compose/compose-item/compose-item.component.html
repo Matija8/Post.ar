@@ -1,4 +1,4 @@
-<div *ngIf="this.data.size === 'minimized'" class="compose-item-minimized">
+<div *ngIf="this.editorData.size === 'minimized'" class="compose-item-minimized">
 
   <div class="compose-item-menubar">
     <button class="compose-menubar-button" (click)="changeSize('normal')">_</button>
@@ -9,7 +9,7 @@
 </div>
 
 
-<div *ngIf="this.data.size === 'normal'" class="compose-item-medium">
+<div *ngIf="this.editorData.size === 'normal'" class="compose-item-medium">
 
   <div class="compose-item-menubar">
     <button class="compose-menubar-button" (click)="changeSize('minimized')">_</button>
@@ -21,17 +21,17 @@
     <form class="form">
       <div class="form-group">
         <label for="">To:</label>
-        <input name="to" type="text" [(ngModel)]="this.data.to" class="form-control" required>
+        <input name="to" type="text" [(ngModel)]="this.editorData.msg.to" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="">Subject</label>
-        <input name="subject" type="text" [(ngModel)]="this.data.subject" class="form-control" required>
+        <input name="subject" type="text" [(ngModel)]="this.editorData.msg.subject" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="">Message</label>
-        <input name="msg" type="text" [(ngModel)]="this.data.msg" class="form-control" required>
+        <input name="msg" type="text" [(ngModel)]="this.editorData.msg.messageText" class="form-control" required>
       </div>
-      <button (click)="send()" type="button" class="btn btn-primary float-left">Send</button>
+      <button (click)="clickSend()" type="button" class="btn btn-primary float-left">Send</button>
     </form>
   </div>
 

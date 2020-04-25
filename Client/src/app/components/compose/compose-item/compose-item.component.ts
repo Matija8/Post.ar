@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { editorSize, EditorMessage, EditorData } from '../../../models/Compose';
+
 
 @Component({
   selector: 'postar-compose-item',
@@ -7,34 +9,35 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ComposeItemComponent implements OnInit {
 
+
   @Input() id: number;
-  @Input() data: any;
+  @Input() editorData: EditorData;
 
   @Output() closeEvent = new EventEmitter<number>();
+  @Output() send = new EventEmitter<EditorMessage>();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  send() {
+  clickSend(): void {
+    const msg = this.editorData.msg;
     console.log(`
       send clicked:
-      to = ${this.data.to}
-      subject = ${this.data.subject}
-      msg = ${this.data.msg}`);
+      to = ${msg.to}
+      subject = ${msg.subject}
+      msg = ${msg.messageText}`);
+
+    this.send.emit(msg);
   }
 
   closeClick() {
     this.closeEvent.emit(this.id);
   }
 
-  changeSize(newSize: string) {
-    const sizes = Object.freeze(['normal', 'minimized', /*'maximized'*/]);
-    if ( !sizes.includes(newSize) ) {
-      return;
-    }
-    this.data.size = newSize;
+  changeSize(newSize: editorSize) {
+    this.editorData.size = newSize;
   }
 
 }
