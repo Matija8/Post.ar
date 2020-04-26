@@ -1,8 +1,8 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { skipWhile, map } from 'rxjs/operators';
 import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
+import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
 
 
 export class Folder {
@@ -11,13 +11,8 @@ export class Folder {
   public readonly contents: Observable<Message[]> = this.stream.asObservable();
   private folderActivated = false;
 
-  private readonly httpOptions = {
-    headers : new HttpHeaders({ 'Content-type' : 'application/json' }),
-    withCredentials: true
-  };
-
   constructor(
-    private http: HttpClient,
+    private http: HttpWrapperService,
     private secretar: SecretarService,
     private readonly GET_REQUEST_URL: string
   ) {
@@ -30,7 +25,7 @@ export class Folder {
   public refreshFolder() {
     // TODO: delete id and test msg after testing.
     let id = 0;
-    this.http.get(this.GET_REQUEST_URL, this.httpOptions).subscribe(
+    this.http.get(this.GET_REQUEST_URL).subscribe(
       (res: any) => {
         const data = this.secretar.decrypt(
           res.payload.data,

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Message, RMessage, SMessage } from '../../models/Messages';
 import { SecretarService } from '../secretar/secretar.service';
 import { Folder } from 'src/app/models/Folder';
+import { HttpWrapperService } from './http-wrapper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +22,7 @@ export class GetMailService {
 
 
   constructor(
-    private http: HttpClient,
+    private http: HttpWrapperService,
     private secretar: SecretarService
   ) {}
 

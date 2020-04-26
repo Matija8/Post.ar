@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, LoginData, RegisterData } from '../../models/User';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { SecretarService } from '../secretar/secretar.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GetMailService } from './get-mail.service';
+import { HttpWrapperService } from './http-wrapper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +17,8 @@ export class AuthService {
   private readonly userDataSource: BehaviorSubject<User>;
   public readonly currentUserData: Observable<User>;
 
-  httpOptions = {
-    headers : new HttpHeaders({
-      'Content-type' : 'application/json'
-    }),
-    withCredentials: true
-  };
-
   constructor(
-    private http: HttpClient,
+    private http: HttpWrapperService,
     private secretar: SecretarService,
     private cookie: CookieService,
     private getMail: GetMailService
@@ -42,7 +35,7 @@ export class AuthService {
       surname: user.surname,
       username: user.email,
       password: user.password
-    }, this.httpOptions);
+    });
   }
 
 
@@ -50,7 +43,7 @@ export class AuthService {
     const response = this.http.post(this.loginUrl, {
       username: user.email,
       password: user.password
-    }, this.httpOptions);
+    });
 
     response.subscribe(
       (res: any) => {
