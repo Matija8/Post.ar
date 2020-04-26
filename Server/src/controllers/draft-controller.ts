@@ -56,7 +56,6 @@ export class DraftController {
         for (const draft of user.drafts) {
             drafts.push({
                 message_id: draft.message_id,
-                subject: draft.subject,
                 content: draft.content,
                 from: draft.timestamp
             });
@@ -109,7 +108,6 @@ export class DraftController {
         try {
             await this.draftsRepository.insert({
                 message_id: uuidv4(),
-                subject: body.subject || "No Subject",
                 content: body.content,
                 timestamp: new Date().getTime().toString(),
                 user: user

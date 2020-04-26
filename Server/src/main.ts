@@ -5,7 +5,9 @@ import { Routes } from "./routes";
 import { Logger } from "./utils/logger";
 
 const cors = require("cors");
+const http = require("http");
 const express = require("express");
+
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
@@ -21,7 +23,7 @@ createConnection().then(connection => {
     // setup express app
     app.use(cookieParser());
     app.use(bodyParser.json());
-    app.use(cors({ origin: [ "http://localhost:4200" ], credentials: true }));
+    app.use(cors({ origin: ["http://localhost:4200"], credentials: true }));
 
     // register express routes
     Routes.forEach(route => {
@@ -30,8 +32,10 @@ createConnection().then(connection => {
     });
 
     // start express server
-    app.listen(process.env.PORT);
-    logger.info(`server started at ${ process.env.PORT } port`);
+    http.createServer(app)
+        .listen(process.env.PORT);
+        
+    logger.info(`server started at ${process.env.PORT} port`);
 }).catch(err => {
     logger.fatal(err);
 });

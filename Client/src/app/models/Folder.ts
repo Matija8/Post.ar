@@ -27,7 +27,7 @@ export class Folder {
     let id = 0;
     this.http.get(this.GET_REQUEST_URL).subscribe(
       (res: any) => {
-        const data = this.secretar.decrypt(
+        const data = this.secretar.decryptAndVerify(
           res.payload.data,
           res.payload.secret,
           res.payload.hash

@@ -96,6 +96,7 @@ export class StarredController {
                         { is_starred: true }
                     );
                     break;
+
                 case "sent":
                     await this.sentRepository.update(
                         { message_id: body.messageId },
@@ -146,6 +147,7 @@ export class StarredController {
                         { is_starred: false }
                     );
                     break;
+
                 case "sent":
                     await this.sentRepository.update(
                         { message_id: body.messageId },

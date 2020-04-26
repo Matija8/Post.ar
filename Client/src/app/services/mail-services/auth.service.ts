@@ -47,7 +47,7 @@ export class AuthService {
 
     response.subscribe(
       (res: any) => {
-        const userData = this.secretar.decrypt(
+        const userData = this.secretar.decryptAndVerify(
           res.payload.data,
           res.payload.secret,
           res.payload.hash

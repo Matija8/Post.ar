@@ -12,15 +12,16 @@ export class SecretarService {
 
   constructor() { }
 
-  decrypt(data: string, secret: string, hash: string) {
+  private readonly key = "c1a43b1211a152874b90e51964da011a73a370be0599f31773220b831e83e61b";
+  private readonly iv  = "df20508a1626a997fa3e3510d74bb596";
+
+  decryptAndVerify(data: string, secret: string, hash: string) {
     try {
       const pk = pki.decryptRsaPrivateKey(PrivateKey.key, PrivateKey.passphrase);
+      const key = JSON.parse(pk.decrypt(util.hexToBytes(secret), 'RSA-OAEP'));
 
-      let key = pk.decrypt(util.hexToBytes(secret), 'RSA-OAEP');
-      key = JSON.parse(key);
-
-      const decipher = cipher.createDecipher('AES-CBC', util.hexToBytes(key.key));
-      decipher.start({iv: util.hexToBytes(key.iv)});
+      const decipher = cipher.createDecipher('AES-CFB', util.hexToBytes(key.key));
+      decipher.start({ iv: util.hexToBytes(key.iv) });
       decipher.update(util.createBuffer(util.hexToBytes(data)));
       decipher.finish();
       const decrypted = JSON.parse(decipher.output.toString());
@@ -37,8 +38,35 @@ export class SecretarService {
 
       return result ? decrypted : undefined;
     } catch (err) {
-      console.log(err);
       return undefined;
     }
   }
+
+  encryptMessage(message: any): string | undefined {
+    try {
+      message = JSON.stringify(message);
+
+      const mesageCipher = cipher.createCipher('AES-CFB', util.hexToBytes(this.key));
+      mesageCipher.start({ iv: util.hexToBytes(this.iv) });
+      mesageCipher.update(util.createBuffer(message));
+      mesageCipher.finish();
+  
+      return mesageCipher.output.toHex();
+    } catch (err) {
+      return undefined;
+    }
+  }
+
+  decryptMessage(message: string): string | undefined {
+    try {
+      const messageDecipher = cipher.createDecipher('AES-CFB', util.hexToBytes(this.key));
+      messageDecipher.start({ iv: util.hexToBytes(this.iv) } );
+      messageDecipher.update(util.createBuffer(util.hexToBytes(message)));
+
+      return messageDecipher.output.toString();
+    } catch (err) {
+      return undefined;
+    }
+  }
+
 }

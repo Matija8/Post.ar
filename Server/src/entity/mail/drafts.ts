@@ -12,14 +12,11 @@ export class Drafts {
 
     @Column({ unique: true, nullable: false })
     message_id: string;
-    
-    @Column({ nullable: false })
-    subject: string;
-    
+
     @Column({ nullable: false })
     content: string;
 
     @Column({ nullable: false })
     timestamp: string;
-    
+ 
 }

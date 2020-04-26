@@ -58,7 +58,6 @@ export class InboxController {
             messages.push({
                 message_id: message.message_id,
                 from: message.from,
-                subject: message.subject,
                 content: message.content,
                 isRead: message.is_read,
                 isStarred: message.is_starred,
@@ -114,37 +113,32 @@ export class InboxController {
         }
 
         this.logger.debug("save message to inbox and sent mail box", "/send");
-        try {
-            await getManager().transaction(async entityManager => {
-                await entityManager.insert(Inbox, {
-                    message_id: uuidv4(),
-                    from: session.user.username,
-                    subject: body.subject || "No Subject",
-                    content: body.content,
-                    is_read: false,
-                    is_starred: false,
-                    timestamp: new Date().getTime().toString(),
-                    user: recipient
-                });
+        await getManager().transaction(async entityManager => {
+            await entityManager.insert(Inbox, {
+                message_id: uuidv4(),
+                from: session.user.username,
+                content: body.content,
+                is_read: false,
+                is_starred: false,
+                timestamp: new Date().getTime().toString(),
+                user: recipient
+            });
 
-                await entityManager.insert(Sent, {
-                    message_id: uuidv4(),
-                    subject: body.subject || "No Subject",
-                    content: body.content,
-                    is_starred: false,
-                    timestamp: new Date().getTime().toString(),
-                    to: recipient.username,
-                    user: session.user
-                });
+            await entityManager.insert(Sent, {
+                message_id: uuidv4(),
+                content: body.content,
+                is_starred: false,
+                timestamp: new Date().getTime().toString(),
+                to: recipient.username,
+                user: session.user
             });
 
             createResponse(response, 200, 2003, success[2003]);
             this.logger.info("done", "/send");
-        } catch (err) {
+        }).catch(err => {
             this.logger.fatal(err, "/send");
             createResponse(response, 400, 1006, error[1006]);
-            return;
-        }
+        });
     }
     
     async markAsRead(request: Request, response: Response) {
@@ -166,24 +160,22 @@ export class InboxController {
             return;
         }
 
-        try {
-            this.logger.debug("update read messages", "/markAsRead");
-            getManager().transaction(async entityManager => {
-                for (const messageId of body.messageIds)
-                    await entityManager.update(Inbox,
-                        { message_id: messageId },
-                        { is_read: true }
-                    );
-            });
-        } catch (err) {
+        this.logger.debug("update read messages", "/markAsRead");
+        await getManager().transaction(async entityManager => {
+            for (const messageId of body.messageIds)
+                await entityManager.update(Inbox,
+                    { message_id: messageId },
+                    { is_read: true }
+                );
+
+            createResponse(response, 200, 2007, success[2007]);
+            this.logger.info("done", "/markAsRead");
+        }).catch(err => {
             createResponse(response, 400, 1011, error[1011]);
             this.logger.fatal(err, "/markAsRead");
-            this.logger.info("done", "/markAsRead");
-            return;
-        }
+        });
         
-        createResponse(response, 200, 2007, success[2007]);
-        this.logger.info("done", "/markAsRead");
+
     }
 
     async markAsUnread(request: Request, response: Response) {
@@ -205,24 +197,22 @@ export class InboxController {
             return;
         }
 
-        try {
-            this.logger.debug("update read messages", "/markAsUnread");
-            getManager().transaction(async entityManager => {
-                for (const messageId of body.messageIds)
-                    await entityManager.update(Inbox,
-                        { message_id: messageId },
-                        { is_read: false }
-                    );
-            });
-        } catch (err) {
+        this.logger.debug("update read messages", "/markAsUnread");
+        await getManager().transaction(async entityManager => {
+            for (const messageId of body.messageIds)
+                await entityManager.update(Inbox,
+                    { message_id: messageId },
+                    { is_read: false }
+                );
+            
+            createResponse(response, 200, 2012, success[2012]);
+            this.logger.info("done", "/markAsUnread");
+        }).catch(err => {
             createResponse(response, 400, 1017, error[1017]);
             this.logger.fatal(err, "/markAsUnread");
-            this.logger.info("done", "/markAsUnread");
-            return;
-        }
+        });
         
-        createResponse(response, 200, 2012, success[2012]);
-        this.logger.info("done", "/markAsUnread");
+
     }
 
 }
