@@ -1,20 +1,24 @@
 export interface Message {
-  id: number;
+  message_id: string;
+  content: string;
+  timestamp?: number;
+  from?: string;
+  to?: string;
+  isRead?: boolean;
+  isStarred?: boolean;
+
+  // check model with server for these properties
+  cc?: string;
   subject?: string;
-  cc: string;
-  messageText: string;
-  is_starred?: boolean;
-  sender?: string;
-  sentTo?: string;
 }
 
 
 export interface RMessage extends Message {
-  sender: string;
+  from: string;
 }
 
 export function isReceived(msg: Message): msg is RMessage {
-  if ('sender' in msg) {
+  if ('from' in msg) {
     return true;
   }
   return false;
@@ -22,11 +26,11 @@ export function isReceived(msg: Message): msg is RMessage {
 
 
 export interface SMessage extends Message {
-  sentTo: string;
+  to: string;
 }
 
 export function isSent(msg: Message): msg is SMessage {
-  if ('sentTo' in msg) {
+  if ('to' in msg) {
     return true;
   }
   return false;

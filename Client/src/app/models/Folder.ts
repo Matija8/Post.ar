@@ -9,48 +9,28 @@ export class Folder {
 
   private readonly stream = new BehaviorSubject<Message[]>(null);
   public readonly contents: Observable<Message[]> = this.stream.asObservable();
-  private folderActivated = false;
 
   constructor(
     private http: HttpWrapperService,
     private secretar: SecretarService,
     private readonly GET_REQUEST_URL: string
-  ) {
-    this.stream.subscribe( messages => this.folderActivated = !!messages );
-  }
-
-  // TODO: delete this after testing.
-  private testMsg: Message[] = [];
+  ) {}
 
   public refreshFolder() {
-    // TODO: delete id and test msg after testing.
-    let id = 0;
     this.http.get(this.GET_REQUEST_URL).subscribe(
       (res: any) => {
         const data = this.secretar.decryptAndVerify(
           res.payload.data,
           res.payload.secret,
           res.payload.hash
-        );
+        ).data.replace('/"', '"');
         console.log('Folder refresh data: ', data);
-        this.testMsg = this.testMsg.concat([{
-          id: id++,
-          sender: 'Sendera simulira random broj izmedju 0 i 10: ' + String(Math.floor(Math.random() * 20)),
-          cc: String(Math.floor(Math.random() * 10) + 20) + ' je nasumicni broj od 20 do 30',
-          messageText: String(Math.floor(Math.random() * 10)) + ' je nasumicni broj od 0 do 10'
-        }]);
-        this.stream.next(this.testMsg);
+        this.stream.next(JSON.parse(data));
       },
       (err: any) => {
         console.log(err.error.statusCode);
         if ([1005, 1009].includes(err.error.statusCode)) {
-          this.testMsg = this.testMsg.concat([{
-            id: id++,
-            sender: 'Sendera simulira random broj izmedju 0 i 20: ' + String(Math.floor(Math.random() * 20)),
-            cc: String(Math.floor(Math.random() * 10) + 20) + ' je nasumicni broj od 20 do 30',
-            messageText: String(Math.floor(Math.random() * 10)) + ' je nasumicni broj od 0 do 10'
-          }]);
-          this.stream.next(this.testMsg);
+          this.stream.next([]);
         } else {
           console.log('Folder refresh error: ', err);
         }
@@ -63,14 +43,12 @@ export class Folder {
   }
 
   public waitForActivation(): Observable<boolean> {
-    if (!this.folderActivated) {
+    if (!this.stream.getValue()) {
       this.refreshFolder();
-      return this.stream.pipe(
-        skipWhile(messages => messages === null),
-        map(messages => !!messages));
-    } else {
-      return of(true);
     }
+    return this.stream.pipe(
+      skipWhile(messages => messages === null),
+      map(messages => !!messages));
   }
 
 }

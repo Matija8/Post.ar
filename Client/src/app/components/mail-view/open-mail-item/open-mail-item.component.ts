@@ -13,14 +13,14 @@ import { map } from 'rxjs/operators';
 export class OpenMailItemComponent implements OnInit, OnDestroy {
 
   public msg: Message;
-  private msgId: number;
+  private msgId: string;
   private folderName: string;
   private paramMapSubscription: Subscription = null;
   private folderSubscription: Subscription = null;
 
   constructor(private getMail: GetMailService , private route: ActivatedRoute, private router: Router) {
     this.paramMapSubscription = this.route.paramMap.subscribe(params => {
-      this.msgId = Number(params.get('msgId'));
+      this.msgId = params.get('msgId');
       this.folderName = params.get('folder');
       // TODO: this should be in a guard (routing)
       if (!this.getMail.validFolder(this.folderName)) {
@@ -28,7 +28,7 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
       }
     });
     this.folderSubscription = this.getMail.folders[this.folderName].contents.pipe(
-      map(messages => messages.find(message => message.id === this.msgId))
+      map(messages => messages.find(message => message.message_id === this.msgId))
     ).subscribe(
       message => {
         if (!message) {
@@ -49,6 +49,10 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
     if (this.paramMapSubscription !== null) {
       this.paramMapSubscription.unsubscribe();
       this.paramMapSubscription = null;
+    }
+    if (this.folderSubscription !== null) {
+      this.folderSubscription.unsubscribe();
+      this.folderSubscription = null;
     }
   }
 
