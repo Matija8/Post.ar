@@ -25,4 +25,7 @@ export class Sent {
     @Column({ nullable: false })
     timestamp: string;
 
+    @Column({nullable:false})
+    is_deleted: boolean;
+
 }

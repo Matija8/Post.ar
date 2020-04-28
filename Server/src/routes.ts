@@ -3,6 +3,7 @@ import { InboxController } from "./controllers/inbox-controller";
 import { SentController } from "./controllers/sent-controller";
 import { DraftController } from "./controllers/draft-controller";
 import { StarredController } from "./controllers/starred-controler";
+import { TrashController } from "./controllers/trash-controller";
 
 export const Routes = [
     // user controller routes
@@ -87,5 +88,24 @@ export const Routes = [
         method: "post",
         path: "/removeStarredMessage",
         handler: "removeStarredMessage"
+    },
+    // trash controller routes
+    {
+        controller: TrashController,
+        method: "get",
+        path: "/trashed",
+        handler: "trashed"
+    },
+    {
+        controller: TrashController,
+        method: "post",
+        path: "/trashMessage",
+        handler: "trashMessage"
+    },
+    {
+        controller: TrashController,
+        method: "post",
+        path: "/removeTrashMessage",
+        handler: "removeTrashMessage"
     }
 ]
