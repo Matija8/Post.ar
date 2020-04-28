@@ -18,7 +18,8 @@ body {
 
 
 .login-warning {
-    color: rgb(250, 10, 10)
+    visibility: hidden;
+    color: rgb(250, 10, 10);
 }
 
 
