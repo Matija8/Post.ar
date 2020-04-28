@@ -28,4 +28,7 @@ export class Inbox {
     @Column({ nullable: false })
     timestamp: string;
 
+    @Column({nullable:false})
+    is_deleted: boolean;
+
 }

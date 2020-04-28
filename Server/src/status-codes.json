@@ -13,7 +13,10 @@
         "2009": "Successfully saved starred message",
         "2010": "Successfully removed starred message",
         "2011": "Successfully discarded message as draft",
-        "2012": "Successfully updated messages as unread"
+        "2012": "Successfully updated messages as unread",
+        "2013": "Found trashed messages",
+        "2014": "Successfully saved trashed message",
+        "2015": "Successfully removed trashed message"
     },
     "error": 
     {
@@ -34,6 +37,9 @@
         "1014": "Failed to save starred message",
         "1015": "Failed to remove starred message",
         "1016": "Failed to discard message as draft",
-        "1017": "Failed to update messages as unread"
+        "1017": "Failed to update messages as unread",
+        "1018": "Failed to get trashed messages",
+        "1019": "Failed to save trashed message",
+        "1020": "Failed to remove starred message"
     }
 }   
