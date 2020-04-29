@@ -33,7 +33,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
-    this.warning = 'hidden';
   }
 
   registerUser() {

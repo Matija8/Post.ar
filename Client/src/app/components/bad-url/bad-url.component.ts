@@ -10,11 +10,10 @@ export class BadURLComponent implements OnInit {
 
   public loggedIn: boolean;
 
-  constructor(private auth: AuthService) {
-    this.loggedIn = auth.loggedIn();
-  }
+  constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
+    this.loggedIn = this.auth.loggedIn();
   }
 
 }

@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
-    this.warning = 'hidden';
   }
 
   LogIn(): void {
@@ -40,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription = this.auth.userLogin(loginData)
     .subscribe(
       (res: any) => {
-        console.log(this.secretar.decryptAndVerify(res.payload.data, res.payload.secret, res.payload.hash))
+        console.log(this.secretar.decryptAndVerify(res.payload.data, res.payload.secret, res.payload.hash));
         this.router.navigate(['/inbox']);
       },
       (err: any) => {
