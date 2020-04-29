@@ -11,6 +11,11 @@ export class SendMailService {
 
   constructor(private http: HttpWrapperService) {}
 
+
+  validTo(to: string): boolean {
+    return !!to.match(/^[a-zA-Z][a-zA-Z0-9]*@post\.ar$/);
+  }
+
   send(message: EditorMessage) {
     this.http.post(this.SEND_URL, {
       recipient: message.to,
