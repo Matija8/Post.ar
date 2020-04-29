@@ -34,11 +34,11 @@ export class InboxController {
         }
 
         this.logger.debug("get user", "/inbox");
-        let user = await this.userRepository.findOne({ 
+        let user = await this.userRepository.findOne({
             where: { username: session.user.username },
-            relations: [ "inbox" ] 
+            relations: [ "inbox" ]
         });
-        
+
         if (!user) {
             createResponse(response, 400, 1004, error[1004]);
             this.logger.info("done", "/inbox");
@@ -64,7 +64,7 @@ export class InboxController {
                 timestamp: message.timestamp
             });
         }
-        
+
         this.logger.debug("encrypt mail list", "/inbox");
         const encrypted = secretar.encrypt({ total: messages.length, data: JSON.stringify(messages) });
         if (!encrypted) {
@@ -76,10 +76,10 @@ export class InboxController {
         createResponse(response, 200, 2002, success[2002], encrypted);
         this.logger.info("done", "/inbox");
     }
-    
+
     async send(request: Request, response: Response) {
         this.logger.info("start", "/send");
-        
+
         this.logger.debug("validate user", "/send");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -120,6 +120,7 @@ export class InboxController {
                 content: body.content,
                 is_read: false,
                 is_starred: false,
+                is_deleted: false,
                 timestamp: new Date().getTime().toString(),
                 user: recipient
             });
@@ -128,6 +129,7 @@ export class InboxController {
                 message_id: uuidv4(),
                 content: body.content,
                 is_starred: false,
+                is_deleted: false,
                 timestamp: new Date().getTime().toString(),
                 to: recipient.username,
                 user: session.user
@@ -140,10 +142,10 @@ export class InboxController {
             createResponse(response, 400, 1006, error[1006]);
         });
     }
-    
+
     async markAsRead(request: Request, response: Response) {
         this.logger.info("start", "/markAsRead");
-        
+
         this.logger.debug("validate user", "/markAsRead");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -174,13 +176,13 @@ export class InboxController {
             createResponse(response, 400, 1011, error[1011]);
             this.logger.fatal(err, "/markAsRead");
         });
-        
+
 
     }
 
     async markAsUnread(request: Request, response: Response) {
         this.logger.info("start", "/markAsUnread");
-        
+
         this.logger.debug("validate user", "/markAsUnread");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -204,14 +206,14 @@ export class InboxController {
                     { message_id: messageId },
                     { is_read: false }
                 );
-            
+
             createResponse(response, 200, 2012, success[2012]);
             this.logger.info("done", "/markAsUnread");
         }).catch(err => {
             createResponse(response, 400, 1017, error[1017]);
             this.logger.fatal(err, "/markAsUnread");
         });
-        
+
 
     }
 
