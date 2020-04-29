@@ -12,8 +12,8 @@ export class SecretarService {
 
   constructor() { }
 
-  private readonly key = "c1a43b1211a152874b90e51964da011a73a370be0599f31773220b831e83e61b";
-  private readonly iv  = "df20508a1626a997fa3e3510d74bb596";
+  private readonly key = 'c1a43b1211a152874b90e51964da011a73a370be0599f31773220b831e83e61b';
+  private readonly iv  = 'df20508a1626a997fa3e3510d74bb596';
 
   decryptAndVerify(data: string, secret: string, hash: string) {
     try {
@@ -50,7 +50,7 @@ export class SecretarService {
       mesageCipher.start({ iv: util.hexToBytes(this.iv) });
       mesageCipher.update(util.createBuffer(message));
       mesageCipher.finish();
-  
+
       return mesageCipher.output.toHex();
     } catch (err) {
       return undefined;
