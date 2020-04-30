@@ -22,21 +22,24 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
     this.paramMapSubscription = this.route.paramMap.subscribe(params => {
       this.msgId = params.get('msgId');
       this.folderName = params.get('folder');
-      // TODO: this should be in a guard (routing)
-      if (!this.getMail.validFolder(this.folderName)) {
+      const folder = this.getMail.folders[this.folderName];
+      if (!folder) {
         router.navigate(['inbox']);
       }
-    });
-    this.folderSubscription = this.getMail.folders[this.folderName].contents.pipe(
-      map(messages => messages.find(message => message.message_id === this.msgId))
-    ).subscribe(
-      message => {
-        if (!message) {
-          router.navigate(['inbox']);
-        }
-        this.msg = message;
+      if (this.folderSubscription !== null) {
+        this.folderSubscription.unsubscribe();
       }
-    );
+      this.folderSubscription = folder.contents.pipe(
+        map(messages => messages.find(message => message.message_id === this.msgId))
+      ).subscribe(
+        message => {
+          if (!message) {
+            router.navigate(['inbox']);
+          }
+          this.msg = message;
+        }
+      );
+    });
   }
 
   ngOnInit(): void {

@@ -12,6 +12,7 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
+import { MessageGuard } from './services/guards/message.guard';
 
 
 const routes: Routes = [
@@ -50,7 +51,7 @@ const routes: Routes = [
     component: DraftsComponent
   },
   { path: ':folder/:msgId',
-    canActivate: [AuthGuard],
+    canActivate: [MessageGuard],
     component: OpenMailItemComponent
   },
   { path: '**', component: BadURLComponent }
