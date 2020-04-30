@@ -14,19 +14,21 @@ export abstract class Folder {
 
 
 interface RefreshWrapper<T> {
-  refreshAttempt: number;
   data: T;
-  refreshed: boolean;
+  folderInitialized: boolean;
+  refreshAttempt: number;
+  // refreshSuccessful: boolean;
 }
 
 
 export class SimpleFolder<T> extends Folder {
 
-  refreshAttempt = 0;
+  private refreshAttempt = 0;
   private readonly stream = new BehaviorSubject<RefreshWrapper<T[]>>({
-    refreshAttempt: this.refreshAttempt,
     data: [],
-    refreshed: false
+    folderInitialized: false,
+    refreshAttempt: this.refreshAttempt,
+    // refreshSuccessful: false
   });
   public readonly contents: Observable<T[]> = this.stream.pipe(map(wrapper => wrapper.data));
 
@@ -44,32 +46,37 @@ export class SimpleFolder<T> extends Folder {
     .pipe(take(1))
     .subscribe(
       (res: any) => {
-        const data = this.secretar.decryptAndVerify(
+        const dataJSON = this.secretar.decryptAndVerify(
           res.payload.data,
           res.payload.secret,
           res.payload.hash
         ).data.replace('/"', '"');
-        console.log('Folder refresh data: ', data);
+        // console.log('Folder refresh data: ', dataString);
+        // TODO: Validate data (data validation function taken as an argument by the constructor?!)
+        const data = JSON.parse(dataJSON);
         this.stream.next({
+          data,
+          folderInitialized: true,
           refreshAttempt: this.refreshAttempt + 1,
-          data: JSON.parse(data),
-          refreshed: true
+          // refreshSuccessful: true
         });
       },
       (err: any) => {
         console.log(err.error.statusCode);
         if (err.error.statusCode === this.EMPTY_FOLDER_ERR_CODE) {
           this.stream.next({
-            refreshAttempt: this.refreshAttempt + 1,
             data: [],
-            refreshed: true
+            folderInitialized: true,
+            refreshAttempt: this.refreshAttempt + 1,
+            // refreshSuccessful: true
           });
         } else {
           console.log('Folder refresh error: ', err);
+          const oldData = this.stream.getValue();
           this.stream.next({
+            ...oldData,
             refreshAttempt: this.refreshAttempt + 1,
-            data: [],
-            refreshed: false
+            // refreshSuccessful: false
           });
         }
       }
@@ -79,20 +86,21 @@ export class SimpleFolder<T> extends Folder {
   public emptyFolder(): void {
     this.refreshAttempt = 0;
     this.stream.next({
-      refreshAttempt: 0,
       data: [],
-      refreshed: false
+      folderInitialized: false,
+      refreshAttempt: this.refreshAttempt,
+      // refreshSuccessful: false
     });
   }
 
   public waitForActivation(): Observable<boolean> {
-    if (!this.stream.getValue().refreshed) {
+    if (!this.stream.getValue().folderInitialized) {
       this.refreshFolder();
       return this.stream.pipe(
         skipWhile(wrapper => wrapper.refreshAttempt === this.refreshAttempt),
         map(wrapper => {
           this.refreshAttempt++;
-          return wrapper.refreshed;
+          return wrapper.folderInitialized;
         })
       );
     } else {

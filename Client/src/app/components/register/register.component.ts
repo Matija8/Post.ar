@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RegisterData } from 'src/app/models/User';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
-import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -10,15 +10,13 @@ import { Subscription } from 'rxjs';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit {
 
   public name: string;
   public surname: string;
   public email: string;
   public password: string;
   public retypePassword: string;
-
-  private subscription: Subscription = null;
 
   public warning: 'hidden'|'visible';
 
@@ -28,24 +26,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.warning = 'hidden';
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription !== null) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
-    }
-  }
-
   registerUser() {
-    if (this.subscription !== null) {
-      this.subscription.unsubscribe();
-    }
     const registrationData: RegisterData = {
       name: this.name,
       surname: this.surname,
       email: this.email,
       password: this.password
     };
-    this.subscription = this.auth.registerUser(registrationData)
+    this.auth.registerUser(registrationData)
+    .pipe(take(1))
     .subscribe(
       (res: any) => {
         console.log('Response from registerUser:', res);
