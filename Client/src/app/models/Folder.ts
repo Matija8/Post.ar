@@ -1,23 +1,48 @@
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { skipWhile, map } from 'rxjs/operators';
+import { skipWhile, map, take } from 'rxjs/operators';
 import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
 import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
 
 
-export class Folder {
+export abstract class Folder {
+  public readonly contents: Observable<any[]>;
+  public abstract refreshFolder(): void;
+  public abstract emptyFolder(): void;
+  public abstract waitForActivation(): void;
+}
 
-  private readonly stream = new BehaviorSubject<Message[]>(null);
-  public readonly contents: Observable<Message[]> = this.stream.asObservable();
+
+interface RefreshWrapper<T> {
+  refreshAttempt: number;
+  data: T;
+  refreshed: boolean;
+}
+
+
+export class SimpleFolder<T> extends Folder {
+
+  refreshAttempt = 0;
+  private readonly stream = new BehaviorSubject<RefreshWrapper<T[]>>({
+    refreshAttempt: this.refreshAttempt,
+    data: [],
+    refreshed: false
+  });
+  public readonly contents: Observable<T[]> = this.stream.pipe(map(wrapper => wrapper.data));
 
   constructor(
     private http: HttpWrapperService,
     private secretar: SecretarService,
-    private readonly GET_REQUEST_URL: string
-  ) {}
+    private readonly GET_REQUEST_URL: string,
+    private readonly EMPTY_FOLDER_ERR_CODE: number
+  ) {
+    super();
+  }
 
-  public refreshFolder() {
-    this.http.get(this.GET_REQUEST_URL).subscribe(
+  public refreshFolder(): void {
+    this.http.get(this.GET_REQUEST_URL)
+    .pipe(take(1))
+    .subscribe(
       (res: any) => {
         const data = this.secretar.decryptAndVerify(
           res.payload.data,
@@ -25,30 +50,59 @@ export class Folder {
           res.payload.hash
         ).data.replace('/"', '"');
         console.log('Folder refresh data: ', data);
-        this.stream.next(JSON.parse(data));
+        this.stream.next({
+          refreshAttempt: this.refreshAttempt + 1,
+          data: JSON.parse(data),
+          refreshed: true
+        });
       },
       (err: any) => {
         console.log(err.error.statusCode);
-        if ([1005, 1009].includes(err.error.statusCode)) {
-          this.stream.next([]);
+        if (err.error.statusCode === this.EMPTY_FOLDER_ERR_CODE) {
+          this.stream.next({
+            refreshAttempt: this.refreshAttempt + 1,
+            data: [],
+            refreshed: true
+          });
         } else {
           console.log('Folder refresh error: ', err);
+          this.stream.next({
+            refreshAttempt: this.refreshAttempt + 1,
+            data: [],
+            refreshed: false
+          });
         }
       }
     );
   }
 
   public emptyFolder(): void {
-    this.stream.next(null);
+    this.refreshAttempt = 0;
+    this.stream.next({
+      refreshAttempt: 0,
+      data: [],
+      refreshed: false
+    });
   }
 
   public waitForActivation(): Observable<boolean> {
-    if (!this.stream.getValue()) {
+    if (!this.stream.getValue().refreshed) {
       this.refreshFolder();
+      return this.stream.pipe(
+        skipWhile(wrapper => wrapper.refreshAttempt === this.refreshAttempt),
+        map(wrapper => {
+          this.refreshAttempt++;
+          return wrapper.refreshed;
+        })
+      );
+    } else {
+      return of(true);
     }
-    return this.stream.pipe(
-      skipWhile(messages => messages === null),
-      map(messages => !!messages));
   }
 
 }
+
+// todo: Starred, All mail...
+/* class AggregateFolder {
+
+} */
