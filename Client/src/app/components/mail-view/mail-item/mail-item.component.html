@@ -1,4 +1,5 @@
 <div class="mail-item" [routerLink]="[router.url, msg.message_id]">
-    <div class="mail-item-title" *ngIf="sentByMe"> {{ msg.to }} </div>
-    <div class="mail-item-title" *ngIf="!sentByMe"> {{ msg.from }} </div>
+    <button (click)="star($event)" >star</button>
+    <div class="mail-item-title" *ngIf="sentByMe"> To: {{ msg.to }} </div>
+    <div class="mail-item-title" *ngIf="!sentByMe"> From: {{ msg.from }} </div>
 </div>

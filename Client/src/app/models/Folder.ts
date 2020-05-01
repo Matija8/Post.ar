@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { skipWhile, map, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
+import { skipWhile, map, take, filter } from 'rxjs/operators';
 import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
 import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
@@ -9,7 +9,7 @@ export abstract class Folder {
   public readonly contents: Observable<any[]>;
   public abstract refreshFolder(): void;
   public abstract emptyFolder(): void;
-  public abstract waitForActivation(): void;
+  public abstract waitForActivation(): Observable<boolean>;
 }
 
 
@@ -110,7 +110,36 @@ export class SimpleFolder<T> extends Folder {
 
 }
 
-// todo: Starred, All mail...
-class AggregateFolder {
 
+export class AggregateFolder {
+
+  public readonly contents: Observable<any[]>;
+
+  constructor(private simpleFolders: SimpleFolder<Message>[], filteringFunction: (message) => boolean) {
+    this.contents = combineLatest(simpleFolders.map(simpleFolder => simpleFolder.contents))
+    .pipe(
+      map(
+        // [[1, 2, 3], [4, 5]] => [1, 2, 3, 4, 5]
+        ArrayOfContents => ArrayOfContents.reduce(
+          (accumulatedContents, nextContents) => accumulatedContents.concat(nextContents), []
+        )
+      ),
+      filter(filteringFunction)
+    );
+  }
+
+  public refreshFolder(): void {
+    this.simpleFolders.forEach(folder => this.refreshFolder);
+  }
+
+  public emptyFolder(): void {
+    // Do nothing... Simple folders empty by themselves
+  }
+
+  public waitForActivation(): Observable<boolean> {
+    return combineLatest(
+      this.simpleFolders.map(folder => folder.waitForActivation())
+    )
+    .pipe(map( activationSignals => activationSignals.every(signal => !!signal) ));
+  }
 }

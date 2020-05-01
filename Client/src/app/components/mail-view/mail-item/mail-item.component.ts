@@ -18,4 +18,9 @@ export class MailItemComponent implements OnInit {
   ngOnInit(): void {
     this.sentByMe = !(isReceived(this.msg));
   }
+
+  star(event: MouseEvent): void {
+    event.stopPropagation();
+    console.log('star');
+  }
 }

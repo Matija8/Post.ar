@@ -63,6 +63,12 @@ const routes: Routes = [
     component: StarredComponent,
     data: {folderName: 'starred'}
   },
+  { path: 'starred/:msgId',
+    canActivate: [FolderGuard],
+    component: OpenMailItemComponent,
+    data: {folderName: 'starred'}
+  },
+
   // Other
   { path: '**', component: BadURLComponent }
 ];
