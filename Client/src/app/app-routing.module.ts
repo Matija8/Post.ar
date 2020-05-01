@@ -12,33 +12,9 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
-import { MessageGuard } from './services/guards/message.guard';
 
 
 const routes: Routes = [
-  { path: '',
-    canActivate: [AuthGuard],
-    redirectTo: '/inbox',
-    pathMatch: 'full'
-  },
-  { path: 'inbox',
-    canActivate: [FolderGuard],
-    component: InboxComponent,
-    data: {folderName: 'inbox'}
-  },
-  { path: 'sent',
-    canActivate: [FolderGuard],
-    component: SentComponent,
-    data: {folderName: 'sent'}
-  },
-  { path: 'starred',
-    canActivate: [AuthGuard],
-    component: StarredComponent
-  },
-  { path: 'drafts',
-    canActivate: [AuthGuard],
-    component: DraftsComponent
-  },
   { path: 'login',
     canActivate: [LoggedInGuard],
     component: LoginComponent
@@ -46,14 +22,48 @@ const routes: Routes = [
   { path: 'register',
     component: RegisterComponent
   },
-  { path: 'drafts/:msgId',
+  { path: '',
     canActivate: [AuthGuard],
-    component: DraftsComponent
+    redirectTo: '/inbox',
+    pathMatch: 'full'
   },
-  { path: ':folder/:msgId',
-    canActivate: [MessageGuard],
-    component: OpenMailItemComponent
+
+  // 'Regular' Folders
+  { path: 'inbox',
+    canActivate: [FolderGuard],
+    component: InboxComponent,
+    data: {folderName: 'inbox'}
   },
+  { path: 'inbox/:msgId',
+    canActivate: [FolderGuard],
+    component: OpenMailItemComponent,
+    data: {folderName: 'inbox'}
+  },
+
+  { path: 'sent',
+    canActivate: [FolderGuard],
+    component: SentComponent,
+    data: {folderName: 'sent'}
+  },
+  { path: 'sent/:msgId',
+    canActivate: [FolderGuard],
+    component: OpenMailItemComponent,
+    data: {folderName: 'sent'}
+  },
+
+  { path: 'drafts',
+    canActivate: [FolderGuard],
+    component: DraftsComponent,
+    data: {folderName: 'drafts'}
+  },
+
+  // 'Aggregate' Folders
+  { path: 'starred',
+    canActivate: [FolderGuard],
+    component: StarredComponent,
+    data: {folderName: 'starred'}
+  },
+  // Other
   { path: '**', component: BadURLComponent }
 ];
 

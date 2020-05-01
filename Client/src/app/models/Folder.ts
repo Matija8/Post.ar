@@ -111,6 +111,6 @@ export class SimpleFolder<T> extends Folder {
 }
 
 // todo: Starred, All mail...
-/* class AggregateFolder {
+class AggregateFolder {
 
-} */
+}

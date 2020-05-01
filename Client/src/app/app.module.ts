@@ -29,7 +29,6 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
-import { MessageGuard } from './services/guards/message.guard';
 
 @NgModule({
   declarations: [
@@ -63,7 +62,6 @@ import { MessageGuard } from './services/guards/message.guard';
     CookieService,
     AuthGuard,
     LoggedInGuard,
-    MessageGuard
   ],
   bootstrap: [
     AppComponent

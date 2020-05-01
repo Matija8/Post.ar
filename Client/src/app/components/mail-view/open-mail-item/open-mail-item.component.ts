@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Message } from '../../../models/Messages';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Folder } from 'src/app/models/Folder';
 
 @Component({
   selector: 'postar-open-mail-item',
@@ -13,49 +14,75 @@ import { map } from 'rxjs/operators';
 export class OpenMailItemComponent implements OnInit, OnDestroy {
 
   public msg: Message;
-  private msgId: string;
   private folderName: string;
-  private paramMapSubscription: Subscription = null;
-  private folderSubscription: Subscription = null;
+  private folder: Folder;
+  private routeSub: Subscription = null;
+  private folderSub: Subscription = null;
 
   constructor(private getMail: GetMailService , private route: ActivatedRoute, private router: Router) {
-    this.paramMapSubscription = this.route.paramMap.subscribe(params => {
-      this.msgId = params.get('msgId');
-      this.folderName = params.get('folder');
-      const folder = this.getMail.folders[this.folderName];
-      if (!folder) {
-        router.navigate(['inbox']);
-      }
-      if (this.folderSubscription !== null) {
-        this.folderSubscription.unsubscribe();
-      }
-      this.folderSubscription = folder.contents.pipe(
-        map(messages => messages.find(message => message.message_id === this.msgId))
-      ).subscribe(
-        message => {
-          if (!message) {
-            router.navigate(['inbox']);
-          }
-          this.msg = message;
+    this.routeSub = combineLatest([
+      this.route.data,
+      this.route.paramMap
+    ])
+    .pipe(
+      map(([routeData, paramMap]) => [routeData.folderName, paramMap.get('msgId')])
+    )
+    .subscribe(
+      ([folderName, msgId]: [string, string]) => {
+        if (!folderName) {
+          this.router.navigate(['/inbox']);
+          return;
         }
-      );
-    });
+        if (folderName !== this.folderName) {
+          const folder = this.getMail.folders[folderName];
+          if (!folder) {
+            this.router.navigate(['/inbox']);
+            return;
+          }
+          this.folderName = folderName;
+          this.folder = folder;
+        }
+        if (!msgId) {
+          this.router.navigate([this.folderName]);
+          return;
+        }
+        if (this.folderSub !== null) {
+          this.folderSub.unsubscribe();
+        }
+        this.folderSub = this.folder.contents.pipe(
+          map(messages => messages.find(message => message.message_id === msgId))
+        ).subscribe(
+          message => {
+            if (!message) {
+              router.navigate(['/inbox']);
+              return;
+            }
+            this.msg = message;
+          }
+        );
+
+      }
+    );
   }
 
   ngOnInit(): void {
     if (!this.msg) {
-      this.router.navigate(['inbox']);
+      if (this.folder && this.folderName) {
+        this.router.navigate([this.folderName]);
+      } else {
+        this.router.navigate(['/inbox']);
+      }
     }
   }
 
   ngOnDestroy(): void {
-    if (this.paramMapSubscription !== null) {
-      this.paramMapSubscription.unsubscribe();
-      this.paramMapSubscription = null;
+    if (this.routeSub !== null) {
+      this.routeSub.unsubscribe();
+      this.routeSub = null;
     }
-    if (this.folderSubscription !== null) {
-      this.folderSubscription.unsubscribe();
-      this.folderSubscription = null;
+    if (this.folderSub !== null) {
+      this.folderSub.unsubscribe();
+      this.folderSub = null;
     }
   }
 
