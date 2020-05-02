@@ -16,7 +16,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  shouldSidebarRender() {
+  shouldSidebarRender(): boolean {
     const validRoutePrefixes = ['/inbox', '/sent', '/starred', '/drafts'];
     for (const prefix of validRoutePrefixes) {
       if (this.router.url.startsWith(prefix)) {
@@ -24,6 +24,11 @@ export class MainComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  shouldHeaderRender(): boolean {
+    const url = this.router.url;
+    return !(url.startsWith('/login') || url.startsWith('/register')) ;
   }
 
 }

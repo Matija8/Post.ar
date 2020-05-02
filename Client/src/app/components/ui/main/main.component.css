@@ -8,6 +8,10 @@ main {
 
     padding: 0;
     margin: 0;
+}
+
+
+.under-header {
     margin-top: var(--header-height);
 }
 

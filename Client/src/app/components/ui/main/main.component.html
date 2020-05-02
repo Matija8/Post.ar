@@ -1,4 +1,7 @@
-<main>
+
+<postar-header *ngIf="shouldHeaderRender()"></postar-header>
+
+<main [ngClass]="{'under-header': shouldHeaderRender()}">
 
     <postar-sidebar
         *ngIf="shouldSidebarRender()"
