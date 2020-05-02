@@ -114,4 +114,35 @@ export class UserController {
         this.logger.info("done", "/login");
     }
 
+    async checkSession(request: Request, response: Response) {
+        this.logger.info("start", "/checkSession");
+        
+        this.logger.debug("check if session exists", "/checkSession");
+        const session = SessionManager.find(request.cookies["SESSIONID"]);
+        if (!session) {
+            createResponse(response, 401, 1000, error[1000]);
+            this.logger.info("done", "/checkSession");
+            return;
+        }
+
+        // user session is already active
+        this.logger.debug("prepare and send user data", "/checkSession");
+        const userData = { 
+            username: session.user.username,
+            name: session.user.name,
+            surname: session.user.surname 
+        };
+        
+       // encrypt user data
+       const encrypted = secretar.encrypt(userData);
+       if (!encrypted) {
+           createResponse(response, 400, 1010, error[1010]);
+           this.logger.info("done", "/checkSession");
+           return;
+       }
+
+       createResponse(response, 200, 2016, success[2016]);
+       this.logger.info("done", "/checkSession");
+    }
+
 }

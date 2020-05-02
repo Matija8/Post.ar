@@ -52,6 +52,9 @@ export class InboxController {
             return;
         }
 
+        // filter user inbox 
+        user.inbox = user.inbox.filter(message => !message.is_deleted);
+
         this.logger.debug("get user's inbox", "/inbox");
         let messages = [];
         for (const message of user.inbox) {
@@ -114,27 +117,37 @@ export class InboxController {
 
         this.logger.debug("save message to inbox and sent mail box", "/send");
         await getManager().transaction(async entityManager => {
+            const timestamp = new Date().getTime().toString();
+            const messageId = uuidv4();
+
             await entityManager.insert(Inbox, {
-                message_id: uuidv4(),
+                message_id: messageId,
                 from: session.user.username,
                 content: body.content,
                 is_read: false,
                 is_starred: false,
                 is_deleted: false,
-                timestamp: new Date().getTime().toString(),
+                timestamp: timestamp,
                 user: recipient
             });
 
             await entityManager.insert(Sent, {
-                message_id: uuidv4(),
+                message_id: messageId,
                 content: body.content,
                 is_starred: false,
                 is_deleted: false,
-                timestamp: new Date().getTime().toString(),
+                timestamp: timestamp,
                 to: recipient.username,
                 user: session.user
             });
 
+            const encrypted = secretar.encrypt({ messageId: messageId, timestamp: timestamp, ...body });
+            if (!encrypted) {
+                createResponse(response, 400, 1010, error[1010]);
+                this.logger.info("done", "/inbox");
+                return;
+            }
+    
             createResponse(response, 200, 2003, success[2003]);
             this.logger.info("done", "/send");
         }).catch(err => {
@@ -176,8 +189,6 @@ export class InboxController {
             createResponse(response, 400, 1011, error[1011]);
             this.logger.fatal(err, "/markAsRead");
         });
-
-
     }
 
     async markAsUnread(request: Request, response: Response) {
@@ -213,8 +224,6 @@ export class InboxController {
             createResponse(response, 400, 1017, error[1017]);
             this.logger.fatal(err, "/markAsUnread");
         });
-
-
     }
 
 }

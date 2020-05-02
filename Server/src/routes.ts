@@ -19,6 +19,12 @@ export const Routes = [
         path: "/login",
         handler: "login"
     },
+    {
+        controller: UserController,
+        method: "get",
+        path: "/checkSession",
+        handler: "checkSession"
+    },
     // inbox controller routes
     {
         controller: InboxController,
