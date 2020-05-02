@@ -1,5 +1,14 @@
-<div class="mail-item" [routerLink]="[router.url, msg.message_id]">
-    <button (click)="star($event)" >star</button>
-    <div class="mail-item-title" *ngIf="sentByMe"> To: {{ msg.to }} </div>
-    <div class="mail-item-title" *ngIf="!sentByMe"> From: {{ msg.from }} </div>
+<div class="mail-item unselectable" [routerLink]="[router.url, msg.message_id]">
+    <div>select</div>
+    <input type="checkbox" (click)="$event.stopPropagation()"
+        [checked]="isSelected"
+        (change)="selectToggle()">
+    <div>star</div>
+    <input type="checkbox" (click)="$event.stopPropagation()"
+        [checked]="msg.isStarred"
+        (change)="star()">
+    <div class="mail-item-title" *ngIf="sentByMe; else From"> To: {{ msg.to }} </div>
+    <ng-template #From>
+        <div class="mail-item-title"> From: {{ msg.from }} </div>
+    </ng-template>
 </div>

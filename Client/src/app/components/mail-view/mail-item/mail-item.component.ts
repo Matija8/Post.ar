@@ -1,5 +1,5 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { Message, isReceived, isSent } from 'src/app/models/Messages';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Message, isReceived } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,16 +11,24 @@ import { Router } from '@angular/router';
 export class MailItemComponent implements OnInit {
 
   @Input() msg: Message;
-  sentByMe = false;
+  @Output() selectEmitter = new EventEmitter<[string, boolean]>();
+  public sentByMe: boolean;
+  public isSelected: boolean;
 
   constructor(public router: Router) {}
 
   ngOnInit(): void {
-    this.sentByMe = !(isReceived(this.msg));
+    this.sentByMe = !isReceived(this.msg);
+    this.isSelected = false;
   }
 
-  star(event: MouseEvent): void {
-    event.stopPropagation();
+  star(): void {
     console.log('star');
+  }
+
+  selectToggle() {
+    this.isSelected = !this.isSelected;
+    console.log(this.isSelected);
+    this.selectEmitter.emit([this.msg.message_id, this.isSelected]);
   }
 }

@@ -1,8 +1,13 @@
 .mail-item {
     display: flex;
     flex-direction: row;
+    align-items: center;
     border: solid 0.3px black;
     padding: 2px;
+}
+
+.mail-item > * {
+    margin-right: 10px;
 }
 
 .mail-item-title {

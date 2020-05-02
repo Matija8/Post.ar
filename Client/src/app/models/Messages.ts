@@ -12,6 +12,10 @@ export interface Message {
   subject?: string;
 }
 
+export const msgType = function getFolderNameOfMessage(msg: Message) {
+  return isReceived(msg) ? 'inbox' : 'sent';
+};
+
 
 export interface RMessage extends Message {
   from: string;
