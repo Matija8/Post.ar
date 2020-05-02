@@ -34,6 +34,12 @@ export class User {
     })
     surname: string;
 
+    @Column({
+        nullable: false,
+        enum: ["default", "dark"]
+    })
+    theme: string;
+
     @OneToMany(type => Inbox, inbox => inbox.user)
     inbox: Inbox[];
 

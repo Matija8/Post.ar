@@ -25,6 +25,12 @@ export const Routes = [
         path: "/checkSession",
         handler: "checkSession"
     },
+    {
+        controller: UserController,
+        method: "post",
+        path: "/setTheme",
+        handler: "setTheme"
+    },
     // inbox controller routes
     {
         controller: InboxController,

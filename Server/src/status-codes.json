@@ -17,7 +17,8 @@
         "2013": "Found messages in trash",
         "2014": "Successfully moved message to trash",
         "2015": "Successfully removed message",
-        "2016": "Found user session"
+        "2016": "Found user session",
+        "2017": "Successfully changed user theme"
     },
     "error": 
     {
@@ -41,6 +42,7 @@
         "1017": "Failed to update messages as unread",
         "1018": "Failed to get messages from trash",
         "1019": "Failed to move message to trash",
-        "1020": "Failed to remove starred message"
+        "1020": "Failed to remove starred message",
+        "1021": "Failed to change user theme"
     }
 }   

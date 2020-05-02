@@ -28,7 +28,7 @@ export class SentController {
             this.logger.info("done", "/sent");
             return;
         }
-
+        
         this.logger.debug("get user", "/sent");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },

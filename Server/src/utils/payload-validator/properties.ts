@@ -12,5 +12,7 @@ export const Properties = {
     messageId:  { type: String, required: true },
     messageIds: { type: Array, each: { type: String }, required: true },
 
-    type: { type: String, required: true }
+    type: { type: String, required: true },
+    
+    theme: { type: String, required: true }
 }

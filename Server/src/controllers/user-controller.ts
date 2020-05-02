@@ -45,6 +45,7 @@ export class UserController {
                 password: hash,
                 name: body.name,
                 surname: body.surname,
+                theme: "default"
             });
         } catch (err) {
             createResponse(response, 400, 1002, error[1002]);
@@ -100,7 +101,12 @@ export class UserController {
         // create response
         this.logger.debug("encrypt and send user data", "/login");
         
-        const userData = { username: user.username, name: user.name, surname: user.surname };
+        const userData = { 
+            username: user.username,
+            name: user.name,
+            surname: user.surname,
+            theme: user.theme
+        };
         
         // encrypt user data
         const encrypted = secretar.encrypt(userData);
@@ -130,7 +136,8 @@ export class UserController {
         const userData = { 
             username: session.user.username,
             name: session.user.name,
-            surname: session.user.surname 
+            surname: session.user.surname,
+            theme: session.user.theme
         };
         
        // encrypt user data
@@ -143,6 +150,44 @@ export class UserController {
 
        createResponse(response, 200, 2016, success[2016]);
        this.logger.info("done", "/checkSession");
+    }
+
+    async setTheme(request: Request, response: Response) {
+        this.logger.info("start", "/setTheme");
+        
+        this.logger.debug("check if session exists", "/setTheme");
+        const session = SessionManager.find(request.cookies["SESSIONID"]);
+        if (!session) {
+            createResponse(response, 401, 1000, error[1000]);
+            this.logger.info("done", "/setTheme");
+            return;
+        }
+
+        this.logger.debug("validate payload", "/setTheme");
+        const body = request.body;
+        if (PayloadValidator.validate(body, ["theme"])) {
+            createResponse(response, 400, 1001, error[1001]);
+            this.logger.info("done", "/setTheme");
+            return;
+        }
+
+        if (!["default", "dark"].includes(body.theme)) {
+            createResponse(response, 400, 1021, error[1021]);
+            this.logger.info("done", "/setTheme");
+            return;
+        }
+
+        try {
+            this.logger.debug("update user theme settings", "/setTheme");
+            await this.userRepository.update({ username: session.user.username }, { theme: body.theme });
+            
+            createResponse(response, 200, 2017, success[2017]);
+            this.logger.info("done", "/setTheme");
+        } catch(err) {
+            createResponse(response, 400, 1021, error[1021]);
+            this.logger.info("done", "/setTheme");
+        }
+     
     }
 
 }
