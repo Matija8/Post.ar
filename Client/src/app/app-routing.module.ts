@@ -12,6 +12,7 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
+import { TrashedComponent } from './components/folders/trashed/trashed.component';
 
 
 const routes: Routes = [
@@ -55,6 +56,13 @@ const routes: Routes = [
     canActivate: [FolderGuard],
     component: DraftsComponent,
     data: {folderName: 'drafts'}
+  },
+
+  {
+    path: 'trashed',
+    canActivate: [FolderGuard],
+    component: TrashedComponent,
+    data: {folderName: 'trashed'}
   },
 
   // 'Aggregate' Folders

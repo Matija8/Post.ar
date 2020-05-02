@@ -121,6 +121,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "postarClient"
+    }
+  },
+  "defaultProject": "postarClient",
+  "cli": {
+    "analytics": false
+  }
 }
