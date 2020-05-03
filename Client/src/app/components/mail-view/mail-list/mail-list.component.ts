@@ -10,6 +10,7 @@ import { TagMailService } from 'src/app/services/mail-services/tag-mail.service'
 export class MailListComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<void>();
   @Output() starredEmitter = new EventEmitter<void>();
+  @Output() deleteEmitter = new EventEmitter<void>();
   @Input() messagesList: Message[];
   private selected: Set<string>;
 
@@ -51,4 +52,8 @@ export class MailListComponent implements OnInit, OnDestroy {
     this.starredEmitter.emit();
   }
 
+  onDelete([messageId, type, deleted]: [string, string, boolean]): void {
+    this.tagMail.moveToTrash(messageId, type, deleted);
+    this.deleteEmitter.emit();
+  }
 }

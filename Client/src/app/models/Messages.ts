@@ -6,6 +6,7 @@ export interface Message {
   to?: string;
   isRead?: boolean;
   isStarred?: boolean;
+  isDeleted?: boolean;
 
   // check model with server for these properties
   cc?: string;

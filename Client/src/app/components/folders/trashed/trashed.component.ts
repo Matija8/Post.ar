@@ -9,9 +9,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./trashed.component.css']
 })
 export class TrashedComponent implements OnInit, OnDestroy {
-  private folder = this.getMail.folders.trashed;
+  private folder = this.getMail.folders.all;
   private subscription: Subscription = null;
 
+  private allMessages: Message[];
   public trashedMessages: Message[];
 
   constructor(private getMail: GetMailService) { }
@@ -19,7 +20,8 @@ export class TrashedComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.trashedMessages = messages;
+        this.allMessages = messages;
+        this.softRefresh();
       },
       (error: any): void => {
         console.log('Error during trashed subscription: ', error);
@@ -32,6 +34,10 @@ export class TrashedComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
+  }
+
+  softRefresh(): void {
+    this.trashedMessages = this.allMessages.filter(message => message.isDeleted);
   }
 
   refreshFolder(): void {
