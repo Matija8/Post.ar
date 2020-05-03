@@ -13,22 +13,9 @@ export abstract class Folder {
 }
 
 
-interface RefreshWrapper<T> {
-  data: T;
-  folderInitialized: boolean;
-  refreshAttempt: number;
-}
-
-
 export class SimpleFolder<T> extends Folder {
-
-  protected refreshAttempt = 0;
-  protected readonly stream = new BehaviorSubject<RefreshWrapper<T[]>>({
-    data: [],
-    folderInitialized: false,
-    refreshAttempt: this.refreshAttempt,
-  });
-  public readonly contents: Observable<T[]> = this.stream.pipe(map(wrapper => wrapper.data));
+  protected readonly stream = new BehaviorSubject<T[]>(null);
+  public readonly contents: Observable<T[]> = this.stream.asObservable();
 
   constructor(
     protected http: HttpWrapperService,
@@ -59,53 +46,31 @@ export class SimpleFolder<T> extends Folder {
       res.payload.hash
     ).data.replace('/"', '"');
     const data = JSON.parse(dataJSON).sort((a, b) => a.timestamp < b.timestamp);
-    // console.log(data);
-    this.stream.next({
-      data,
-      folderInitialized: true,
-      refreshAttempt: this.refreshAttempt + 1,
-    });
+    this.stream.next(data);
   }
 
   protected handleError(err: any) {
     if (err.error.statusCode === this.EMPTY_FOLDER_ERR_CODE) {
-      this.stream.next({
-        data: [],
-        folderInitialized: true,
-        refreshAttempt: this.refreshAttempt + 1,
-      });
+      this.stream.next([]);
     } else {
-      console.log('Folder refresh error: ', err);
-      const oldData = this.stream.getValue();
-      this.stream.next({
-        ...oldData,
-        refreshAttempt: this.refreshAttempt + 1,
-      });
+      // TODO: handle error in folder.guard.ts?
+      console.log(err);
+      this.stream.error(err);
     }
   }
 
   public emptyFolder(): void {
-    this.refreshAttempt = 0;
-    this.stream.next({
-      data: [],
-      folderInitialized: false,
-      refreshAttempt: this.refreshAttempt,
-    });
+    this.stream.next(null);
   }
 
   public waitForActivation(): Observable<boolean> {
-    if (!this.stream.getValue().folderInitialized) {
+    if (this.stream.getValue() === null) {
       this.refreshFolder();
-      return this.stream.pipe(
-        skipWhile(wrapper => wrapper.refreshAttempt === this.refreshAttempt),
-        map(wrapper => {
-          this.refreshAttempt++;
-          return wrapper.folderInitialized;
-        })
-      );
-    } else {
-      return of(true);
     }
+    return this.stream.pipe(
+      skipWhile(data => data === null),
+      map(data => !!data)
+    );
   }
 
 }
@@ -128,21 +93,13 @@ export class TrashFolder extends SimpleFolder<Message> {
       res.payload.hash
     );
     const data = JSON.parse(dataJSON);
-    // console.log((data.inbox).concat(data.sentMessages));
-    this.stream.next({
-      data: (data.inbox).concat(data.sentMessages),
-      folderInitialized: true,
-      refreshAttempt: this.refreshAttempt + 1,
-    });
+    this.stream.next(data.inbox.concat(data.sentMessages));
   }
 
   protected handleError(err: any): void {
-    console.log('Trash refresh error: ', err);
-    const oldData = this.stream.getValue();
-    this.stream.next({
-      ...oldData,
-      refreshAttempt: this.refreshAttempt + 1,
-    });
+    // TODO: handle error in folder.guard.ts?
+    console.log(err);
+    this.stream.error(err);
   }
 }
 
@@ -154,18 +111,14 @@ export class AggregateFolder {
   constructor(private simpleFolders: SimpleFolder<Message>[]) {
     this.contents = combineLatest(simpleFolders.map(simpleFolder => simpleFolder.contents))
     .pipe(
-      map(
-        ArrayOfContents => ArrayOfContents.reduce(
-          (accumulatedContents, nextContents) => accumulatedContents.concat(nextContents), []
-        )
+      map(ArrayOfContents => ArrayOfContents.reduce((accumulatedContents, nextContents) => accumulatedContents.concat(nextContents), [])
       )
     );
   }
 
   public refreshFolder(): void {
     this.simpleFolders.forEach(folder => {
-      // console.log(folder);
-      // this.refreshFolder();
+      folder.refreshFolder();
     });
   }
 

@@ -47,9 +47,8 @@ export class MailListComponent implements OnInit, OnDestroy {
 
 
   onStar([messageId, type, starred]: [string, string, boolean]): void {
-    this.starredEmitter.emit();
     this.tagMail.star(messageId, starred, type);
-    console.log('?');
+    this.starredEmitter.emit();
   }
 
 }

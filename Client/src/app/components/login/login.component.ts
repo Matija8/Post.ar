@@ -34,8 +34,9 @@ export class LoginComponent implements OnInit {
     .pipe(take(1))
     .subscribe(
       (res: any) => {
+        this.requestPending = false;
         console.log(this.secretar.decryptAndVerify(res.payload.data, res.payload.secret, res.payload.hash));
-        this.auth.currentUserData.pipe(skipWhile(userData => !userData), take(1)).subscribe(
+        this.auth.currentUserData.pipe(skipWhile(userData => userData === null), take(1)).subscribe(
           _ => this.router.navigate(['/inbox'])
         );
       },

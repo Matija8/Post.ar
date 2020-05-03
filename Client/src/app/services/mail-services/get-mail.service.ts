@@ -18,13 +18,12 @@ export class GetMailService {
     const simpleFolders = {
       inbox: new SimpleFolder<RMessage>(this.http, this.secretar, 'http://localhost:8000/inbox', 1005),
       sent: new SimpleFolder<SMessage>(this.http, this.secretar, 'http://localhost:8000/sent', 1009),
-      trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trashed'),
     };
-    const all = new AggregateFolder(Object.values(simpleFolders));
     this.folders = {
       ...simpleFolders,
-      all,
+      all: new AggregateFolder(Object.values(simpleFolders)),
       drafts: new SimpleFolder<any>(this.http, this.secretar, 'http://localhost:8000/drafts', 1007),
+      trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trashed'),
     };
   }
 

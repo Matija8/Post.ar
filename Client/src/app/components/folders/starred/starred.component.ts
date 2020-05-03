@@ -39,7 +39,6 @@ export class StarredComponent implements OnInit, OnDestroy {
   }
 
   softRefresh(): void {
-    console.log('soft');
     this.starredMessages = this.allMessages.filter(message => message.isStarred);
   }
 
