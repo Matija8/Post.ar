@@ -18,10 +18,6 @@ export class SendMailService {
     return !!to.match(/^[a-zA-Z][a-zA-Z0-9]*@post\.ar$/);
   }
 
-  /* star(messageId: string, type: string) {
-    this.http.post('http://localhost:8000/starMessage', {messageId, type});
-  } */
-
   send(message: EditorMessage) {
     this.http.post('http://localhost:8000/send', {
       recipient: message.to,

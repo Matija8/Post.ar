@@ -15,5 +15,6 @@
 
 <postar-mail-item
 *ngFor="let msg of messagesList" [msg]=msg
-    (selectEmitter)="onSelect($event)">
+    (selectEmitter)="onSelect($event)"
+    (starEmitter)="onStar($event)">
 </postar-mail-item>

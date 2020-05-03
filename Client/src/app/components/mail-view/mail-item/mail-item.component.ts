@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { Message, isReceived } from 'src/app/models/Messages';
+import { Message, isReceived, msgType } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,6 +12,7 @@ export class MailItemComponent implements OnInit {
 
   @Input() msg: Message;
   @Output() selectEmitter = new EventEmitter<[string, boolean]>();
+  @Output() starEmitter = new EventEmitter<[string, string, boolean]>();
   public sentByMe: boolean;
   public isSelected: boolean;
 
@@ -23,12 +24,12 @@ export class MailItemComponent implements OnInit {
   }
 
   star(): void {
-    console.log('star');
+    this.msg.isStarred = !this.msg.isStarred;
+    this.starEmitter.emit([this.msg.message_id, msgType(this.msg), this.msg.isStarred]);
   }
 
   selectToggle() {
     this.isSelected = !this.isSelected;
-    console.log(this.isSelected);
     this.selectEmitter.emit([this.msg.message_id, this.isSelected]);
   }
 }

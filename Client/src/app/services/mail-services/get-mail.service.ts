@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SecretarService } from '../secretar/secretar.service';
-import { Folder, SimpleFolder, AggregateFolder } from 'src/app/models/Folder';
+import { Folder, SimpleFolder, AggregateFolder, TrashFolder } from 'src/app/models/Folder';
 import { HttpWrapperService } from './http-wrapper.service';
 import { SMessage, RMessage } from 'src/app/models/Messages';
 
@@ -9,10 +9,7 @@ import { SMessage, RMessage } from 'src/app/models/Messages';
 })
 export class GetMailService {
 
-  private readonly VALID_FOLDERS = ['inbox', 'sent', 'starred'];
-
   public folders: {readonly [folderName: string]: Folder};
-
 
   constructor(
     private http: HttpWrapperService,
@@ -21,20 +18,18 @@ export class GetMailService {
     const simpleFolders = {
       inbox: new SimpleFolder<RMessage>(this.http, this.secretar, 'http://localhost:8000/inbox', 1005),
       sent: new SimpleFolder<SMessage>(this.http, this.secretar, 'http://localhost:8000/sent', 1009),
+      trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trashed'),
     };
-    const aggregateFolders = {
-      starred: new AggregateFolder(Object.values(simpleFolders), (msg => msg.isStarred)),
-      all: new AggregateFolder(Object.values(simpleFolders), (_ => true)),
-    };
+    const all = new AggregateFolder(Object.values(simpleFolders));
     this.folders = {
       ...simpleFolders,
-      ...aggregateFolders,
+      all,
       drafts: new SimpleFolder<any>(this.http, this.secretar, 'http://localhost:8000/drafts', 1007),
     };
   }
 
 
   validFolder(folder: string): boolean {
-    return this.VALID_FOLDERS.includes(folder);
+    return ['inbox', 'sent', 'starred'].includes(folder);
   }
 }

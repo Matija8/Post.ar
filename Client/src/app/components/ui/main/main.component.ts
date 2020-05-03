@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
   }
 
   shouldSidebarRender(): boolean {
-    const validRoutePrefixes = ['/inbox', '/sent', '/starred', '/drafts'];
+    const validRoutePrefixes = ['/inbox', '/sent', '/starred', '/drafts', '/all', '/trash'];
     for (const prefix of validRoutePrefixes) {
       if (this.router.url.startsWith(prefix)) {
         return true;

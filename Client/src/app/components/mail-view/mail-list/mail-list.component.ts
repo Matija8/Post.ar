@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Message } from 'src/app/models/Messages';
+import { Message, msgType } from 'src/app/models/Messages';
+import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 
 @Component({
   selector: 'postar-mail-list',
@@ -8,10 +9,11 @@ import { Message } from 'src/app/models/Messages';
 })
 export class MailListComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<void>();
+  @Output() starredEmitter = new EventEmitter<void>();
   @Input() messagesList: Message[];
   private selected: Set<string>;
 
-  constructor() {}
+  constructor(private tagMail: TagMailService) {}
 
   ngOnInit(): void {
     this.selected = new Set<string>();
@@ -41,6 +43,13 @@ export class MailListComponent implements OnInit, OnDestroy {
 
   clearSelected(): void {
     this.selected.clear();
+  }
+
+
+  onStar([messageId, type, starred]: [string, string, boolean]): void {
+    this.starredEmitter.emit();
+    this.tagMail.star(messageId, starred, type);
+    console.log('?');
   }
 
 }

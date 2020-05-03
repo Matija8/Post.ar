@@ -10,9 +10,10 @@ import { Subscription } from 'rxjs';
 })
 export class StarredComponent implements OnInit, OnDestroy {
 
-  private folder = this.getMail.folders.starred;
+  private folder = this.getMail.folders.all;
   private subscription: Subscription = null;
 
+  private allMessages: Message[];
   public starredMessages: Message[];
 
   constructor(private getMail: GetMailService) {}
@@ -20,12 +21,14 @@ export class StarredComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.starredMessages = messages;
+        this.allMessages = messages;
+        this.softRefresh();
       },
       (err): void => {
         console.log('Error in starred subscription', err);
       }
     );
+    this.softRefresh();
   }
 
   ngOnDestroy(): void {
@@ -33,6 +36,11 @@ export class StarredComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
+  }
+
+  softRefresh(): void {
+    console.log('soft');
+    this.starredMessages = this.allMessages.filter(message => message.isStarred);
   }
 
   refreshFolder(): void {
