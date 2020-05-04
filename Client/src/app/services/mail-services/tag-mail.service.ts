@@ -28,8 +28,7 @@ export class TagMailService {
   }
 
   moveToTrash(messageId: string, type: string, isDeleted: boolean): Observable<any> {
-    const response = this.http.post('http://localhost:8000/trash', {messageId, type});
-
+    const response = this.http.post('http://localhost:8000/trashMessage', {messageId, type});
     response.subscribe(
       (res: any): void => {
         console.log('Tag-mail-service', res);

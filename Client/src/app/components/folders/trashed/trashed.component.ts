@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./trashed.component.css']
 })
 export class TrashedComponent implements OnInit, OnDestroy {
-  private folder = this.getMail.folders.all;
+  private folder = this.getMail.folders.trash;
   private subscription: Subscription = null;
 
   private allMessages: Message[];
@@ -21,6 +21,7 @@ export class TrashedComponent implements OnInit, OnDestroy {
     this.subscription = this.folder.contents.subscribe(
       (messages: Message[]): void => {
         this.allMessages = messages;
+        console.log('All trash messages: ', messages);
         this.softRefresh();
       },
       (error: any): void => {
@@ -38,6 +39,7 @@ export class TrashedComponent implements OnInit, OnDestroy {
 
   softRefresh(): void {
     this.trashedMessages = this.allMessages.filter(message => message.isDeleted);
+    console.log('From softReset(): ', this.trashedMessages);
   }
 
   refreshFolder(): void {

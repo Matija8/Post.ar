@@ -40,6 +40,7 @@ export class SimpleFolder<T> extends Folder {
   }
 
   protected handleResponse(res: any) {
+    console.log('handleResponse simple folder');
     const dataJSON = this.secretar.decryptAndVerify(
       res.payload.data,
       res.payload.secret,
@@ -87,6 +88,7 @@ export class TrashFolder extends SimpleFolder<Message> {
   }
 
   protected handleResponse(res: any): void {
+    console.log('handleResponse trash folder');
     const dataJSON = this.secretar.decryptAndVerify(
       res.payload.data,
       res.payload.secret,

@@ -24,6 +24,7 @@ import { ComposeItemComponent } from './components/compose/compose-item/compose-
 
 import { AuthService } from './services/mail-services/auth.service';
 import { GetMailService } from './services/mail-services/get-mail.service';
+import { TagMailService } from './services/mail-services/tag-mail.service';
 import { ChangeThemeService } from './services/ui-services/change-theme.service';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -60,6 +61,7 @@ import { TrashedComponent } from './components/folders/trashed/trashed.component
   providers: [
     AuthService,
     GetMailService,
+    TagMailService,
     ChangeThemeService,
     CookieService,
     AuthGuard,

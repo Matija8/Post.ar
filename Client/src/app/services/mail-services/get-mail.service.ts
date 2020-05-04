@@ -29,6 +29,6 @@ export class GetMailService {
 
 
   validFolder(folder: string): boolean {
-    return ['inbox', 'sent', 'starred'].includes(folder);
+    return ['inbox', 'sent', 'starred', 'trash'].includes(folder);
   }
 }
