@@ -14,7 +14,7 @@ import { User } from "../entity/user";
 export class SentController {
 
     private logger = new Logger("sent-controller");
-    
+
     // repositories
     private userRepository  = getRepository(User);
 
@@ -28,7 +28,7 @@ export class SentController {
             this.logger.info("done", "/sent");
             return;
         }
-        
+
         this.logger.debug("get user", "/sent");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
@@ -47,6 +47,9 @@ export class SentController {
             return;
         }
 
+        // filter user inbox
+        user.sent = user.sent.filter(message => !message.is_deleted);
+
         this.logger.debug("get user sent mail", "/sent");
         let sentMail = [];
         for (const message of user.sent)
@@ -57,7 +60,7 @@ export class SentController {
                 isStarred: message.is_starred,
                 timestamp: message.timestamp,
             });
-        
+
         this.logger.debug("encrypt user's sent mail", "/sent");
         const encrypted = secretar.encrypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
         if (!encrypted) {
@@ -65,7 +68,7 @@ export class SentController {
             this.logger.info("done", "/sent");
             return;
         }
-        
+
         createResponse(response, 200, 2005, success[2005], encrypted);
         this.logger.info("done", "/sent");
     }

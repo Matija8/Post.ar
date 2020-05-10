@@ -4,7 +4,6 @@ import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
 import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
 
-
 export abstract class Folder {
   public readonly contents: Observable<any[]>;
   public abstract refreshFolder(): void;
@@ -40,7 +39,6 @@ export class SimpleFolder<T> extends Folder {
   }
 
   protected handleResponse(res: any) {
-    console.log('handleResponse simple folder');
     const dataJSON = this.secretar.decryptAndVerify(
       res.payload.data,
       res.payload.secret,
@@ -74,6 +72,23 @@ export class SimpleFolder<T> extends Folder {
     );
   }
 
+}
+
+
+export class MessageFolder extends SimpleFolder<Message> {
+
+  constructor(
+    http: HttpWrapperService,
+    secretar: SecretarService,
+    GET_REQUEST_URL: string,
+    EMPTY_FOLDER_ERR_CODE: number
+  ) {
+    super(http, secretar, GET_REQUEST_URL, EMPTY_FOLDER_ERR_CODE);
+  }
+
+  public removeByIds(idsToDelete: string[]): void {
+    this.stream.next(this.stream.getValue().filter(msg => !idsToDelete.includes(msg.message_id)));
+  }
 }
 
 

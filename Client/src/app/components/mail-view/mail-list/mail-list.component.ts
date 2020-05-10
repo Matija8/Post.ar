@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Message, msgType } from 'src/app/models/Messages';
+import { Message } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
+import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 
 @Component({
   selector: 'postar-mail-list',
@@ -8,13 +9,16 @@ import { TagMailService } from 'src/app/services/mail-services/tag-mail.service'
   styleUrls: ['./mail-list.component.css']
 })
 export class MailListComponent implements OnInit, OnDestroy {
-  @Output() refresh = new EventEmitter<void>();
-  @Output() starredEmitter = new EventEmitter<void>();
-  @Output() deleteEmitter = new EventEmitter<void>();
   @Input() messagesList: Message[];
+  @Output() refresh = new EventEmitter<void>();
+  // starredEmitter -> use to notify starred component to soft refresh. TODO: different solution?
+  @Output() starredEmitter = new EventEmitter<void>();
   private selected: Set<string>;
 
-  constructor(private tagMail: TagMailService) {}
+  constructor(
+    private tagMail: TagMailService,
+    private trashMail: TrashMailService,
+  ) {}
 
   ngOnInit(): void {
     this.selected = new Set<string>();
@@ -46,14 +50,12 @@ export class MailListComponent implements OnInit, OnDestroy {
     this.selected.clear();
   }
 
-
   onStar([messageId, type, starred]: [string, string, boolean]): void {
     this.tagMail.star(messageId, starred, type);
     this.starredEmitter.emit();
   }
 
-  onDelete([messageId, type, deleted]: [string, string, boolean]): void {
-    this.tagMail.moveToTrash(messageId, type, deleted);
-    this.deleteEmitter.emit();
+  onDelete([messageId, type]: [string, string]): void {
+    this.trashMail.moveToTrash(messageId, type);
   }
 }

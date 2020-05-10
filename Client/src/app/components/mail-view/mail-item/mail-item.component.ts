@@ -13,7 +13,7 @@ export class MailItemComponent implements OnInit {
   @Input() msg: Message;
   @Output() selectEmitter = new EventEmitter<[string, boolean]>();
   @Output() starEmitter = new EventEmitter<[string, string, boolean]>();
-  @Output() deleteEmitter = new EventEmitter<[string, string, boolean]>();
+  @Output() moveToTrashEmitter = new EventEmitter<[string, string]>();
   public sentByMe: boolean;
   public isSelected: boolean;
 
@@ -34,10 +34,9 @@ export class MailItemComponent implements OnInit {
     this.selectEmitter.emit([this.msg.message_id, this.isSelected]);
   }
 
-  deleteMessage(event: Event) {
-    console.log('delete is clicked\n');
+  moveToTrash(event: Event) {
     event.stopPropagation();
     this.msg.isDeleted = true;
-    this.deleteEmitter.emit([this.msg.message_id, msgType(this.msg), this.msg.isDeleted]);
+    this.moveToTrashEmitter.emit([this.msg.message_id, msgType(this.msg)]);
   }
 }

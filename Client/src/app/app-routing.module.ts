@@ -52,6 +52,19 @@ const routes: Routes = [
     data: {folderName: 'sent'}
   },
 
+  {
+    path: 'trash',
+    canActivate: [FolderGuard],
+    component: TrashedComponent,
+    data: {folderName: 'trash'}
+  },
+  {
+    path: 'trash/:msgId',
+    canActivate: [FolderGuard],
+    component: OpenMailItemComponent,
+    data: {folderName: 'trash'}
+  },
+
   { path: 'drafts',
     canActivate: [FolderGuard],
     component: DraftsComponent,
@@ -59,19 +72,6 @@ const routes: Routes = [
   },
 
 // 'Aggregate' Folders
-  {
-    path: 'trash',
-    canActivate: [FolderGuard],
-    component: TrashedComponent,
-    data: {folderName: 'all'}
-  },
-
-  {
-    path: 'trash:/msgId',
-    canActivate: [FolderGuard],
-    component: OpenMailItemComponent,
-    data: {folderName: 'all'}
-  },
 
   { path: 'starred',
     canActivate: [FolderGuard],
