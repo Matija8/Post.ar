@@ -31,6 +31,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
+import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { TrashedComponent } from './components/folders/trashed/trashed.component
     BadURLComponent,
     ComposeItemComponent,
     OpenMailItemComponent,
-    TrashedComponent
+    TrashedComponent,
+    TrashedItemComponent,
   ],
   imports: [
     BrowserModule,

@@ -35,4 +35,19 @@ export class TrashMailService {
 
     return response;
   }
+
+  // TODO: Change to array of messages ({messageId: string, type: string}[])
+  // after server gets updated to accept that format.
+  // 'Type' (folder) might not be neccessary.
+  restoreFromTrash(messageId: string, type: string) {
+    // TODO
+    console.log('trash-mail service: Restore from trash called (TODO)');
+  }
+
+  deleteForever(messageId: string, type: string) {
+    // TODO
+    console.log('trash-mail service: Delete forever called (TODO)');
+    // TODO: Add remove by ids to trash.
+    // this.getMail.folders.trash.removeByIds();
+  }
 }

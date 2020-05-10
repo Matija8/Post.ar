@@ -34,9 +34,8 @@ export class MailItemComponent implements OnInit {
     this.selectEmitter.emit([this.msg.message_id, this.isSelected]);
   }
 
-  moveToTrash(event: Event) {
+  moveToTrash(event: MouseEvent) {
     event.stopPropagation();
-    this.msg.isDeleted = true;
     this.moveToTrashEmitter.emit([this.msg.message_id, msgType(this.msg)]);
   }
 }

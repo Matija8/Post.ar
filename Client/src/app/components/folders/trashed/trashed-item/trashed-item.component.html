@@ -1,0 +1,20 @@
+<div class="trash-item unselectable" [routerLink]="[router.url, msg.message_id]">
+    <div>select</div>
+    <input type="checkbox" (click)="$event.stopPropagation()"
+        [checked]="isSelected"
+        (change)="selectToggle()">
+    <button type="button"
+        class="btn btn-danger"
+        (click)="deleteForever($event)">
+        delete forever
+    </button>
+    <button type="button"
+        class="btn btn-primary"
+        (click)="restore($event)">
+        restore
+    </button>
+    <div class="trash-item-title" *ngIf="sentByMe; else From"> To: {{ msg.to }} </div>
+    <ng-template #From>
+        <div class="trash-item-title"> From: {{ msg.from }} </div>
+    </ng-template>
+</div>

@@ -11,7 +11,6 @@ import { TrashMailService } from 'src/app/services/mail-services/trash-mail.serv
 export class MailListComponent implements OnInit, OnDestroy {
   @Input() messagesList: Message[];
   @Output() refresh = new EventEmitter<void>();
-  // starredEmitter -> use to notify starred component to soft refresh. TODO: different solution?
   @Output() starredEmitter = new EventEmitter<void>();
   private selected: Set<string>;
 

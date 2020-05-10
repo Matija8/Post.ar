@@ -1,5 +1,26 @@
-<postar-mail-list
-[messagesList]=trashedMessages>
-(refresh)="refreshFolder()"
-(deleteEmitter)="softRefresh()"
-</postar-mail-list>
+<!-- List header -->
+<div class="trash-list-header">
+  <div class="left">
+    <div> selected: {{ selectedChar() }} </div>
+    <div id="none-selected" *ngIf="selectedChar() === 'None'">
+      <button
+        (click)="refreshFolder()">
+        Refresh
+      </button>
+    </div>
+
+  </div>
+
+  <div class="right">
+  </div>
+
+</div>
+
+<!-- List items -->
+<postar-trashed-item
+*ngFor="let msg of trashedMessages" [msg]=msg
+  (selectEmitter)="onSelect($event)"
+  (deleteForeverEmitter)="onDeleteForever($event)"
+  (restoreEmitter)="onRestore($event)"
+  >
+</postar-trashed-item>
