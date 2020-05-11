@@ -2,3 +2,14 @@
     display: block;
     margin-top: var(--header-height);
 }
+
+.input-container {
+  position: relative;
+  float: left;
+}
+.input-container:after {
+  position: absolute;
+  right: 0;
+  top: 0;
+  content: '@gmail.com';
+}

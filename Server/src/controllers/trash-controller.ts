@@ -167,5 +167,65 @@ export class TrashController {
         createResponse(response, 200, 2015, success[2015]);
     }
 
+    async deleteMessage(request: Request, response: Response) {
+        this.logger.info("start", "/deleteMessage");
+        
+        this.logger.debug("validate user", "/deleteMessage");
+        const session = SessionManager.find(request.cookies["SESSIONID"]);
+        if (!session) {
+            createResponse(response, 401, 1000, error[1000]);
+            this.logger.info("done", "/deleteMessage");
+            return;
+        }
+
+        this.logger.debug("validate payload", "/deleteMessage");
+        const body = request.body;
+        if (PayloadValidator.validate(body, ["messageId", "type"])) {
+            createResponse(response, 400, 1001, error[1001]);
+            this.logger.info("done", "/deleteMessage");
+            return;
+        }
+
+        this.logger.debug("delete message", "/deleteMessage");
+        try {
+            switch (body.type) {
+                case "inbox":
+                    // let messageToDelete = await this.inboxRepository.find(
+                    //     { message_id: body.message_id }
+                    // )
+                    await this.inboxRepository.delete({ message_id: body.message_id });
+
+                    // await this.inboxRepository.update(
+                    //     { message_id: body.messageId },
+                    //     { is_deleted: false }
+                    // );
+                    break;
+
+                case "sent":
+
+                    await this.sentRepository.delete({ message_id: body.message_id });
+
+                    // await this.sentRepository.update(
+                    //     { message_id: body.messageId },
+                    //     { is_deleted: false }
+                    // );
+                    break;
+    
+                default:
+                    createResponse(response, 400, 1013, error[1013]);
+                    this.logger.info("done", "/deleteMessage");
+                    return;
+            }
+        } catch (err) {
+            createResponse(response, 400, 1020, error[1020]);
+            this.logger.fatal(err, "/deleteMessage");
+            this.logger.info("done", "/deleteMessage");
+            return;
+        }
+
+        createResponse(response, 200, 2015, success[2015]);
+        this.logger.info("done", "/deleteMessage");
+    }
+
 
 }

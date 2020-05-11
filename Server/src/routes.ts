@@ -119,5 +119,11 @@ export const Routes = [
         method: "post",
         path: "/removeTrashMessage",
         handler: "removeTrashMessage"
+    },
+    {
+        controller: TrashController,
+        method: "post",
+        path: "/deleteMessage",
+        handler: "deleteMessage"
     }
 ]

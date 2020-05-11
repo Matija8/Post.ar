@@ -16,7 +16,7 @@
             Failed to log in!
           </p>
         </div>
-        <button (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
+        <button type="button" (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
         <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>
       </form>
     </div>

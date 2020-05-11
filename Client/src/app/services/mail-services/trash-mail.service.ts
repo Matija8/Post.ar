@@ -23,11 +23,11 @@ export class TrashMailService {
     const response = this.http.post('http://localhost:8000/trashMessage', {messageId, type});
     response.subscribe(
       (res: any): void => {
-        console.log('Tag-mail-service', res);
+        console.log('trash-mail-service', res);
         this.getMail.folders.trash.refreshFolder();
       },
       (err: any): void => {
-        console.log('Tag-mail-service', err);
+        console.log('trash-mail-service', err);
         sourceFolder.refreshFolder();
         // TODO: A pop-up (modal) that informs user that deleting failed!?
       }
@@ -42,6 +42,26 @@ export class TrashMailService {
   restoreFromTrash(messageId: string, type: string) {
     // TODO
     console.log('trash-mail service: Restore from trash called (TODO)');
+
+    const sourceFolder = this.getMail.folders[type] as MessageFolder;
+    // Folders are updated here!
+    sourceFolder.removeByIds([messageId]);
+
+    const response = this.http.post('http://localhost:8000/removeTrashMessage', {messageId, type});
+    response.subscribe(
+      (res: any): void => {
+        console.log('trash-mail-service', res);
+        this.getMail.folders.trash.refreshFolder();
+        this.getMail.folders.all.refreshFolder();
+      },
+      (err: any): void => {
+        console.log('trash-mail-service', err);
+        sourceFolder.refreshFolder();
+        // TODO: A pop-up (modal) that informs user that deleting failed!?
+      }
+    );
+
+    return response;
   }
 
   deleteForever(messageId: string, type: string) {
@@ -49,5 +69,25 @@ export class TrashMailService {
     console.log('trash-mail service: Delete forever called (TODO)');
     // TODO: Add remove by ids to trash.
     // this.getMail.folders.trash.removeByIds();
+
+    const sourceFolder = this.getMail.folders[type] as MessageFolder;
+    // Folders are updated here!
+    sourceFolder.removeByIds([messageId]);
+
+    const response = this.http.post('http://localhost:8000/deleteMessage', {messageId, type});
+    response.subscribe(
+      (res: any): void => {
+        console.log('trash-mail-service', res);
+        this.getMail.folders.trash.refreshFolder();
+        this.getMail.folders.all.refreshFolder();
+      },
+      (err: any): void => {
+        console.log('trash-mail-service', err);
+        sourceFolder.refreshFolder();
+        // TODO: A pop-up (modal) that informs user that deleting failed!?
+      }
+    );
+
+    return response;
   }
 }

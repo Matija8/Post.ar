@@ -70,13 +70,13 @@ export class TrashedComponent implements OnInit, OnDestroy {
   onDeleteForever([messageId, type]: [string, string]): void {
     // TODO
     console.log('Trashed component.ts: onDeleteForever (TODO)');
-    this.trashMail.deleteForever(undefined, undefined);
+    this.trashMail.deleteForever(messageId, type);
   }
 
   onRestore([messageId, type]: [string, string]): void {
     // TODO
-    console.log('Trashed component.ts: onRestore (TODO)');
-    this.trashMail.restoreFromTrash(undefined, undefined);
+    console.log('Trashed component.ts: onRestore');
+    this.trashMail.restoreFromTrash(messageId, type);
   }
 
 }
