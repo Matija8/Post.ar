@@ -13,7 +13,7 @@ import { Sent } from "../entity/mail/sent";
 import { User } from "../entity/user";
 
 export class TrashController {
-    
+
     private logger = new Logger("trash-controller");
 
     private userRepository = getRepository(User);
@@ -22,7 +22,7 @@ export class TrashController {
 
     async trashed(request: Request, response: Response) {
         this.logger.info("start", "/trashed");
-        
+
         this.logger.debug("validate user", "/trashed");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -36,7 +36,7 @@ export class TrashController {
             where: { username: session.user.username },
             relations: [ "inbox", "sent" ]
         });
-        
+
         if (!user) {
             createResponse(response, 401, 1018, error[1018]);
             this.logger.info("done", "/trashed");
@@ -46,7 +46,7 @@ export class TrashController {
         this.logger.debug("filter messages", "/trashed");
         const inboxMessages = user.inbox.filter(message => message.is_deleted)
                                         .map(message => { message["type"] = "inbox"; return message; });
-        
+
         const sentMessages = user.sent.filter(message => message.is_deleted)
                                       .map(message => { message["type"] = "sent"; return message; });
 
@@ -60,14 +60,14 @@ export class TrashController {
             this.logger.info("done", "/trashed");
             return;
         }
-  
+
         createResponse(response, 200, 2013, success[2013], encrypted);
         this.logger.info("done", "/trashed");
     }
 
     async trashMessage(request: Request, response: Response) {
         this.logger.info("start", "/trashMessage");
-        
+
         this.logger.debug("validate user", "/trashMessage");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -100,7 +100,7 @@ export class TrashController {
                         { is_deleted: true }
                     );
                     break;
-    
+
                 default:
                     createResponse(response, 400, 1013, error[1013]);
                     this.logger.info("done", "/trashMessage");
@@ -118,7 +118,7 @@ export class TrashController {
 
     async removeTrashMessage(request: Request, response: Response) {
         this.logger.info("start", "/removeTrashMessage");
-        
+
         this.logger.debug("validate user", "/removeTrashMessage");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -151,7 +151,7 @@ export class TrashController {
                         { is_deleted: false }
                     );
                     break;
-    
+
                 default:
                     createResponse(response, 400, 1013, error[1013]);
                     this.logger.info("done", "/removeTrashMessage");
@@ -169,7 +169,7 @@ export class TrashController {
 
     async deleteMessage(request: Request, response: Response) {
         this.logger.info("start", "/deleteMessage");
-        
+
         this.logger.debug("validate user", "/deleteMessage");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
@@ -193,7 +193,7 @@ export class TrashController {
                     // let messageToDelete = await this.inboxRepository.find(
                     //     { message_id: body.message_id }
                     // )
-                    await this.inboxRepository.delete({ message_id: body.message_id });
+                    await this.inboxRepository.delete({ message_id: body.messageId });
 
                     // await this.inboxRepository.update(
                     //     { message_id: body.messageId },
@@ -203,14 +203,14 @@ export class TrashController {
 
                 case "sent":
 
-                    await this.sentRepository.delete({ message_id: body.message_id });
+                    await this.sentRepository.delete({ message_id: body.messageId });
 
                     // await this.sentRepository.update(
                     //     { message_id: body.messageId },
                     //     { is_deleted: false }
                     // );
                     break;
-    
+
                 default:
                     createResponse(response, 400, 1013, error[1013]);
                     this.logger.info("done", "/deleteMessage");

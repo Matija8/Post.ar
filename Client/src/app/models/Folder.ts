@@ -103,13 +103,13 @@ export class TrashFolder extends SimpleFolder<Message> {
   }
 
   protected handleResponse(res: any): void {
-    console.log('handleResponse trash folder');
     const dataJSON = this.secretar.decryptAndVerify(
       res.payload.data,
       res.payload.secret,
       res.payload.hash
     );
     const data = JSON.parse(dataJSON);
+    console.log('handleResponse trash folder:', data);
     this.stream.next(data.inbox.concat(data.sentMessages));
   }
 
