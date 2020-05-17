@@ -12,9 +12,18 @@
         <div class="form-group">
           <label>Password</label>
           <input name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
-          <p class="login-warning" [style.visibility]="warning">
-            Failed to log in!
-          </p>
+          <div style="display: flex; align-items: center; margin-top: 4px;">
+            <label style="margin: 0; margin-right: 5px;"> Keep me logged in!</label>
+            <input type="checkbox"
+              [checked]="keepMeLoggedIn" (change)="keepMeLoggedIn = !keepMeLoggedIn"
+            >
+            <p class="login-warning"
+              [style.visibility]="warning"
+              style="margin: 0; margin-left: auto;"
+            >
+              Failed to log in!
+            </p>
+          </div>
         </div>
         <button type="button" (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
         <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>

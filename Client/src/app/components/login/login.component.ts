@@ -19,9 +19,18 @@ export class LoginComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router, private secretar: SecretarService) {}
 
+  public get keepMeLoggedIn(): boolean {
+    return this.auth.keepMeLoggedIn;
+  }
+
+  public set keepMeLoggedIn(value: boolean) {
+    this.auth.keepMeLoggedIn = value;
+  }
+
   ngOnInit(): void {
     this.warning = 'hidden';
     this.requestPending = false;
+    this.keepMeLoggedIn = this.auth.keepMeLoggedIn;
   }
 
   LogIn(): void {

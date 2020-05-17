@@ -148,7 +148,7 @@ export class UserController {
            return;
        }
 
-       createResponse(response, 200, 2016, success[2016]);
+       createResponse(response, 200, 2016, success[2016], encrypted);
        this.logger.info("done", "/checkSession");
     }
 

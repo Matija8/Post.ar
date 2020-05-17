@@ -24,7 +24,6 @@ const routes: Routes = [
     component: RegisterComponent
   },
   { path: '',
-    canActivate: [AuthGuard],
     redirectTo: '/inbox',
     pathMatch: 'full'
   },
