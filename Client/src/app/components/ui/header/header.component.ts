@@ -15,6 +15,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public showMenuBtnVisibile: 'visible'|'hidden' = this.auth.loggedIn() ? 'visible' : 'hidden';
   public dropdownHidden = true;
   public letter = ' ';
+  public name = ' ';
+  public surname = ' ';
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
@@ -24,9 +26,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.showMenuBtnVisibile = !!userData ? 'visible' : 'hidden';
       this.dropdownHidden = true;
       if (userData) {
-        const name: string = userData.name;
-        if (typeof(name) === 'string' && name.length > 0) {
-          this.letter = name[0].toUpperCase();
+        this.name = userData.name;
+        this.surname = userData.surname;
+        if (typeof(this.name) === 'string' && this.name.length > 0) {
+          this.letter = this.name[0].toUpperCase();
         }
       } else {
         this.letter = ' ';

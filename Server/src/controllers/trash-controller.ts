@@ -190,25 +190,12 @@ export class TrashController {
         try {
             switch (body.type) {
                 case "inbox":
-                    // let messageToDelete = await this.inboxRepository.find(
-                    //     { message_id: body.message_id }
-                    // )
                     await this.inboxRepository.delete({ message_id: body.messageId });
-
-                    // await this.inboxRepository.update(
-                    //     { message_id: body.messageId },
-                    //     { is_deleted: false }
-                    // );
                     break;
 
                 case "sent":
 
                     await this.sentRepository.delete({ message_id: body.messageId });
-
-                    // await this.sentRepository.update(
-                    //     { message_id: body.messageId },
-                    //     { is_deleted: false }
-                    // );
                     break;
 
                 default:

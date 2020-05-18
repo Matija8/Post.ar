@@ -58,6 +58,7 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
               return;
             }
             this.msg = message;
+            console.log('Naslov: ', this.msg.subject);
           }
         );
 
