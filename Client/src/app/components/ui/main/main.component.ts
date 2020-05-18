@@ -27,8 +27,7 @@ export class MainComponent implements OnInit {
   }
 
   shouldHeaderRender(): boolean {
-    const url = this.router.url;
-    return !(url.startsWith('/login') || url.startsWith('/register')) ;
+    return this.shouldSidebarRender();
   }
 
 }

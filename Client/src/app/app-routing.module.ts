@@ -9,7 +9,6 @@ import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
 import { OpenMailItemComponent } from './components/mail-view/open-mail-item/open-mail-item.component';
 
-import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
 import { TrashedComponent } from './components/folders/trashed/trashed.component';

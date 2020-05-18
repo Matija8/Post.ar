@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { SecretarService } from '../secretar/secretar.service';
 import { Folder, SimpleFolder, AggregateFolder, MessageFolder, TrashFolder } from 'src/app/models/Folder';
 import { HttpWrapperService } from './http-wrapper.service';
-import { SMessage, RMessage } from 'src/app/models/Messages';
-import { AuthService } from './auth.service';
+import { Observable, zip } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +28,16 @@ export class GetMailService {
     };
   }
 
+  public emptyFolders(): Observable<boolean> {
+    return zip(
+      ...Object.values(this.folders).map(folder => folder.emptyFolder())
+    ).pipe(
+      map(_ => true),
+      take(1)
+    );
+  }
 
-  validFolder(folder: string): boolean {
+  public validFolder(folder: string): boolean {
     return ['inbox', 'sent', 'starred', 'trash'].includes(folder);
   }
 }

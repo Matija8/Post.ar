@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { User, LoginData, RegisterData } from '../../models/User';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of, zip } from 'rxjs';
 import { SecretarService } from '../secretar/secretar.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GetMailService } from './get-mail.service';
 import { HttpWrapperService } from './http-wrapper.service';
-import { take } from 'rxjs/operators';
+import { take, flatMap, skipWhile, map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,27 +33,30 @@ export class AuthService {
     });
   }
 
-  userLogin(user: LoginData): Observable<object> {
-    const response = this.http.post('http://localhost:8000/login', {
+  userLogin(user: LoginData): Observable<User> {
+    return this.http.post('http://localhost:8000/login', {
       username: user.email,
       password: user.password
-    });
-    response
-    .pipe(take(1))
-    .subscribe(
-      (res: any) => {
-        const userData = this.secretar.decryptAndVerify(
-          res.payload.data,
-          res.payload.secret,
-          res.payload.hash
-        );
-        this.userDataSource.next(userData);
-      },
-      (err: any) => {
-        console.log(err);
-      }
+    }).pipe(
+      take(1),
+      flatMap(
+        (res: any) => {
+          const userData = this.secretar.decryptAndVerify(
+            res.payload.data,
+            res.payload.secret,
+            res.payload.hash
+          );
+          if (!userData) {
+            return throwError('Failed to decrypt login server response.');
+          }
+          this.userDataSource.next(userData);
+          return this.currentUserData.pipe(
+            skipWhile(data => data !== userData),
+            take(1)
+          );
+        }
+      )
     );
-    return response;
   }
 
   sessionIdExists() {
@@ -72,41 +75,61 @@ export class AuthService {
     }
   }
 
-  userLoginBySessionID() {
+  private userLoginBySessionID() {
     if (!this.sessionIdExists) {
       return throwError('SESSIONID does\'nt exist');
     }
-    const response = this.http.get('http://localhost:8000/checkSession');
-    response
-    .pipe(take(1))
-    .subscribe(
-      (res: any) => {
-        console.log(res);
-        const userData = this.secretar.decryptAndVerify(
-          res.payload.data,
-          res.payload.secret,
-          res.payload.hash
-        );
-        if (!userData) {
-          console.log('userData:', userData);
-          this.userDataSource.error('userLoginBySessionID userData is falsy!');
-          this.userDataSource.next(null);
-          return;
+    return this.http.get('http://localhost:8000/checkSession')
+    .pipe(
+      take(1),
+      flatMap(
+        (res: any) => {
+          const userData = this.secretar.decryptAndVerify(
+            res.payload.data,
+            res.payload.secret,
+            res.payload.hash
+          );
+          if (!userData) {
+            return throwError('Failed to decrypt login server response.');
+          }
+          this.userDataSource.next(userData);
+          return this.currentUserData.pipe(
+            skipWhile(data => data !== userData),
+            take(1)
+          );
         }
-        this.userDataSource.next(userData);
-      },
-      (err: any) => {
-        console.log(err);
-      }
+      )
     );
-    return response;
   }
 
-  userLogout(): void {
+  public tryToLoginBySessionID(): Observable<boolean> {
+    return this.userLoginBySessionID()
+    .pipe(
+      take(1),
+      map(loginSuccess => {
+        return true;
+      }),
+      catchError(
+        (err: any) => {
+          console.log(err);
+          this.keepMeLoggedIn = false;
+          return of(false);
+        }
+      )
+    );
+  }
+
+  userLogout(): Observable<boolean> {
     this.userDataSource.next(null);
-    this.cookie.delete('SESSIONID');
-    Object.values(this.getMail.folders)
-      .forEach(folder => folder.emptyFolder());
+    this.keepMeLoggedIn = false;
+    // this.cookie.delete('SESSIONID');
+    return zip(
+      this.getMail.emptyFolders(),
+      this.currentUserData.pipe(skipWhile(userData => userData !== null))
+    ).pipe(
+      map(_ => true),
+      take(1)
+    );
   }
 
   loggedIn(): boolean {

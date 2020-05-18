@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
-import { skipWhile, map, take, filter } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, combineLatest, zip } from 'rxjs';
+import { skipWhile, map, take } from 'rxjs/operators';
 import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
 import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
@@ -7,7 +7,7 @@ import { HttpWrapperService } from '../services/mail-services/http-wrapper.servi
 export abstract class Folder {
   public readonly contents: Observable<any[]>;
   public abstract refreshFolder(): void;
-  public abstract emptyFolder(): void;
+  public abstract emptyFolder(): Observable<boolean>;
   public abstract waitForActivation(): Observable<boolean>;
 }
 
@@ -58,8 +58,13 @@ export class SimpleFolder<T> extends Folder {
     }
   }
 
-  public emptyFolder(): void {
+  public emptyFolder(): Observable<boolean> {
     this.stream.next(null);
+    return this.stream.pipe(
+      skipWhile(data => data !== null),
+      map(_ => true),
+      take(1)
+    );
   }
 
   public waitForActivation(): Observable<boolean> {
@@ -139,8 +144,13 @@ export class AggregateFolder {
     });
   }
 
-  public emptyFolder(): void {
-    // Do nothing... Simple folders empty by themselves
+  public emptyFolder(): Observable<boolean> {
+    return zip(
+      ...this.simpleFolders.map(folder => folder.emptyFolder())
+    ).pipe(
+      map(_ => true),
+      take(1)
+    );
   }
 
   public waitForActivation(): Observable<boolean> {

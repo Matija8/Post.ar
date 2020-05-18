@@ -28,7 +28,6 @@ import { TagMailService } from './services/mail-services/tag-mail.service';
 import { ChangeThemeService } from './services/ui-services/change-theme.service';
 import { CookieService } from 'ngx-cookie-service';
 
-import { AuthGuard } from './services/guards/auth.guard';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
 import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
@@ -66,7 +65,6 @@ import { TrashedItemComponent } from './components/folders/trashed/trashed-item/
     TagMailService,
     ChangeThemeService,
     CookieService,
-    AuthGuard,
     LoggedInGuard,
   ],
   bootstrap: [
