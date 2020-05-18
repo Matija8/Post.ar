@@ -20,6 +20,9 @@ export class Sent {
     is_starred: boolean;
 
     @Column({ nullable: false })
+    subject: string;
+
+    @Column({ nullable: false })
     content: string;
 
     @Column({ nullable: false })

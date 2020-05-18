@@ -56,6 +56,7 @@ export class DraftController {
         for (const draft of user.drafts) {
             drafts.push({
                 message_id: draft.message_id,
+                subject: draft.subject,
                 content: draft.content,
                 from: draft.timestamp
             });
