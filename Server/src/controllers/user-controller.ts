@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // utils
 import { PayloadValidator } from "../utils/payload-validator/payload-validator";
@@ -58,12 +58,12 @@ export class UserController {
     }
 
     async login(request: Request, response: Response) {
-        this.logger.info("start", "/register");
+        this.logger.info("start", "/login");
         
         let body = request.body;
         
         this.logger.debug("validate payload", "/login");
-        if (PayloadValidator.validate(body, ["username", "password"])) {
+        if (PayloadValidator.validate(body, ["username", "password", "keepMeLoggedIn"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/login");
             return;
@@ -75,6 +75,15 @@ export class UserController {
         const user = await this.userRepository.findOne({ where: { username: body.username } });
         if (!user) {
             createResponse(response, 400, 1003, error[1003]);
+            this.logger.info("done", "/login");
+            return;
+        }
+
+        // update user keepMeLoggedIn feature
+        const update = await this.userRepository.update({ keepMeLoggedIn: body.keepMeLoggedIn }, { username: body.username })
+                                                .catch(err => { this.logger.fatal(err, "/login"); return undefined; });
+        if (!update) {
+            createResponse(response, 400, 1010, error[1010]);
             this.logger.info("done", "/login");
             return;
         }
@@ -118,6 +127,16 @@ export class UserController {
 
         createResponse(response, 200, 2001, success[2001], encrypted);
         this.logger.info("done", "/login");
+    }
+
+    async logout(request: Request, response: Response) {
+        this.logger.info("start", "/logout");
+        
+        this.logger.debug("delete session", "/logout");
+        SessionManager.delete(request.cookies["SESSIONID"]);
+        
+        createResponse(response, 200, 2018, success[2018]);
+        this.logger.debug("done", "/logout");
     }
 
     async checkSession(request: Request, response: Response) {
@@ -187,7 +206,6 @@ export class UserController {
             createResponse(response, 400, 1021, error[1021]);
             this.logger.info("done", "/setTheme");
         }
-     
     }
 
 }

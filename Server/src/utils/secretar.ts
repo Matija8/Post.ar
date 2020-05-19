@@ -7,6 +7,9 @@ class SecretarModel {
 
     private logger = new Logger("secretar");
 
+    private messageKey = "";
+    private messageIv = "";
+
     encrypt(data: any) {
         try {
             data = JSON.stringify(data);
@@ -26,9 +29,15 @@ class SecretarModel {
             const superSecret = crypto.publicEncrypt(KeyStore.publicKey, Buffer.from(keyData))
                                       .toString("hex");
             
-            // create signature
+            // hash message
+            const hash = crypto.createHash("sha256");
+            hash.update(data);
+            
+            const hashedData = hash.digest("hex");
+            
+            // sign message hash
             const sign = crypto.createSign("RSA-SHA256");
-            sign.update(data);
+            sign.update(hashedData);
             const signature = sign.sign(KeyStore.privateKey, "hex");
 
             return { data: encrypted, secret: superSecret, hash: signature };

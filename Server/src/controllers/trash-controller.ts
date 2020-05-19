@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { getRepository, getManager } from "typeorm";
+import { getRepository } from "typeorm";
 
+// utils
 import { PayloadValidator } from "../utils/payload-validator/payload-validator";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { createResponse } from "../utils/utils";
@@ -8,6 +9,7 @@ import { Logger } from "../utils/logger";
 import { success, error } from "../status-codes.json";
 import { secretar } from "../utils/secretar";
 
+// entities
 import { Inbox } from "../entity/mail/inbox";
 import { Sent } from "../entity/mail/sent";
 import { User } from "../entity/user";

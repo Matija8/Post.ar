@@ -22,6 +22,12 @@ export const Routes = [
     {
         controller: UserController,
         method: "get",
+        path: "/logout",
+        handler: "logout"
+    },
+    {
+        controller: UserController,
+        method: "get",
         path: "/checkSession",
         handler: "checkSession"
     },

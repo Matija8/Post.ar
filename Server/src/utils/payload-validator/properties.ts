@@ -14,5 +14,7 @@ export const Properties = {
 
     type: { type: String, required: true },
     
-    theme: { type: String, required: true }
+    theme: { type: String, required: true },
+
+    keepMeLoggedIn: { type: Boolean, required: false }
 }

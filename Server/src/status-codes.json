@@ -18,7 +18,8 @@
         "2014": "Successfully moved message to trash",
         "2015": "Successfully removed message",
         "2016": "Found user session",
-        "2017": "Successfully changed user theme"
+        "2017": "Successfully changed user theme",
+        "2018": "User logged out successfully"
     },
     "error": 
     {

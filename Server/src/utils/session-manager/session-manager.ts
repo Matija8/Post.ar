@@ -17,6 +17,9 @@ class SessionManagerModel {
             return undefined;
         }
 
+        if (session.user.keepMeLoggedIn) 
+            session.refreshSession();
+
         return session;
     }
 

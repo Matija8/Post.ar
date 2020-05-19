@@ -40,6 +40,13 @@ export class User {
     })
     theme: string;
 
+
+    @Column({
+        nullable: false,
+        default: false
+    })
+    keepMeLoggedIn: boolean;
+
     @OneToMany(type => Inbox, inbox => inbox.user)
     inbox: Inbox[];
 
