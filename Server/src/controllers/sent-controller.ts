@@ -56,7 +56,6 @@ export class SentController {
             sentMail.push({
                 message_id: message.message_id,
                 to: message.to,
-                subject: message.subject,
                 content: message.content,
                 isStarred: message.is_starred,
                 timestamp: message.timestamp,

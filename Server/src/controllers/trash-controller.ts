@@ -130,7 +130,7 @@ export class TrashController {
 
         this.logger.debug("validate payload", "/removeTrashMessage");
         const body = request.body;
-        if (PayloadValidator.validate(body, ["messageId", "type"])) {
+        if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/removeTrashMessage");
             return;
@@ -194,7 +194,6 @@ export class TrashController {
                     break;
 
                 case "sent":
-
                     await this.sentRepository.delete({ message_id: body.messageId });
                     break;
 

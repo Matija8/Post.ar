@@ -31,7 +31,7 @@
 > ``/send``
 >+ **Description:** Sends mail to other registered user
 >+ **Method**: *post*
->+ **Required fields**: *recipient*: ``string``, *subject*: ``string``, *content*: ``string``
+>+ **Required fields**: *recipient*: ``string``, *content*: ``string``
 >+ **Response fields**: ``{ }``
 >+ **Error codes**: ``1000, 1001, 1006``
 
@@ -73,7 +73,7 @@
 > ``/saveDraft``
 >+ **Description:** Save message as a draft
 >+ **Method**: *post*
->+ **Required fields**: *subject*: ``string``, *content*: ``string``
+>+ **Required fields**: *content*: ``string``
 >+ **Response fields**: ``{ }``
 >+ **Error codes**: ``1000, 1001, 1004, 1007, 1010``
 

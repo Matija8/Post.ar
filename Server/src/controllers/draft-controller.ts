@@ -56,7 +56,6 @@ export class DraftController {
         for (const draft of user.drafts) {
             drafts.push({
                 message_id: draft.message_id,
-                subject: draft.subject,
                 content: draft.content,
                 from: draft.timestamp
             });
@@ -88,7 +87,7 @@ export class DraftController {
         const body = request.body;
 
         this.logger.debug("validate payload", "/saveDraft");
-        if (PayloadValidator.validate(body, ["subject", "content"])) {
+        if (PayloadValidator.validate(body, ["content"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/saveDraft");
             return;

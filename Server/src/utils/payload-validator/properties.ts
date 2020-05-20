@@ -6,7 +6,6 @@ export const Properties = {
     lastname: { type: String, required: true },
 
     recipient: { type: String, required: true },
-    subject:   { type: String, required: false },
     content:   { type: String, required: true },
     
     messageId:  { type: String, required: true },
