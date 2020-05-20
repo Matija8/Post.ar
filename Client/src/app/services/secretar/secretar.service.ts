@@ -28,8 +28,12 @@ export class SecretarService {
 
       const publicKey = pki.publicKeyFromPem(PublicKey.key);
 
+      let hashData = forgeMd.sha256.create();
+      hashData.update(decipher.output.toString());
+      hashData = util.bytesToHex(hashData.digest().data);
+  
       const md = forgeMd.sha256.create();
-      md.update(decipher.output.toString());
+      md.update(hashData);
 
       const result = publicKey.verify(
         md.digest().getBytes(),
