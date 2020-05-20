@@ -80,7 +80,8 @@ export class UserController {
         }
 
         // update user keepMeLoggedIn feature
-        const update = await this.userRepository.update({ keepMeLoggedIn: body.keepMeLoggedIn }, { username: body.username })
+        this.logger.debug("update user keepMeLoggedIn feature", "/login");
+        const update = await this.userRepository.update({ username: body.username }, { keepMeLoggedIn: body.keepMeLoggedIn })
                                                 .catch(err => { this.logger.fatal(err, "/login"); return undefined; });
         if (!update) {
             createResponse(response, 400, 1010, error[1010]);
