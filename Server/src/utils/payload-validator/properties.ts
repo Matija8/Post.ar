@@ -16,5 +16,13 @@ export const Properties = {
     
     theme: { type: String, required: true },
 
-    keepMeLoggedIn: { type: Boolean, required: true }
+    keepMeLoggedIn: { type: Boolean, required: true },
+
+    messages: {
+        type: Array, required: true,
+        each: {
+            messageId: { type: String },
+            type: { type: String },
+        }
+    }
 }
