@@ -20,13 +20,13 @@ export class LoggedInGuard implements CanActivate {
     if (this.auth.keepMeLoggedIn) {
       return this.auth.tryToLoginBySessionID()
       .pipe(
-        map(loginSuccess => {
-          this.navigateToInbox();
-          return false;
-        }),
-        catchError((err: any) => {
-          console.log(err);
-          return of(true);
+        map(loginSuccessful => {
+          if (loginSuccessful) {
+            this.navigateToInbox();
+            return false;
+          } else {
+            return true;
+          }
         })
       );
     }

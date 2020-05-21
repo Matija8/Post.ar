@@ -21,13 +21,13 @@ export class FolderGuard implements CanActivate {
       if (this.auth.keepMeLoggedIn) {
         return this.auth.tryToLoginBySessionID()
         .pipe(
-          flatMap(loginSuccess => {
-            return this.waitForFolderActivation(route);
-          }),
-          catchError((err: any) => {
-            console.log(err);
-            this.navigateToLogin();
-            return of(false);
+          flatMap(loginSuccessful => {
+            if (loginSuccessful) {
+              return this.waitForFolderActivation(route);
+            } else {
+              this.navigateToLogin();
+              return of(false);
+            }
           })
         );
       } else {

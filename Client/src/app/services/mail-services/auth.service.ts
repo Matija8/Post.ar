@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { GetMailService } from './get-mail.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { take, flatMap, skipWhile, map, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import { take, flatMap, skipWhile, map, catchError } from 'rxjs/operators';
 export class AuthService {
 
   private readonly keepMeLoggedInToken = 'keepMeLoggedIn';
+  private readonly loggedInToken = 'loggedIn';
 
   private readonly userDataSource = new BehaviorSubject<User>(null);
   public readonly currentUserData = this.userDataSource.asObservable();
@@ -21,7 +23,8 @@ export class AuthService {
     private http: HttpWrapperService,
     private secretar: SecretarService,
     private cookie: CookieService,
-    private getMail: GetMailService
+    private getMail: GetMailService,
+    private router: Router,
   ) {}
 
   registerUser(user: RegisterData): Observable<object> {
@@ -33,11 +36,40 @@ export class AuthService {
     });
   }
 
+  sessionIdExists() {
+    return this.cookie.check('SESSIONID');
+  }
+
+  public get keepMeLoggedIn(): boolean {
+    return !!localStorage.getItem(this.keepMeLoggedInToken);
+  }
+
+  public set keepMeLoggedIn(yes: boolean) {
+    if (yes) {
+      localStorage.setItem(this.keepMeLoggedInToken, 'active');
+    } else {
+      localStorage.removeItem(this.keepMeLoggedInToken);
+    }
+  }
+
+  private get oneTabLoggedIn(): boolean {
+    return !!localStorage.getItem(this.loggedInToken);
+  }
+
+  private set oneTabLoggedIn(yes: boolean) {
+    if (yes) {
+      localStorage.setItem(this.loggedInToken, 'active');
+    } else {
+      localStorage.removeItem(this.loggedInToken);
+    }
+  }
+
+  public oneTabLoggedInChange(): void {
+    // TODO: set storage listener for logging in/out.
+  }
+
   userLogin(user: LoginData): Observable<User> {
-    return this.http.post('http://localhost:8000/login', {
-      username: user.email,
-      password: user.password
-    }).pipe(
+    return this.http.post('http://localhost:8000/login', user).pipe(
       take(1),
       flatMap(
         (res: any) => {
@@ -59,25 +91,9 @@ export class AuthService {
     );
   }
 
-  sessionIdExists() {
-    return this.cookie.check('SESSIONID');
-  }
-
-  get keepMeLoggedIn(): boolean {
-    return !!localStorage.getItem(this.keepMeLoggedInToken);
-  }
-
-  set keepMeLoggedIn(yes: boolean) {
-    if (yes) {
-      localStorage.setItem(this.keepMeLoggedInToken, 'active');
-    } else {
-      localStorage.removeItem(this.keepMeLoggedInToken);
-    }
-  }
-
   private userLoginBySessionID() {
-    if (!this.sessionIdExists) {
-      return throwError('SESSIONID does\'nt exist');
+    if (!this.sessionIdExists()) {
+      return throwError('SESSIONID doesn\'t exist. This is ok.');
     }
     return this.http.get('http://localhost:8000/checkSession')
     .pipe(
@@ -93,6 +109,7 @@ export class AuthService {
             return throwError('Failed to decrypt login server response.');
           }
           this.userDataSource.next(userData);
+          this.oneTabLoggedIn = true;
           return this.currentUserData.pipe(
             skipWhile(data => data !== userData),
             take(1)
@@ -119,15 +136,18 @@ export class AuthService {
     );
   }
 
-  userLogout(): Observable<boolean> {
+  public userLogout(): Observable<boolean> {
     this.userDataSource.next(null);
-    this.keepMeLoggedIn = false;
-    // this.cookie.delete('SESSIONID');
     return zip(
       this.getMail.emptyFolders(),
-      this.currentUserData.pipe(skipWhile(userData => userData !== null))
+      this.currentUserData.pipe(skipWhile(userData => userData !== null)),
+      this.http.get('http://localhost:8000/logout').pipe(take(1))
     ).pipe(
-      map(_ => true),
+      flatMap(_ => {
+        this.cookie.delete('SESSIONID');
+        this.oneTabLoggedIn = false;
+        return of(true);
+      }),
       take(1)
     );
   }

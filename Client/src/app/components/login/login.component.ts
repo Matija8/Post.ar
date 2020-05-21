@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.requestPending = true;
-    const loginData: LoginData = { email: this.email, password: this.password };
+    const loginData: LoginData = { username: this.email, password: this.password, keepMeLoggedIn: this.keepMeLoggedIn };
     this.auth.userLogin(loginData)
     .subscribe(
       (userData: User) => {
