@@ -17,7 +17,7 @@ export class LoggedInGuard implements CanActivate {
       this.navigateToInbox();
       return of(false);
     }
-    if (this.auth.keepMeLoggedIn) {
+    if (this.auth.keepMeLoggedIn || this.auth.oneTabLoggedIn) {
       return this.auth.tryToLoginBySessionID()
       .pipe(
         map(loginSuccessful => {

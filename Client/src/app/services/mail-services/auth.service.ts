@@ -25,7 +25,9 @@ export class AuthService {
     private cookie: CookieService,
     private getMail: GetMailService,
     private router: Router,
-  ) {}
+  ) {
+    window.addEventListener('storage', this.oneTabLoggedInChange.bind(this));
+  }
 
   registerUser(user: RegisterData): Observable<object> {
     return this.http.post('http://localhost:8000/register', {
@@ -36,7 +38,7 @@ export class AuthService {
     });
   }
 
-  sessionIdExists() {
+  private sessionIdExists() {
     return this.cookie.check('SESSIONID');
   }
 
@@ -52,11 +54,11 @@ export class AuthService {
     }
   }
 
-  private get oneTabLoggedIn(): boolean {
+  public get oneTabLoggedIn(): boolean {
     return !!localStorage.getItem(this.loggedInToken);
   }
 
-  private set oneTabLoggedIn(yes: boolean) {
+  public set oneTabLoggedIn(yes: boolean) {
     if (yes) {
       localStorage.setItem(this.loggedInToken, 'active');
     } else {
@@ -65,10 +67,32 @@ export class AuthService {
   }
 
   public oneTabLoggedInChange(): void {
-    // TODO: set storage listener for logging in/out.
+    if (this.oneTabLoggedIn) {
+      if (!this.loggedIn()) {
+        this.tryToLoginBySessionID()
+        .pipe(take(1))
+        .subscribe(loggedIn => {
+          if (loggedIn) {
+            this.router.navigate(['/inbox']);
+          }
+        });
+        return;
+      }
+    } else {
+      if (this.loggedIn()) {
+        this.userLogout()
+        .pipe(take(1))
+        .subscribe(loggedOut => {
+          if (loggedOut) {
+            this.router.navigate(['/login']);
+          }
+        });
+        return;
+      }
+    }
   }
 
-  userLogin(user: LoginData): Observable<User> {
+  public userLogin(user: LoginData): Observable<User> {
     return this.http.post('http://localhost:8000/login', user).pipe(
       take(1),
       flatMap(
@@ -82,6 +106,7 @@ export class AuthService {
             return throwError('Failed to decrypt login server response.');
           }
           this.userDataSource.next(userData);
+          this.oneTabLoggedIn = true;
           return this.currentUserData.pipe(
             skipWhile(data => data !== userData),
             take(1)

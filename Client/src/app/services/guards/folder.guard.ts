@@ -18,7 +18,7 @@ export class FolderGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     if (!this.auth.loggedIn()) {
-      if (this.auth.keepMeLoggedIn) {
+      if (this.auth.keepMeLoggedIn || this.auth.oneTabLoggedIn) {
         return this.auth.tryToLoginBySessionID()
         .pipe(
           flatMap(loginSuccessful => {
