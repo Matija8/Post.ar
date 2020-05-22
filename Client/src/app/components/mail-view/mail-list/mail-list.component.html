@@ -1,17 +1,21 @@
-<div class="mail-list-header">
+<mat-card class="mail-list-header">
 
   <div class="left">
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected" *ngIf="selectedChar() === 'None'">
-      <button id="refresh-btn" (click)="refresh.emit();"> Refresh </button>
+    <div id="none-selected" *ngIf="selectedChar() === 'None'; else deleteSelectedBlock">
+      <button mat-raised-button color="primary" id="refresh-btn" (click)="refresh.emit();"> refresh </button>
     </div>
+    <ng-template #deleteSelectedBlock>
+      <!-- //TODO: implement delete selected  -->
+      <button mat-raised-button color="warn">delete selected</button>
+    </ng-template>
 
   </div>
 
   <div class="right">
   </div>
 
-</div>
+</mat-card>
 
 <postar-mail-item
 *ngFor="let msg of messagesList" [msg]=msg

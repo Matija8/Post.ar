@@ -33,6 +33,13 @@ import { TrashedComponent } from './components/folders/trashed/trashed.component
 import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +66,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatCardModule,
+    MatListModule
   ],
   providers: [
     AuthService,

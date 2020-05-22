@@ -1,15 +1,13 @@
-<div class="mail-item unselectable" [routerLink]="[router.url, msg.message_id]">
-    <div>select</div>
-    <input type="checkbox" (click)="$event.stopPropagation()"
-        [checked]="isSelected"
-        (change)="selectToggle()">
-    <div>star</div>
-    <input type="checkbox" (click)="$event.stopPropagation()"
-        [checked]="msg.isStarred"
-        (change)="star()">
-    <button type="button" class="btn btn-danger" (click)="moveToTrash($event)">delete</button>
+<mat-card class="mail-item unselectable" [routerLink]="[router.url, msg.message_id]">
+    <mat-checkbox (click)="$event.stopPropagation()"
+      [checked]="isSelected"
+      (change)="selectToggle()">select</mat-checkbox>
+    <mat-checkbox (click)="$event.stopPropagation()"
+      [checked]="msg.isStarred"
+      (change)="star()">star</mat-checkbox>
+    <button mat-raised-button color="warn" type="button" (click)="moveToTrash($event)">delete</button>
     <div class="mail-item-title" *ngIf="sentByMe; else From"> To: {{ msg.to }} </div>
     <ng-template #From>
         <div class="mail-item-title"> From: {{ msg.from }} </div>
     </ng-template>
-</div>
+</mat-card>

@@ -1,9 +1,17 @@
 <!-- TODO: add subject to message model... -->
 <!-- TODO: make proper to or from check... -->
-<h2 *ngIf="this.msg.from">  {{ this.msg.from }} </h2>
-<h2 *ngIf="this.msg.to">  {{ this.msg.to }} </h2>
-<h3> {{ this.msg.subject }}</h3>
-<h4>  {{ this.msg.cc }} </h4>
-<p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> {{ this.msg.subject }}</mat-card-title>
+    <mat-card-subtitle *ngIf="this.msg.from">  From: {{ this.msg.from }} </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="this.msg.to">  To: {{ this.msg.to }} </mat-card-subtitle>
+    <mat-card-subtitle> Cc: {{ this.msg.cc }} </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
     {{ this.msg.content }}
-</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="warn">delete</button>
+    <button mat-button color="primary" (click)="onReply()">reply</button>
+  </mat-card-actions>
+</mat-card>
