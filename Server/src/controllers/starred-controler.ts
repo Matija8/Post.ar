@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, getManager } from "typeorm";
 
 // Utils
 import { SessionManager } from "../utils/session-manager/session-manager";
@@ -81,42 +81,41 @@ export class StarredController {
 
         this.logger.debug("validate payload", "/starMessage");
         const body = request.body;
-        if (PayloadValidator.validate(body, ["messageId", "type"])) {
+        if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/starMessage");
             return;
         }
 
         this.logger.debug("save starred message", "/starMessage");
-        try {
-            switch (body.type) {
-                case "inbox":
-                    await this.inboxRepository.update(
-                        { message_id: body.messageId },
-                        { is_starred: true }
-                    );
-                    break;
+        await getManager().transaction(async entityManager =>{
+            for (const message of body.messages){
+                switch (message.type){
+                    case "inbox":
+                        await entityManager.update(Inbox,
+                            { message_id: message.messageId },
+                            { is_starred: true }
+                        );
+                        break;
+                    case "sent":
+                        await entityManager.update(Sent,
+                            { message_id: message.messageId },
+                            { is_starred: true }
+                        );
+                        break;
 
-                case "sent":
-                    await this.sentRepository.update(
-                        { message_id: body.messageId },
-                        { is_starred: true }
-                    );
-                    break;
-    
-                default:
-                    createResponse(response, 400, 1013, error[1013]);
-                    this.logger.info("done", "/starMessage");
-                    return;
+                    default:
+                        createResponse(response, 400, 1013, error[1013]);
+                        this.logger.info("done", "/starMessage");
+                        return;
+                }
+                createResponse(response, 200, 2009, success[2009]);
+                this.logger.info("done", "/starhMessage");
             }
-        } catch (err) {
+        }).catch(err => {
             createResponse(response, 400, 1014, error[1014]);
             this.logger.fatal(err, "/starMessage");
-            this.logger.info("done", "/starMessage");
-            return;
-        }
-
-        createResponse(response, 200, 2009, success[2009]);
+        });
     }
 
     async removeStarredMessage(request: Request, response: Response) {
@@ -132,42 +131,41 @@ export class StarredController {
 
         this.logger.debug("validate payload", "/removeStarredMessage");
         const body = request.body;
-        if (PayloadValidator.validate(body, ["messageId", "type"])) {
+        if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001, error[1001]);
             this.logger.info("done", "/removeStarredMessage");
             return;
         }
 
         this.logger.debug("remove starred message", "/removeStarredMessage");
-        try {
-            switch (body.type) {
-                case "inbox":
-                    await this.inboxRepository.update(
-                        { message_id: body.messageId },
-                        { is_starred: false }
-                    );
-                    break;
+        await getManager().transaction(async entityManager =>{
+            for (const message of body.messages){
+                switch (message.type){
+                    case "inbox":
+                        await entityManager.update(Inbox,
+                            { message_id: message.messageId },
+                            { is_starred: false }
+                        );
+                        break;
+                    case "sent":
+                        await entityManager.update(Sent,
+                            { message_id: message.messageId },
+                            { is_starred: false }
+                        );
+                        break;
 
-                case "sent":
-                    await this.sentRepository.update(
-                        { message_id: body.messageId },
-                        { is_starred: false }
-                    );
-                    break;
-    
-                default:
-                    createResponse(response, 400, 1013, error[1013]);
-                    this.logger.info("done", "/removeStarredMessage");
-                    return;
+                    default:
+                        createResponse(response, 400, 1013, error[1013]);
+                        this.logger.info("done", "/removeStarredMessage");
+                        return;
+                }
+                createResponse(response, 200, 2010, success[2010]);
+                this.logger.info("done", "/removeStarredMessage");
             }
-        } catch (err) {
+        }).catch(err => {
             createResponse(response, 400, 1015, error[1015]);
             this.logger.fatal(err, "/removeStarredMessage");
-            this.logger.info("done", "/removeStarredMessage");
-            return;
-        }
-
-        createResponse(response, 200, 2010, success[2010]);
+        });
     }
 
 }
