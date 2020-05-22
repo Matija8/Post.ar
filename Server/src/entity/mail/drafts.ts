@@ -14,6 +14,12 @@ export class Drafts {
     message_id: string;
 
     @Column({ nullable: false })
+    to: string;
+
+    @Column({nullable: false})
+    subject: string;
+
+    @Column({ nullable: false })
     content: string;
 
     @Column({ nullable: false })

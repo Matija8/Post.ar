@@ -22,6 +22,9 @@ export class Inbox {
     @Column({ nullable: false })
     is_starred: boolean;
 
+    @Column({nullable: false})
+    subject: string;
+
     @Column({ nullable: false })
     content: string;
 

@@ -61,6 +61,7 @@ export class InboxController {
             messages.push({
                 message_id: message.message_id,
                 from: message.from,
+                subject: message.subject,
                 content: message.content,
                 isRead: message.is_read,
                 isStarred: message.is_starred,
@@ -123,6 +124,7 @@ export class InboxController {
             await entityManager.insert(Inbox, {
                 message_id: messageId,
                 from: session.user.username,
+                subject: body.subject,
                 content: body.content,
                 is_read: false,
                 is_starred: false,
@@ -133,6 +135,7 @@ export class InboxController {
 
             await entityManager.insert(Sent, {
                 message_id: messageId,
+                subject: body.subject,
                 content: body.content,
                 is_starred: false,
                 is_deleted: false,

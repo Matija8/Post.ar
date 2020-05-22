@@ -30,3 +30,6 @@ body {
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

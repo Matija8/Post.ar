@@ -31,6 +31,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
 import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { TrashedItemComponent } from './components/folders/trashed/trashed-item/
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     AuthService,
