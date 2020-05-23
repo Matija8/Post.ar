@@ -12,24 +12,29 @@
 <div *ngIf="this.editorData.size === 'normal'" class="compose-item-medium">
 
   <div class="compose-item-menubar">
-    <button class="compose-menubar-button" (click)="changeSize('minimized')">_</button>
-    <!--<button class="compose-menubar-button">◻️</button>-->
-    <button class="compose-menubar-button" (click)="closeClick()">X</button>
+    <span class="compose-item-menubar-left">
+      {{ headerText() }} ({{ "id: " + index }})
+    </span>
+    <div class="compose-item-menubar-right">
+      <button class="compose-menubar-button" (click)="changeSize('minimized')">_</button>
+      <!--<button class="compose-menubar-button">◻️</button>-->
+      <button class="compose-menubar-button" (click)="closeClick()">X</button>
+    </div>
   </div>
 
   <div class="compose-item-body">
     <form class="form">
       <div class="form-group">
         <label for="">To:</label>
-        <input name="to" type="text" [(ngModel)]="this.editorData.msg.to" class="form-control" required>
+        <input name="to" type="text" [(ngModel)]="editorData.msg.to" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="">Subject</label>
-        <input name="subject" type="text" [(ngModel)]="this.editorData.msg.subject" class="form-control" required>
+        <input name="subject" type="text" [(ngModel)]="editorData.msg.subject" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="">Message</label>
-        <input name="msg" type="text" [(ngModel)]="this.editorData.msg.messageText" class="form-control" required>
+        <input name="msg" type="text" [(ngModel)]="editorData.msg.messageText" class="form-control" required>
       </div>
       <button (click)="clickSend()" [disabled]="sendBtnDisabled()" type="button" class="btn btn-primary float-left">Send</button>
     </form>

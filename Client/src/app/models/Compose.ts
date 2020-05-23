@@ -9,6 +9,14 @@ export interface EditorMessage {
     messageText: string;
 }
 
+export const makeEmptyMsg = function createEmptyEditorMessage(): EditorMessage {
+  return {to: '', cc: '', bcc: '', subject: '', messageText: ''};
+};
+
+export const checkEmpty = function checkIfEditorMessageIsEmpty(message: EditorMessage) {
+  return Object.values(message).every((field: string) => field === '');
+};
+
 export interface EditorData {
   msg: EditorMessage;
   size: editorSize;

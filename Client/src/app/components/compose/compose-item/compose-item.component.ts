@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { editorSize, EditorMessage, EditorData } from '../../../models/Compose';
+import { editorSize, EditorMessage, EditorData, makeEmptyMsg } from '../../../models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
 
 
@@ -11,7 +11,7 @@ import { SendMailService } from 'src/app/services/mail-services/send-mail.servic
 export class ComposeItemComponent implements OnInit {
 
 
-  @Input() id: number;
+  @Input() index: number;
   @Input() editorData: EditorData;
 
   @Output() closeEvent = new EventEmitter<number>();
@@ -31,13 +31,7 @@ export class ComposeItemComponent implements OnInit {
       msg = ${msg.messageText}`);
 
     this.send.emit(msg);
-    this.editorData.msg = {
-      to: '',
-      cc: '',
-      bcc: '',
-      subject: '',
-      messageText: ''
-    };
+    this.editorData.msg = makeEmptyMsg();
   }
 
   sendBtnDisabled() {
@@ -49,11 +43,25 @@ export class ComposeItemComponent implements OnInit {
   }
 
   closeClick() {
-    this.closeEvent.emit(this.id);
+    this.closeEvent.emit(this.index);
+    // console.log(`closing: ${this.index}`);
   }
 
   changeSize(newSize: editorSize) {
     this.editorData.size = newSize;
+  }
+
+  public headerText(): string {
+    const MAX_HEADER_LENGTH = 12;
+    const text = this.editorData.msg.subject.trim();
+    if (!text) {
+      return 'New Message';
+    }
+    return (
+      text.length <= MAX_HEADER_LENGTH ?
+      text :
+      (text.substring(0, MAX_HEADER_LENGTH) + '...')
+    );
   }
 
 }
