@@ -54,3 +54,47 @@ export function isSent(msg: Message): msg is SMessage {
   }
   return false;
 }
+
+export class TagDataSet {
+  private types: Map<messageType, Set<string>>;
+
+  constructor() {
+    this.types = new Map<messageType, Set<string>>();
+  }
+
+  add(message: TagData) {
+    let msgIdsSet = this.types.get(message.type);
+    if (!msgIdsSet) {
+      msgIdsSet = new Set<string>();
+      this.types.set(message.type, msgIdsSet);
+    }
+    msgIdsSet.add(message.messageId);
+  }
+
+  has(message: TagData): boolean {
+    const msgIdsSet = this.types.get(message.type);
+    return !!msgIdsSet && msgIdsSet.has(message.messageId);
+  }
+
+  delete(message: TagData): boolean {
+    const msgIdsSet = this.types.get(message.type);
+    return !!msgIdsSet && msgIdsSet.delete(message.messageId);
+  }
+
+  clear(): void {
+    this.types = new Map<messageType, Set<string>>();
+  }
+
+  get size(): number {
+    return this.values().length;
+  }
+
+  values(): TagData[] {
+    const tagData = [];
+    const setsByType = this.types.entries();
+    for (const [type, messageId] of setsByType) {
+      tagData.push({type, messageId});
+    }
+    return tagData;
+  }
+}

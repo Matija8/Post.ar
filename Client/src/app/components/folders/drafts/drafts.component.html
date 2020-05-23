@@ -1,1 +1,26 @@
-<p>drafts works!</p>
+<!-- List header -->
+<div class="draft-list-header">
+    <div class="left">
+      <div> selected: {{ selectedChar() }} </div>
+      <div id="none-selected" *ngIf="selectedChar() === 'None'">
+        <button
+          (click)="refreshFolder()">
+          Refresh
+        </button>
+      </div>
+
+    </div>
+
+    <div class="right">
+    </div>
+
+  </div>
+
+  <!-- List items -->
+  <!-- <postar-draft-item
+  *ngFor="let draft of draftsList" [draft]=draft
+    (selectEmitter)="onSelect($event)"
+    (deleteForeverEmitter)="onDeleteForever($event)"
+    (restoreEmitter)="onRestore($event)"
+    >
+  </postar-draft-item> -->
