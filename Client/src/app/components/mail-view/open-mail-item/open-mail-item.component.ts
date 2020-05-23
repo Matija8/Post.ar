@@ -19,7 +19,11 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
   private routeSub: Subscription = null;
   private folderSub: Subscription = null;
 
-  constructor(private getMail: GetMailService , private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private getMail: GetMailService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     this.routeSub = combineLatest([
       this.route.data,
       this.route.paramMap

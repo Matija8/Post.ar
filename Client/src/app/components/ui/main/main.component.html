@@ -4,8 +4,7 @@
 <main [ngClass]="{'under-header': shouldHeaderRender()}">
 
     <postar-sidebar
-        *ngIf="shouldSidebarRender()"
-        (addCompose)="addComposeSubject.next()">
+        *ngIf="shouldSidebarRender()">
     </postar-sidebar>
 
     <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
@@ -13,8 +12,7 @@
     </div>
 
     <postar-compose
-        *ngIf="shouldSidebarRender()"
-        [signalFromParent]="addComposeSubject.asObservable()">
+        *ngIf="shouldSidebarRender()">
     </postar-compose>
 
 </main>

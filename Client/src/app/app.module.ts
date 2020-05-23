@@ -26,17 +26,21 @@ import { AuthService } from './services/mail-services/auth.service';
 import { GetMailService } from './services/mail-services/get-mail.service';
 import { TagMailService } from './services/mail-services/tag-mail.service';
 import { ChangeThemeService } from './services/ui-services/change-theme.service';
+import { OpenComposeService } from './services/ui-services/open-compose.service';
+
 import { CookieService } from 'ngx-cookie-service';
 
 import { LoggedInGuard } from './services/guards/logged-in.guard';
+import { FolderGuard } from './services/guards/folder.guard';
+
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
 import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 
 
 
@@ -77,8 +81,10 @@ import {MatListModule} from '@angular/material/list';
     GetMailService,
     TagMailService,
     ChangeThemeService,
+    OpenComposeService,
     CookieService,
     LoggedInGuard,
+    FolderGuard,
   ],
   bootstrap: [
     AppComponent

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { EditorData, EditorMessage, makeEmptyMsg, checkEmpty } from '../../../models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
+import { OpenComposeService } from 'src/app/services/ui-services/open-compose.service';
 
 
 @Component({
@@ -11,17 +12,19 @@ import { SendMailService } from 'src/app/services/mail-services/send-mail.servic
 })
 export class ComposeComponent implements OnInit, OnDestroy {
 
-  @Input() signalFromParent: Observable<void>;
   private signalSubscription: Subscription = null;
 
   public readonly MAX_OPEN = 3;
   public openEditors: EditorData[] = [];
 
-  constructor(private sendMail: SendMailService) {}
+  constructor(
+    private sendMail: SendMailService,
+    private openCompose: OpenComposeService,
+  ) {}
 
   ngOnInit(): void {
-    this.signalSubscription = this.signalFromParent.subscribe(() => {
-      this.addEditor(null);
+    this.signalSubscription = this.openCompose.addEditorEmitter.subscribe((newEditor: EditorData) => {
+      this.addEditor(newEditor.msg);
     });
   }
 
