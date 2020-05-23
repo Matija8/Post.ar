@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Message } from 'src/app/models/Messages';
+import { Message, TagData } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 
@@ -49,12 +49,12 @@ export class MailListComponent implements OnInit, OnDestroy {
     this.selected.clear();
   }
 
-  onStar([messageId, type, starred]: [string, string, boolean]): void {
-    this.tagMail.star(messageId, starred, type);
+  onStar([message, starred]: [TagData, boolean]): void {
+    this.tagMail.star([message], starred);
     this.starredEmitter.emit();
   }
 
-  onDelete([messageId, type]: [string, string]): void {
-    this.trashMail.moveToTrash(messageId, type);
+  onDelete(message: TagData): void {
+    this.trashMail.moveToTrash([message]);
   }
 }

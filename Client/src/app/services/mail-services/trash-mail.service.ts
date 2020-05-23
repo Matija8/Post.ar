@@ -3,6 +3,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
 import { MessageFolder } from 'src/app/models/Folder';
+import { TagData } from 'src/app/models/Messages';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,26 @@ export class TrashMailService {
     private getMail: GetMailService,
   ) {}
 
-  moveToTrash(messageId: string, type: string): Observable<any> {
-    // TODO: 'type' type safety? Inbox | Sent?
-    const sourceFolder = this.getMail.folders[type] as MessageFolder;
-    // Folders are updated here!
-    sourceFolder.removeByIds([messageId]);
-
-    const response = this.http.post('http://localhost:8000/trashMessage', {messageId, type});
+  moveToTrash(messages: TagData[]): Observable<any> {
+    // Option 1:
+    /* for (const {messageId, type} of messages) {
+      const sourceFolder = this.getMail.folders[type] as MessageFolder;
+      sourceFolder.removeByIds([messageId]);
+    } */
+    // Option 1/
+    // Option 2:
+    const messagesPerFolder = new Map<string, string[]>();
+    for (const {messageId, type} of messages) {
+      const newMessages = messagesPerFolder.get(type) || [];
+      newMessages.push(messageId);
+      messagesPerFolder.set(type, newMessages);
+    }
+    for (const folderName of messagesPerFolder.keys()) {
+      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
+      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
+    }
+    // Option 2/
+    const response = this.http.post('http://localhost:8000/trashMessage', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
@@ -28,7 +42,8 @@ export class TrashMailService {
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
-        sourceFolder.refreshFolder();
+        this.getMail.folders.inbox.refreshFolder();
+        this.getMail.folders.sent.refreshFolder();
         // TODO: A pop-up (modal) that informs user that deleting failed!?
       }
     );

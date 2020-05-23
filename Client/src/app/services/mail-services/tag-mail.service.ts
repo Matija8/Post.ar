@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
+import { TagData } from 'src/app/models/Messages';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class TagMailService {
     private getMail: GetMailService,
   ) {}
 
-  star(messageId: string, value: boolean, type: string): Observable<any> {
-    const response = value ? this.http.post('http://localhost:8000/starMessage', {messageId, type})
-      : this.http.post('http://localhost:8000/removeStarredMessage', {messageId, type});
+  star(messages: TagData[], value: boolean): Observable<any> {
+    const response = value ? this.http.post('http://localhost:8000/starMessage', {messages})
+      : this.http.post('http://localhost:8000/removeStarredMessage', {messages});
     response.subscribe(
       (res: any): void => {
         // console.log(res);

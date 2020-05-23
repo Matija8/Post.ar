@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { Message, isReceived, msgType } from 'src/app/models/Messages';
+import { Message, isReceived, TagData, makeTagData } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,8 +12,8 @@ export class MailItemComponent implements OnInit {
 
   @Input() msg: Message;
   @Output() selectEmitter = new EventEmitter<[string, boolean]>();
-  @Output() starEmitter = new EventEmitter<[string, string, boolean]>();
-  @Output() moveToTrashEmitter = new EventEmitter<[string, string]>();
+  @Output() starEmitter = new EventEmitter<[TagData, boolean]>();
+  @Output() moveToTrashEmitter = new EventEmitter<TagData>();
   public sentByMe: boolean;
   public isSelected: boolean;
 
@@ -26,7 +26,7 @@ export class MailItemComponent implements OnInit {
 
   star(): void {
     this.msg.isStarred = !this.msg.isStarred;
-    this.starEmitter.emit([this.msg.message_id, msgType(this.msg), this.msg.isStarred]);
+    this.starEmitter.emit([makeTagData(this.msg), this.msg.isStarred]);
   }
 
   selectToggle() {
@@ -36,6 +36,6 @@ export class MailItemComponent implements OnInit {
 
   moveToTrash(event: MouseEvent) {
     event.stopPropagation();
-    this.moveToTrashEmitter.emit([this.msg.message_id, msgType(this.msg)]);
+    this.moveToTrashEmitter.emit(makeTagData(this.msg));
   }
 }
