@@ -32,6 +32,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
+import { AuthFirstGuard } from './services/guards/auth-first.guard';
 
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
 import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
@@ -85,6 +86,7 @@ import { MatListModule } from '@angular/material/list';
     CookieService,
     LoggedInGuard,
     FolderGuard,
+    AuthFirstGuard,
   ],
   bootstrap: [
     AppComponent

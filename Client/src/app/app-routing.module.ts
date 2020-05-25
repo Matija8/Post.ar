@@ -12,6 +12,7 @@ import { OpenMailItemComponent } from './components/mail-view/open-mail-item/ope
 import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
 import { TrashedComponent } from './components/folders/trashed/trashed.component';
+import { AuthFirstGuard } from './services/guards/auth-first.guard';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   { path: 'register',
+    canActivate: [AuthFirstGuard],
     component: RegisterComponent
   },
   { path: '',
@@ -83,7 +85,9 @@ const routes: Routes = [
   },
 
   // Other
-  { path: '**', component: BadURLComponent }
+  { path: '**', component: BadURLComponent,
+    canActivate: [AuthFirstGuard],
+  }
 ];
 
 @NgModule({

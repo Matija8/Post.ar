@@ -2,8 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Draft } from 'src/app/models/Compose';
 import { Subscription } from 'rxjs';
-import { TagData, TagDataSet } from 'src/app/models/Messages';
-import { MailListComponent } from 'src/app/components/mail-view/mail-list/mail-list.component';
+import { TagDataSet } from 'src/app/models/Messages';
 import { Selectable } from 'src/app/models/Selectable';
 
 @Component({

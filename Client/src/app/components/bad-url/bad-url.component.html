@@ -1,3 +1,3 @@
 <h1> 404 - Page not found! </h1>
-<h3 *ngIf="this.loggedIn" [routerLink]="['inbox']">Go to inbox</h3>
-<h3 *ngIf="!this.loggedIn" [routerLink]="['login']">Go to login</h3>
+<h3 *ngIf="this.loggedIn" routerLink="/inbox" routerLinkActive="active">Go to inbox</h3>
+<h3 *ngIf="!this.loggedIn" routerLink="/login" routerLinkActive="active">Go to login</h3>
