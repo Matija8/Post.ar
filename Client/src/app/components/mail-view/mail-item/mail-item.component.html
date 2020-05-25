@@ -1,4 +1,4 @@
-<mat-card class="mail-item unselectable" [routerLink]="[router.url, msg.message_id]">
+<mat-card class="mail-item unselectable" [routerLink]="[router.url, msg.messageId]">
     <mat-checkbox (click)="$event.stopPropagation()"
       [checked]="isSelected"
       (change)="selectToggle()">select</mat-checkbox>

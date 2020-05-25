@@ -1,4 +1,4 @@
-<div class="trash-item unselectable" [routerLink]="[router.url, msg.message_id]">
+<div class="trash-item unselectable" [routerLink]="[router.url, msg.messageId]">
     <div>select</div>
     <input type="checkbox" (click)="$event.stopPropagation()"
         [checked]="isSelected"

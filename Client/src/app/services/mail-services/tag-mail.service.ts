@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
-import { TagData } from 'src/app/models/Messages';
+import { TagData } from 'src/app/models/TagData/TagData';
 
 @Injectable({
   providedIn: 'root'

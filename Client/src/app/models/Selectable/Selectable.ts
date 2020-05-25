@@ -1,5 +1,7 @@
-import { TagDataSet, TagData, Message } from './Messages';
-import { Draft } from './Compose';
+import { Message } from '../Messages';
+import { TagData } from '../TagData/TagData';
+import { TagDataSet } from '../TagData/TagDataSet';
+import { Draft } from '../Draft';
 
 type messageLike = Draft | Message;
 

@@ -3,7 +3,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
 import { MessageFolder } from 'src/app/models/Folder';
-import { TagData } from 'src/app/models/Messages';
+import { TagData } from 'src/app/models/TagData/TagData';
 
 @Injectable({
   providedIn: 'root'

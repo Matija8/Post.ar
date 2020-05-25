@@ -1,5 +1,5 @@
 export interface Message {
-  message_id: string;
+  messageId: string;
   content: string;
   timestamp?: number;
   from?: string;
@@ -13,27 +13,12 @@ export interface Message {
   subject?: string;
 }
 
-type messageType = 'inbox' | 'sent';
-
-export interface TagData {
-  messageId: string;
-  type: messageType;
-}
-
-export const makeTagData = function convertMessageToTagDataForm(msg: Message): TagData {
-  return {
-    messageId: msg.message_id,
-    type: msgType(msg),
-  };
-};
-
-export const msgType = function getFolderNameOfMessage(msg: Message): messageType {
-  return isReceived(msg) ? 'inbox' : 'sent';
-};
-
-
 export interface RMessage extends Message {
   from: string;
+}
+
+export interface SMessage extends Message {
+  to: string;
 }
 
 export function isReceived(msg: Message): msg is RMessage {
@@ -43,65 +28,9 @@ export function isReceived(msg: Message): msg is RMessage {
   return false;
 }
 
-
-export interface SMessage extends Message {
-  to: string;
-}
-
 export function isSent(msg: Message): msg is SMessage {
   if ('to' in msg) {
     return true;
   }
   return false;
-}
-
-export class TagDataSet {
-  private types: Map<messageType, Set<string>>;
-
-  constructor() {
-    this.types = new Map<messageType, Set<string>>();
-  }
-
-  add(message: TagData) {
-    let msgIdsSet = this.types.get(message.type);
-    if (!msgIdsSet) {
-      msgIdsSet = new Set<string>();
-      this.types.set(message.type, msgIdsSet);
-    }
-    msgIdsSet.add(message.messageId);
-  }
-
-  has(message: TagData): boolean {
-    const msgIdsSet = this.types.get(message.type);
-    return !!msgIdsSet && msgIdsSet.has(message.messageId);
-  }
-
-  delete(message: TagData): boolean {
-    const msgIdsSet = this.types.get(message.type);
-    return !!msgIdsSet && msgIdsSet.delete(message.messageId);
-  }
-
-  clear(): void {
-    this.types = new Map<messageType, Set<string>>();
-  }
-
-  get size(): number {
-    let size = 0;
-    const setsByType = this.types.values();
-    for (const set of setsByType) {
-      size += set.size;
-    }
-    return size;
-  }
-
-  values(): TagData[] {
-    const tagData = [];
-    const setsByType = this.types.entries();
-    for (const [type, msgIdsSet] of setsByType) {
-      for (const messageId of msgIdsSet.values()) {
-        tagData.push({type, messageId});
-      }
-    }
-    return tagData;
-  }
 }

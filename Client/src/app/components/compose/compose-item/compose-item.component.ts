@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { editorSize, EditorMessage, EditorData, makeEmptyMsg } from '../../../models/Compose';
+import { editorSize, EditorMessage, EditorData, makeEmptyEditorMsg } from '../../../models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
 
 
@@ -31,7 +31,7 @@ export class ComposeItemComponent implements OnInit {
       msg = ${msg.messageText}`);
 
     this.send.emit(msg);
-    this.editorData.msg = makeEmptyMsg();
+    this.editorData.msg = makeEmptyEditorMsg();
   }
 
   sendBtnDisabled() {

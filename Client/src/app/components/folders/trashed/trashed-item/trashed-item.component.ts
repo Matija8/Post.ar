@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Message, isReceived, msgType, TagData, makeTagData } from 'src/app/models/Messages';
+import { Message, isReceived } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
-import { SelectableItem } from 'src/app/models/SelectableItem';
+import { SelectableItem } from 'src/app/models/Selectable/SelectableItem';
+import { msgType, makeTagData } from 'src/app/models/TagData/TagData';
 
 @Component({
   selector: 'postar-trashed-item',
@@ -30,13 +31,13 @@ export class TrashedItemComponent extends SelectableItem implements OnInit {
   deleteForever(event: MouseEvent) {
     // TODO: convert to tagData
     event.stopPropagation();
-    this.deleteForeverEmitter.emit([this.msg.message_id, msgType(this.msg)]);
+    this.deleteForeverEmitter.emit([this.msg.messageId, msgType(this.msg)]);
   }
 
   restore(event: MouseEvent) {
     // TODO
     event.stopPropagation();
-    this.restoreEmitter.emit([this.msg.message_id, msgType(this.msg)]);
+    this.restoreEmitter.emit([this.msg.messageId, msgType(this.msg)]);
   }
 
 }

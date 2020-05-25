@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Message, TagData, TagDataSet } from 'src/app/models/Messages';
+import { Message } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
-import { Selectable } from 'src/app/models/Selectable';
+import { Selectable } from 'src/app/models/Selectable/Selectable';
+import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
+import { TagData } from 'src/app/models/TagData/TagData';
 
 @Component({
   selector: 'postar-mail-list',

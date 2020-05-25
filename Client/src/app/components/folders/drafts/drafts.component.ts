@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
-import { Draft } from 'src/app/models/Compose';
 import { Subscription } from 'rxjs';
-import { TagDataSet } from 'src/app/models/Messages';
-import { Selectable } from 'src/app/models/Selectable';
+import { Selectable } from 'src/app/models/Selectable/Selectable';
+import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
+import { Draft } from 'src/app/models/Draft';
 
 @Component({
   selector: 'postar-drafts',

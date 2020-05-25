@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { EditorData, EditorMessage, makeEmptyMsg, checkEmpty } from '../../../models/Compose';
+import { EditorData, EditorMessage, makeEmptyEditorMsg, checkEmpty } from '../../../models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
 import { OpenComposeService } from 'src/app/services/ui-services/open-compose.service';
 
@@ -36,7 +36,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
   }
 
   addEditor(msg: EditorMessage): void {
-    msg = msg || makeEmptyMsg();
+    msg = msg || makeEmptyEditorMsg();
     this.openEditors.push({ msg, size: 'normal' });
     // console.log(`Opening: ${this.openEditors.length - 1}`);
   }

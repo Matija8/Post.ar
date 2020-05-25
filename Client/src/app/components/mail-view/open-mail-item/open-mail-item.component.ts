@@ -54,7 +54,7 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
           this.folderSub.unsubscribe();
         }
         this.folderSub = this.folder.contents.pipe(
-          map(messages => messages.find(message => message.message_id === msgId))
+          map(messages => messages.find(message => message.messageId === msgId))
         ).subscribe(
           message => {
             if (!message) {

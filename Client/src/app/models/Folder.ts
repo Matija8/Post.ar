@@ -92,7 +92,7 @@ export class MessageFolder extends SimpleFolder<Message> {
   }
 
   public removeByIds(idsToDelete: string[]): void {
-    this.stream.next(this.stream.getValue().filter(msg => !idsToDelete.includes(msg.message_id)));
+    this.stream.next(this.stream.getValue().filter(msg => !idsToDelete.includes(msg.messageId)));
   }
 }
 

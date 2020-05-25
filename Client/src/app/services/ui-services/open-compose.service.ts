@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { EditorData, makeEmptyMsg } from 'src/app/models/Compose';
+import { EditorData, makeEmptyEditorMsg } from 'src/app/models/Compose';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class OpenComposeService {
   }
 
   public addEditor(newEditor: EditorData) {
-    newEditor = newEditor || {msg: makeEmptyMsg(), size: 'normal'};
+    newEditor = newEditor || {msg: makeEmptyEditorMsg(), size: 'normal'};
     this.addEditorEmitter.next(newEditor);
   }
 }

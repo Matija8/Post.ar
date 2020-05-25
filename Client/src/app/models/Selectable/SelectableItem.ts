@@ -1,5 +1,5 @@
 import { Output, EventEmitter } from '@angular/core';
-import { TagData } from './Messages';
+import { TagData } from '../TagData/TagData';
 
 export class SelectableItem {
 
