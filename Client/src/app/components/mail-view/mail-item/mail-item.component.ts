@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Message, isReceived, TagData, makeTagData } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
+import { SelectableItem } from 'src/app/models/SelectableItem';
 
 @Component({
   selector: 'postar-mail-item',
@@ -8,16 +9,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./mail-item.component.css']
 })
 
-export class MailItemComponent implements OnInit {
+export class MailItemComponent extends SelectableItem implements OnInit {
 
   @Input() msg: Message;
-  @Output() selectEmitter = new EventEmitter<[string, boolean]>();
   @Output() starEmitter = new EventEmitter<[TagData, boolean]>();
   @Output() moveToTrashEmitter = new EventEmitter<TagData>();
   public sentByMe: boolean;
   public isSelected: boolean;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) {
+    super();
+  }
 
   ngOnInit(): void {
     this.sentByMe = !isReceived(this.msg);
@@ -30,8 +32,7 @@ export class MailItemComponent implements OnInit {
   }
 
   selectToggle() {
-    this.isSelected = !this.isSelected;
-    this.selectEmitter.emit([this.msg.message_id, this.isSelected]);
+    super.selectToggle(makeTagData(this.msg));
   }
 
   moveToTrash(event: MouseEvent) {

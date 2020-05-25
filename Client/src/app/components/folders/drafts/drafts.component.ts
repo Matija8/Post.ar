@@ -4,13 +4,14 @@ import { Draft } from 'src/app/models/Compose';
 import { Subscription } from 'rxjs';
 import { TagData, TagDataSet } from 'src/app/models/Messages';
 import { MailListComponent } from 'src/app/components/mail-view/mail-list/mail-list.component';
+import { Selectable } from 'src/app/models/Selectable';
 
 @Component({
   selector: 'postar-drafts',
   templateUrl: './drafts.component.html',
   styleUrls: ['./drafts.component.css']
 })
-export class DraftsComponent implements OnInit, OnDestroy {
+export class DraftsComponent extends Selectable implements OnInit, OnDestroy {
 
   @Output() refresh = new EventEmitter<void>();
   @Output() starredEmitter = new EventEmitter<void>();
@@ -19,11 +20,12 @@ export class DraftsComponent implements OnInit, OnDestroy {
 
   private folder = this.getMail.folders.drafts;
   private subscription: Subscription = null;
-  private selected: TagDataSet;
 
   constructor(
     private getMail: GetMailService,
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.subscription = this.folder.contents.subscribe(
@@ -45,17 +47,8 @@ export class DraftsComponent implements OnInit, OnDestroy {
     this.selected = null;
   }
 
-  onSelect([message, add]: [TagData, boolean]): void {
-    if (add) {
-      this.selected.add(message);
-    } else {
-      this.selected.delete(message);
-    }
-  }
-
   selectedChar(): string {
-    // TODO: izvuci select logiku!
-    return MailListComponent.prototype.selectedChar.bind(this)();
+    return super.selectedChar(this.draftsList);
   }
 
   refreshFolder(): void {

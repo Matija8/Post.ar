@@ -86,14 +86,21 @@ export class TagDataSet {
   }
 
   get size(): number {
-    return this.values().length;
+    let size = 0;
+    const setsByType = this.types.values();
+    for (const set of setsByType) {
+      size += set.size;
+    }
+    return size;
   }
 
   values(): TagData[] {
     const tagData = [];
     const setsByType = this.types.entries();
-    for (const [type, messageId] of setsByType) {
-      tagData.push({type, messageId});
+    for (const [type, msgIdsSet] of setsByType) {
+      for (const messageId of msgIdsSet.values()) {
+        tagData.push({type, messageId});
+      }
     }
     return tagData;
   }
