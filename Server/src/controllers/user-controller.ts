@@ -8,7 +8,6 @@ import { createResponse } from "../utils/utils";
 import { Logger } from "../utils/logger";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { secretar } from "../utils/secretar";
-import { success, error } from "../status-codes.json";
 
 // entities
 import { User } from "../entity/user";
@@ -30,7 +29,7 @@ export class UserController {
         this.logger.debug("validate payload", "/register");
         let required = ["name", "surname", "username", "password"];
         if (PayloadValidator.validate(body, required)) {
-            createResponse(response, 400, 1001, error[1001]);
+            createResponse(response, 400, 1001);
             this.logger.info("done", "/register");
             return;
         }
@@ -48,12 +47,12 @@ export class UserController {
                 theme: "default"
             });
         } catch (err) {
-            createResponse(response, 400, 1002, error[1002]);
+            createResponse(response, 400, 1002);
             this.logger.fatal(err, "/register");
             return;
         }
 
-        createResponse(response, 200, 2000, success[2000]);
+        createResponse(response, 200, 2000);
         this.logger.info("done", "/register");
     }
 
@@ -64,7 +63,7 @@ export class UserController {
         
         this.logger.debug("validate payload", "/login");
         if (PayloadValidator.validate(body, ["username", "password", "keepMeLoggedIn"])) {
-            createResponse(response, 400, 1001, error[1001]);
+            createResponse(response, 400, 1001);
             this.logger.info("done", "/login");
             return;
         }
@@ -74,7 +73,7 @@ export class UserController {
         
         const user = await this.userRepository.findOne({ where: { username: body.username } });
         if (!user) {
-            createResponse(response, 400, 1003, error[1003]);
+            createResponse(response, 400, 1003);
             this.logger.info("done", "/login");
             return;
         }
@@ -84,7 +83,7 @@ export class UserController {
         const update = await this.userRepository.update({ username: body.username }, { keepMeLoggedIn: body.keepMeLoggedIn })
                                                 .catch(err => { this.logger.fatal(err, "/login"); return undefined; });
         if (!update) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/login");
             return;
         }
@@ -94,7 +93,7 @@ export class UserController {
 
         const match = await bcrypt.compare(body.password, user.password);
         if (!match) {
-            createResponse(response, 400, 1003, error[1003]);
+            createResponse(response, 400, 1003);
             this.logger.info("done", "/login");
             return;
         }
@@ -121,12 +120,12 @@ export class UserController {
         // encrypt user data
         const encrypted = secretar.encrypt(userData);
         if (!encrypted) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/login");
             return;
         }
 
-        createResponse(response, 200, 2001, success[2001], encrypted);
+        createResponse(response, 200, 2001, encrypted);
         this.logger.info("done", "/login");
     }
 
@@ -136,23 +135,23 @@ export class UserController {
         this.logger.debug("delete session", "/logout");
         SessionManager.delete(request.cookies["SESSIONID"]);
         
-        createResponse(response, 200, 2018, success[2018]);
+        createResponse(response, 200, 2018);
         this.logger.debug("done", "/logout");
     }
 
     async checkSession(request: Request, response: Response) {
-        this.logger.info("start", "/checkSession");
+        this.logger.info("start", "/user/checkSession");
         
-        this.logger.debug("check if session exists", "/checkSession");
+        this.logger.debug("check if session exists", "/user/checkSession");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/checkSession");
+            createResponse(response, 400, 1022);
+            this.logger.info("done", "/user/checkSession");
             return;
         }
 
         // user session is already active
-        this.logger.debug("prepare and send user data", "/checkSession");
+        this.logger.debug("prepare and send user data", "/user/checkSession");
         const userData = { 
             username: session.user.username,
             name: session.user.name,
@@ -163,49 +162,49 @@ export class UserController {
        // encrypt user data
        const encrypted = secretar.encrypt(userData);
        if (!encrypted) {
-           createResponse(response, 400, 1010, error[1010]);
-           this.logger.info("done", "/checkSession");
+           createResponse(response, 400, 1010);
+           this.logger.info("done", "/user/checkSession");
            return;
        }
 
-       createResponse(response, 200, 2016, success[2016], encrypted);
-       this.logger.info("done", "/checkSession");
+       createResponse(response, 200, 2016, encrypted);
+       this.logger.info("done", "/user/checkSession");
     }
 
-    async setTheme(request: Request, response: Response) {
-        this.logger.info("start", "/setTheme");
+    async changeTheme(request: Request, response: Response) {
+        this.logger.info("start", "/user/changeTheme");
         
-        this.logger.debug("check if session exists", "/setTheme");
+        this.logger.debug("check if session exists", "/user/changeTheme");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/setTheme");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/user/changeTheme");
             return;
         }
 
-        this.logger.debug("validate payload", "/setTheme");
+        this.logger.debug("validate payload", "/user/changeTheme");
         const body = request.body;
         if (PayloadValidator.validate(body, ["theme"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/setTheme");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/user/changeTheme");
             return;
         }
 
         if (!["default", "dark"].includes(body.theme)) {
-            createResponse(response, 400, 1021, error[1021]);
-            this.logger.info("done", "/setTheme");
+            createResponse(response, 400, 1021);
+            this.logger.info("done", "/user/changeTheme");
             return;
         }
 
         try {
-            this.logger.debug("update user theme settings", "/setTheme");
+            this.logger.debug("update user theme settings", "/user/changeTheme");
             await this.userRepository.update({ username: session.user.username }, { theme: body.theme });
             
-            createResponse(response, 200, 2017, success[2017]);
-            this.logger.info("done", "/setTheme");
+            createResponse(response, 200, 2017);
+            this.logger.info("done", "/user/changeTheme");
         } catch(err) {
-            createResponse(response, 400, 1021, error[1021]);
-            this.logger.info("done", "/setTheme");
+            createResponse(response, 400, 1021);
+            this.logger.info("done", "/user/changeTheme");
         }
     }
 

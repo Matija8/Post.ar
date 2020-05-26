@@ -15,11 +15,12 @@
         "2011": "Successfully discarded message as draft",
         "2012": "Successfully updated messages as unread",
         "2013": "Found messages in trash",
-        "2014": "Successfully moved message to trash",
-        "2015": "Successfully removed message",
+        "2014": "Successfully moved messages to trash",
+        "2015": "Messages moved from trash successfully",
         "2016": "Found user session",
         "2017": "Successfully changed user theme",
-        "2018": "User logged out successfully"
+        "2018": "User logged out successfully",
+        "2019": "Successfully deleted message forever"
     },
     "error": 
     {
@@ -44,6 +45,8 @@
         "1018": "Failed to get messages from trash",
         "1019": "Failed to move message to trash",
         "1020": "Failed to remove starred message",
-        "1021": "Failed to change user theme"
+        "1021": "Failed to change user theme",
+        "1022": "User session not found",
+        "1023": "Successfully deleted message forever"
     }
 }   

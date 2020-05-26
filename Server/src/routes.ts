@@ -28,14 +28,14 @@ export const Routes = [
     {
         controller: UserController,
         method: "get",
-        path: "/checkSession",
+        path: "/user/checkSession",
         handler: "checkSession"
     },
     {
         controller: UserController,
         method: "post",
-        path: "/setTheme",
-        handler: "setTheme"
+        path: "/user/changeTheme",
+        handler: "changeTheme"
     },
     // inbox controller routes
     {
@@ -53,13 +53,13 @@ export const Routes = [
     {
         controller: InboxController,
         method: "post",
-        path: "/markAsRead",
+        path: "/inbox/markAsRead",
         handler: "markAsRead"
     },
     {
         controller: InboxController,
         method: "post",
-        path: "/markAsUnread",
+        path: "/inbox/markAsUnread",
         handler: "markAsUnread"
     },
     // sent controller routes
@@ -79,13 +79,13 @@ export const Routes = [
     {
         controller: DraftController,
         method: "post",
-        path: "/saveDraft",
+        path: "/drafts/save",
         handler: "saveDraft"
     },
     {
         controller: DraftController,
         method: "post",
-        path: "/discardDraft",
+        path: "/drafts/discard",
         handler: "discardDraft"
     },
     // starred controller routes
@@ -98,13 +98,13 @@ export const Routes = [
     {
         controller: StarredController,
         method: "post",
-        path: "/starMessage",
+        path: "/starred/save",
         handler: "starMessage"
     },
     {
         controller: StarredController,
         method: "post",
-        path: "/removeStarredMessage",
+        path: "/starred/remove",
         handler: "removeStarredMessage"
     },
     // trash controller routes
@@ -117,19 +117,19 @@ export const Routes = [
     {
         controller: TrashController,
         method: "post",
-        path: "/trashMessage",
-        handler: "trashMessage"
+        path: "/trash/delete",
+        handler: "deleteMessages"
     },
     {
         controller: TrashController,
         method: "post",
-        path: "/removeTrashMessage",
-        handler: "removeTrashMessage"
+        path: "/trash/undoDelete",
+        handler: "undoDeletedMessages"
     },
     {
         controller: TrashController,
         method: "post",
-        path: "/deleteMessage",
-        handler: "deleteMessage"
+        path: "/trash/deleteForever",
+        handler: "deleteForever"
     }
 ]

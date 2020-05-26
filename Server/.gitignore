@@ -8,3 +8,6 @@ package-lock.json
 
 # docker
 docker/data
+
+# documentation
+doc/apidoc/

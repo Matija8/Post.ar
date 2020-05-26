@@ -11,13 +11,10 @@ export class Drafts {
     user: User;
 
     @Column({ unique: true, nullable: false })
-    message_id: string;
+    messageId: string;
 
     @Column({ nullable: false })
     to: string;
-
-    @Column({nullable: false})
-    subject: string;
 
     @Column({ nullable: false })
     content: string;

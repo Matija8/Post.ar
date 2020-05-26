@@ -40,7 +40,6 @@ export class User {
     })
     theme: string;
 
-
     @Column({
         nullable: false,
         default: false

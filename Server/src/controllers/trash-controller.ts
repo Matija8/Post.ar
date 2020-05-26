@@ -6,7 +6,6 @@ import { PayloadValidator } from "../utils/payload-validator/payload-validator";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { createResponse } from "../utils/utils";
 import { Logger } from "../utils/logger";
-import { success, error } from "../status-codes.json";
 import { secretar } from "../utils/secretar";
 
 // entities
@@ -28,7 +27,7 @@ export class TrashController {
         this.logger.debug("validate user", "/trash");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
+            createResponse(response, 401, 1000);
             this.logger.info("done", "/trash");
             return;
         }
@@ -40,177 +39,174 @@ export class TrashController {
         });
 
         if (!user) {
-            createResponse(response, 401, 1018, error[1018]);
+            createResponse(response, 401, 1018);
             this.logger.info("done", "/trash");
             return;
         }
 
         this.logger.debug("filter messages", "/trash");
-        const inboxMessages = user.inbox.filter(message => message.is_deleted)
+        const inboxMessages = user.inbox.filter(message => message.isDeleted)
                                         .map(message => { message["type"] = "inbox"; return message; });
 
-        const sentMessages = user.sent.filter(message => message.is_deleted)
+        const sentMessages = user.sent.filter(message => message.isDeleted)
                                       .map(message => { message["type"] = "sent"; return message; });
 
         this.logger.debug("encrypt messages", "/trash");
-        const encrypted = secretar.encrypt(JSON.stringify({
-            inbox: inboxMessages,
-            sentMessages: sentMessages
-        }));
+        const encrypted = secretar.encrypt({ inbox: inboxMessages, sent: sentMessages });
         if (!encrypted) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/trash");
             return;
         }
 
-        createResponse(response, 200, 2013, success[2013], encrypted);
+        createResponse(response, 200, 2013, encrypted);
         this.logger.info("done", "/trash");
     }
 
-    async trashMessage(request: Request, response: Response) {
-        this.logger.info("start", "/trashMessage");
+    async deleteMessages(request: Request, response: Response) {
+        this.logger.info("start", "/trash/delete");
 
-        this.logger.debug("validate user", "/trashMessage");
+        this.logger.debug("validate user", "/trash/delete");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/trashMessage");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/trash/delete");
             return;
         }
 
-        this.logger.debug("validate payload", "/trashMessage");
+        this.logger.debug("validate payload", "/trash/delete");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/trashMessage");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/trash/delete");
             return;
         }
 
-        this.logger.debug("save trashed message", "/trashMessage");
+        this.logger.debug("save trashed message", "/trash/delete");
         await getManager().transaction(async entityManager =>{
-            for (const message of body.messages){
-                switch (message.type){
+            for (const message of body.messages) {
+                switch (message.type) {
                     case "inbox":
                         await entityManager.update(Inbox,
-                            { message_id: message.messageId },
-                            { is_deleted: true }
+                            { messageId: message.messageId },
+                            { isDeleted: true }
                         );
                         break;
                     case "sent":
                         await entityManager.update(Sent,
-                            { message_id: message.messageId },
-                            { is_deleted: true }
+                            { messageId: message.messageId },
+                            { isDeleted: true }
                         );
                         break;
 
                     default:
-                        createResponse(response, 400, 1013, error[1013]);
-                        this.logger.info("done", "/trashMessage");
+                        createResponse(response, 400, 1013);
+                        this.logger.info("done", "/trash/delete");
                         return;
                 }
-                createResponse(response, 200, 2014, success[2014]);
-                this.logger.info("done", "/trashMessage");
+                createResponse(response, 200, 2014);
+                this.logger.info("done", "/trashMtrash/deleteessage");
             }
         }).catch(err => {
-            createResponse(response, 400, 1019, error[1019]);
-            this.logger.fatal(err, "/trashMessage");
+            createResponse(response, 400, 1019);
+            this.logger.fatal(err, "/trash/delete");
         });
     }
 
-    async removeTrashMessage(request: Request, response: Response) {
-        this.logger.info("start", "/removeTrashMessage");
+    async undoDeletedMessages(request: Request, response: Response) {
+        this.logger.info("start", "/trash/undoDelete");
 
-        this.logger.debug("validate user", "/removeTrashMessage");
+        this.logger.debug("validate user", "/trash/undoDelete");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/removeTrashMessage");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/trash/undoDelete");
             return;
         }
 
-        this.logger.debug("validate payload", "/removeTrashMessage");
+        this.logger.debug("validate payload", "/trash/undoDelete");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/removeTrashMessage");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/trash/undoDelete");
             return;
         }
 
-        this.logger.debug("remove trashed message", "/removeTrashMessage");
+        this.logger.debug("remove trashed message", "/trash/undoDelete");
         await getManager().transaction(async entityManager =>{
-            for (const message of body.messages){
-                switch (message.type){
+            for (const message of body.messages) {
+                switch (message.type) {
                     case "inbox":
                         await entityManager.update(Inbox,
-                            { message_id: message.messageId },
-                            { is_deleted: false }
+                            { messageId: message.messageId },
+                            { isDeleted: false }
                         );
                         break;
                     case "sent":
                         await entityManager.update(Sent,
-                            { message_id: message.messageId },
-                            { is_deleted: false }
+                            { messageId: message.messageId },
+                            { isDeleted: false }
                         );
                         break;
 
                     default:
-                        createResponse(response, 400, 1013, error[1013]);
-                        this.logger.info("done", "/removeTrashMessage");
+                        createResponse(response, 400, 1013);
+                        this.logger.info("done", "/trash/undoDelete");
                         return;
                 }
-                createResponse(response, 200, 2015, success[2015]);
-                this.logger.info("done", "/removeTrashMessage");
+                createResponse(response, 200, 2015);
+                this.logger.info("done", "/trash/undoDelete");
             }
         }).catch(err => {
-            createResponse(response, 400, 1020, error[1020]);
-            this.logger.fatal(err, "/removeTrashMessage");
+            createResponse(response, 400, 1019);
+            this.logger.fatal(err, "/trash/undoDelete");
         });
     }
 
-    async deleteMessage(request: Request, response: Response) {
-        this.logger.info("start", "/deleteMessage");
+    async deleteForever(request: Request, response: Response) {
+        this.logger.info("start", "/trash/deleteForever");
 
-        this.logger.debug("validate user", "/deleteMessage");
+        this.logger.debug("validate user", "/trash/deleteForever");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/deleteMessage");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        this.logger.debug("validate payload", "/deleteMessage");
+        this.logger.debug("validate payload", "/trash/deleteForever");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageId", "type"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/deleteMessage");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        this.logger.debug("delete message", "/deleteMessage");
+        this.logger.debug("delete message", "/trash/deleteForever");
         try {
             switch (body.type) {
                 case "inbox":
-                    await this.inboxRepository.delete({ message_id: body.messageId });
+                    await this.inboxRepository.delete({ messageId: body.messageId });
                     break;
 
                 case "sent":
-                    await this.sentRepository.delete({ message_id: body.messageId });
+                    await this.sentRepository.delete({ messageId: body.messageId });
                     break;
 
                 default:
-                    createResponse(response, 400, 1013, error[1013]);
-                    this.logger.info("done", "/deleteMessage");
+                    createResponse(response, 400, 1013);
+                    this.logger.info("done", "/trash/deleteForever");
                     return;
             }
         } catch (err) {
-            createResponse(response, 400, 1020, error[1020]);
-            this.logger.fatal(err, "/deleteMessage");
-            this.logger.info("done", "/deleteMessage");
+            createResponse(response, 400, 1023);
+            this.logger.fatal(err, "/trash/deleteForever");
+            this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        createResponse(response, 200, 2015, success[2015]);
-        this.logger.info("done", "/deleteMessage");
+        createResponse(response, 200, 2019);
+        this.logger.info("done", "/trash/deleteForever");
     }
 
 

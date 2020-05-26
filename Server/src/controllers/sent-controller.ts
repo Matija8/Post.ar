@@ -5,7 +5,6 @@ import { getRepository } from "typeorm";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { createResponse } from "../utils/utils";
 import { Logger } from "../utils/logger";
-import { success, error } from "../status-codes.json";
 import { secretar } from "../utils/secretar";
 
 // entities
@@ -24,7 +23,7 @@ export class SentController {
         this.logger.debug("validate user", "/sent");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
+            createResponse(response, 401, 1000);
             this.logger.info("done", "/sent");
             return;
         }
@@ -35,42 +34,41 @@ export class SentController {
             relations: [ "sent" ]
         });
         if (!user) {
-            createResponse(response, 400, 1004, error[1004]);
+            createResponse(response, 400, 1004);
             this.logger.info("done", "/sent");
             return;
         }
 
         this.logger.debug("check sent mail", "/sent");
         if (!user.sent || user.sent.length == 0) {
-            createResponse(response, 400, 1009, error[1009]);
+            createResponse(response, 400, 1009);
             this.logger.info("done", "/sent");
             return;
         }
 
         // filter user inbox
-        user.sent = user.sent.filter(message => !message.is_deleted);
+        user.sent = user.sent.filter(message => !message.isDeleted);
 
         this.logger.debug("get user sent mail", "/sent");
         let sentMail = [];
         for (const message of user.sent)
             sentMail.push({
-                message_id: message.message_id,
+                messageId: message.messageId,
                 to: message.to,
-                subject: message.subject,
                 content: message.content,
-                isStarred: message.is_starred,
+                isStarred: message.isStarred,
                 timestamp: message.timestamp,
             });
 
         this.logger.debug("encrypt user's sent mail", "/sent");
         const encrypted = secretar.encrypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
         if (!encrypted) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/sent");
             return;
         }
 
-        createResponse(response, 200, 2005, success[2005], encrypted);
+        createResponse(response, 200, 2005, encrypted);
         this.logger.info("done", "/sent");
     }
 

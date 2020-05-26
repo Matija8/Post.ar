@@ -5,7 +5,6 @@ import { getRepository, getManager } from "typeorm";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { createResponse } from "../utils/utils";
 import { Logger } from "../utils/logger";
-import { success, error } from "../status-codes.json";
 import { secretar } from "../utils/secretar";
 import { PayloadValidator } from "../utils/payload-validator/payload-validator";
 
@@ -20,8 +19,6 @@ export class StarredController {
 
     // repositories
     private userRepository = getRepository(User);
-    private inboxRepository = getRepository(Inbox);
-    private sentRepository = getRepository(Sent);
 
     async starred(request: Request, response: Response) {
         this.logger.info("start", "/starred");
@@ -29,7 +26,7 @@ export class StarredController {
         this.logger.debug("validate user", "/starred");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
+            createResponse(response, 401, 1000);
             this.logger.info("done", "/starred");
             return;
         }
@@ -41,130 +38,127 @@ export class StarredController {
         });
         
         if (!user) {
-            createResponse(response, 401, 1012, error[1012]);
+            createResponse(response, 401, 1012);
             this.logger.info("done", "/starred");
             return;
         }
 
         this.logger.debug("filter messages", "/starred");
-        const inboxMessages = user.inbox.filter(message => message.is_starred)
+        const inboxMessages = user.inbox.filter(message => message.isStarred)
                                         .map(message => { message["type"] = "inbox"; return message; });
         
-        const sentMessages = user.sent.filter(message => message.is_starred)
+        const sentMessages = user.sent.filter(message => message.isStarred)
                                       .map(message => { message["type"] = "sent"; return message; });
 
         this.logger.debug("encrypt messages", "/starred");
-        const encrypted = secretar.encrypt(JSON.stringify({
-            inbox: inboxMessages,
-            sentMessages: sentMessages
-        }));
+        const encrypted = secretar.encrypt({ inbox: inboxMessages, sent: sentMessages });
         if (!encrypted) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/starred");
             return;
         }
   
-        createResponse(response, 200, 2008, success[2008], encrypted);
+        createResponse(response, 200, 2008, encrypted);
         this.logger.info("done", "/starred");
     }
 
-    async starMessage(request: Request, response: Response) {
-        this.logger.info("start", "/starMessage");
+    async starMessages(request: Request, response: Response) {
+        this.logger.info("start", "/starred/save");
         
-        this.logger.debug("validate user", "/starMessage");
+        this.logger.debug("validate user", "/starred/save");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/starMessage");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/starred/save");
             return;
         }
 
-        this.logger.debug("validate payload", "/starMessage");
+        this.logger.debug("validate payload", "/starred/save");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/starMessage");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/starred/save");
             return;
         }
 
-        this.logger.debug("save starred message", "/starMessage");
+        this.logger.debug("save starred message", "/starred/save");
         await getManager().transaction(async entityManager =>{
-            for (const message of body.messages){
-                switch (message.type){
+            for (const message of body.messages) {
+                switch (message.type) {
                     case "inbox":
                         await entityManager.update(Inbox,
-                            { message_id: message.messageId },
-                            { is_starred: true }
+                            { messageId: message.messageId },
+                            { isStarred: true }
                         );
                         break;
                     case "sent":
                         await entityManager.update(Sent,
-                            { message_id: message.messageId },
-                            { is_starred: true }
+                            { messageId: message.messageId },
+                            { isStarred: true }
                         );
                         break;
 
                     default:
-                        createResponse(response, 400, 1013, error[1013]);
-                        this.logger.info("done", "/starMessage");
+                        createResponse(response, 400, 1013);
+                        this.logger.info("done", "/starred/save");
                         return;
                 }
-                createResponse(response, 200, 2009, success[2009]);
-                this.logger.info("done", "/starhMessage");
+                createResponse(response, 200, 2009);
+                this.logger.info("done", "/starred/save");
             }
         }).catch(err => {
-            createResponse(response, 400, 1014, error[1014]);
-            this.logger.fatal(err, "/starMessage");
+            createResponse(response, 400, 1014);
+            this.logger.fatal(err, "/starred/save");
         });
     }
 
-    async removeStarredMessage(request: Request, response: Response) {
-        this.logger.info("start", "/removeStarredMessage");
+    async removeStarredMessages(request: Request, response: Response) {
+        this.logger.info("start", "/starred/remove");
         
-        this.logger.debug("validate user", "/removeStarredMessage");
+        this.logger.debug("validate user", "/starred/remove");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/removeStarredMessage");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/starred/remove");
             return;
         }
 
-        this.logger.debug("validate payload", "/removeStarredMessage");
+        this.logger.debug("validate payload", "/starred/remove");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/removeStarredMessage");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/starred/remove");
             return;
         }
 
-        this.logger.debug("remove starred message", "/removeStarredMessage");
+        this.logger.debug("remove starred message", "/starred/remove");
         await getManager().transaction(async entityManager =>{
-            for (const message of body.messages){
-                switch (message.type){
+            for (const message of body.messages) {
+                switch (message.type) {
                     case "inbox":
                         await entityManager.update(Inbox,
-                            { message_id: message.messageId },
-                            { is_starred: false }
+                            { messageId: message.messageId },
+                            { isStarred: false }
                         );
                         break;
                     case "sent":
                         await entityManager.update(Sent,
-                            { message_id: message.messageId },
-                            { is_starred: false }
+                            { messageId: message.messageId },
+                            { isStarred: false }
                         );
                         break;
 
                     default:
-                        createResponse(response, 400, 1013, error[1013]);
-                        this.logger.info("done", "/removeStarredMessage");
+                        createResponse(response, 400, 1013);
+                        this.logger.info("done", "/starred/remove");
                         return;
                 }
-                createResponse(response, 200, 2010, success[2010]);
-                this.logger.info("done", "/removeStarredMessage");
+                createResponse(response, 200, 2010);
+                this.logger.info("done", "/starred/remove");
             }
         }).catch(err => {
-            createResponse(response, 400, 1015, error[1015]);
-            this.logger.fatal(err, "/removeStarredMessage");
+            createResponse(response, 400, 1015);
+            this.logger.fatal(err, "/starred/remove");
         });
     }
 

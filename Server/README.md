@@ -20,7 +20,18 @@
 
 ```javascript
     // swich typeorm logging, in ormconfig.json
-    "logging": false
+    logging: false
+```
+## To generate documentation run from server's root directory:
+
+```bash
+    apidoc -i doc/src/ -o doc/apidoc/
 ```
 
-## See **``api.md``** for more details about server API
+### After generating documentation open ``doc/apidoc/index.html`` in your browser
+
+## To install apidoc run:
+
+```bash
+    npm install apidoc -g
+```

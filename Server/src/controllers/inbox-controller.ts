@@ -7,7 +7,6 @@ import { PayloadValidator } from "../utils/payload-validator/payload-validator";
 import { SessionManager } from "../utils/session-manager/session-manager";
 import { createResponse } from "../utils/utils";
 import { Logger } from "../utils/logger";
-import { success, error } from "../status-codes.json";
 import { secretar } from "../utils/secretar";
 
 // entities
@@ -28,7 +27,7 @@ export class InboxController {
         this.logger.debug("validate user", "/inbox");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
+            createResponse(response, 401, 1000);
             this.logger.info("done", "/inbox");
             return;
         }
@@ -40,192 +39,189 @@ export class InboxController {
         });
 
         if (!user) {
-            createResponse(response, 400, 1004, error[1004]);
+            createResponse(response, 400, 1004);
             this.logger.info("done", "/inbox");
             return;
         }
 
         this.logger.debug("check user's inbox", "/inbox");
         if (!user.inbox || user.inbox.length == 0) {
-            createResponse(response, 400, 1005, error[1005]);
+            createResponse(response, 400, 1005);
             this.logger.info("done", "/inbox");
             return;
         }
 
         // filter user inbox 
-        user.inbox = user.inbox.filter(message => !message.is_deleted);
+        user.inbox = user.inbox.filter(message => !message.isDeleted);
 
         this.logger.debug("get user's inbox", "/inbox");
         let messages = [];
         for (const message of user.inbox) {
             messages.push({
-                message_id: message.message_id,
+                messageId: message.messageId,
                 from: message.from,
-                subject: message.subject,
                 content: message.content,
-                isRead: message.is_read,
-                isStarred: message.is_starred,
+                isRead: message.isRead,
+                isStarred: message.isStarred,
                 timestamp: message.timestamp
             });
         }
 
         this.logger.debug("encrypt mail list", "/inbox");
-        const encrypted = secretar.encrypt({ total: messages.length, data: JSON.stringify(messages) });
+        const encrypted = secretar.encrypt(messages);
         if (!encrypted) {
-            createResponse(response, 400, 1010, error[1010]);
+            createResponse(response, 400, 1010);
             this.logger.info("done", "/inbox");
             return;
         }
 
-        createResponse(response, 200, 2002, success[2002], encrypted);
+        createResponse(response, 200, 2002, encrypted);
         this.logger.info("done", "/inbox");
     }
 
     async send(request: Request, response: Response) {
-        this.logger.info("start", "/send");
+        this.logger.info("start", "/mail/send");
 
-        this.logger.debug("validate user", "/send");
+        this.logger.debug("validate user", "/mail/send");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/send");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("validate payload", "/send");
+        this.logger.debug("validate payload", "/mail/send");
         const body = request.body;
-        if (PayloadValidator.validate(body, ["recipient", "content"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/send");
+        if (PayloadValidator.validate(body, ["to", "content"])) {
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/mail/send");
             return;
         }
 
         // user cannot mail himself
-        this.logger.debug("check if mail is valid", "/send");
-        if (body.recipient == session.user.username) {
-            createResponse(response, 400, 1006, error[1006]);
-            this.logger.info("done", "/send");
+        this.logger.debug("check if mail is valid", "/mail/send");
+        if (body.to == session.user.username) {
+            createResponse(response, 400, 1006);
+            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("get recipient", "/send");
-        let recipient = await this.userRepository.findOne({ where: { username: body.recipient } });
+        this.logger.debug("get recipient", "/mail/send");
+        let recipient = await this.userRepository.findOne({ where: { username: body.to } });
         if (!recipient) {
-            createResponse(response, 400, 1006, error[1006]);
-            this.logger.info("done", "/send");
+            createResponse(response, 400, 1006);
+            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("save message to inbox and sent mail box", "/send");
+        this.logger.debug("save message to inbox and sent mail box", "/mail/send");
         await getManager().transaction(async entityManager => {
             const timestamp = new Date().getTime().toString();
             const messageId = uuidv4();
 
             await entityManager.insert(Inbox, {
-                message_id: messageId,
+                messageId: messageId,
                 from: session.user.username,
-                subject: body.subject,
                 content: body.content,
-                is_read: false,
-                is_starred: false,
-                is_deleted: false,
+                isRead: false,
+                isStarred: false,
+                isDeleted: false,
                 timestamp: timestamp,
                 user: recipient
             });
 
             await entityManager.insert(Sent, {
-                message_id: messageId,
-                subject: body.subject,
-                content: body.content,
-                is_starred: false,
-                is_deleted: false,
-                timestamp: timestamp,
+                messageId: messageId,
                 to: recipient.username,
+                content: body.content,
+                isStarred: false,
+                isDeleted: false,
+                timestamp: timestamp,
                 user: session.user
             });
 
             const encrypted = secretar.encrypt({ messageId: messageId, timestamp: timestamp, ...body });
             if (!encrypted) {
-                createResponse(response, 400, 1010, error[1010]);
-                this.logger.info("done", "/inbox");
+                createResponse(response, 400, 1010);
+                this.logger.info("done", "/mail/send");
                 return;
             }
     
-            createResponse(response, 200, 2003, success[2003]);
-            this.logger.info("done", "/send");
+            createResponse(response, 200, 2003, encrypted);
+            this.logger.info("done", "/mail/send");
         }).catch(err => {
-            this.logger.fatal(err, "/send");
-            createResponse(response, 400, 1006, error[1006]);
+            this.logger.fatal(err, "/mail/send");
+            createResponse(response, 400, 1006);
         });
     }
 
     async markAsRead(request: Request, response: Response) {
-        this.logger.info("start", "/markAsRead");
+        this.logger.info("start", "/mail/markAsRead");
 
-        this.logger.debug("validate user", "/markAsRead");
+        this.logger.debug("validate user", "/mail/markAsRead");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/markAsRead");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/mail/markAsRead");
             return;
         }
 
-        this.logger.debug("validate payload", "/markAsRead");
+        this.logger.debug("validate payload", "/mail/markAsRead");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageIds"])) {
-            createResponse(response, 400, 1001, error[1001]);
-            this.logger.info("done", "/markAsRead");
+            createResponse(response, 400, 1001);
+            this.logger.info("done", "/mail/markAsRead");
             return;
         }
 
-        this.logger.debug("update read messages", "/markAsRead");
+        this.logger.debug("update read messages", "/mail/markAsRead");
         await getManager().transaction(async entityManager => {
             for (const messageId of body.messageIds)
                 await entityManager.update(Inbox,
-                    { message_id: messageId },
-                    { is_read: true }
+                    { messageId: messageId },
+                    { isRead: true }
                 );
 
-            createResponse(response, 200, 2007, success[2007]);
-            this.logger.info("done", "/markAsRead");
+            createResponse(response, 200, 2007);
+            this.logger.info("done", "/mail/markAsRead");
         }).catch(err => {
-            createResponse(response, 400, 1011, error[1011]);
-            this.logger.fatal(err, "/markAsRead");
+            createResponse(response, 400, 1011);
+            this.logger.fatal(err, "/mail/markAsRead");
         });
     }
 
     async markAsUnread(request: Request, response: Response) {
-        this.logger.info("start", "/markAsUnread");
+        this.logger.info("start", "/mail/markAsUnread");
 
-        this.logger.debug("validate user", "/markAsUnread");
+        this.logger.debug("validate user", "/mail/markAsUnread");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
-            createResponse(response, 401, 1000, error[1000]);
-            this.logger.info("done", "/markAsUnread");
+            createResponse(response, 401, 1000);
+            this.logger.info("done", "/mail/markAsUnread");
             return;
         }
 
-        this.logger.debug("validate payload", "/markAsUnread");
+        this.logger.debug("validate payload", "/mail/markAsUnread");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageIds"])) {
-            createResponse(response, 400, 1001, error[1001]);
+            createResponse(response, 400, 1001);
             this.logger.info("done", "/markAsUnread");
             return;
         }
 
-        this.logger.debug("update read messages", "/markAsUnread");
+        this.logger.debug("update read messages", "/mail/markAsUnread");
         await getManager().transaction(async entityManager => {
             for (const messageId of body.messageIds)
                 await entityManager.update(Inbox,
-                    { message_id: messageId },
-                    { is_read: false }
+                    { messageId: messageId },
+                    { isRead: false }
                 );
 
-            createResponse(response, 200, 2012, success[2012]);
-            this.logger.info("done", "/markAsUnread");
+            createResponse(response, 200, 2012);
+            this.logger.info("done", "/mail/markAsUnread");
         }).catch(err => {
-            createResponse(response, 400, 1017, error[1017]);
-            this.logger.fatal(err, "/markAsUnread");
+            createResponse(response, 400, 1017);
+            this.logger.fatal(err, "/mail/markAsUnread");
         });
     }
 
