@@ -111,8 +111,8 @@ export const Routes = [
     {
         controller: TrashController,
         method: "get",
-        path: "/trashed",
-        handler: "trashed"
+        path: "/trash",
+        handler: "trash"
     },
     {
         controller: TrashController,

@@ -31,7 +31,7 @@ export class GetMailService {
       ...messageFolders,
       all: new AggregateFolder(Object.values(messageFolders)),
       drafts: new SimpleFolder<Draft>(this.http, this.secretar, 'http://localhost:8000/drafts', 1007),
-      trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trashed'),
+      trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trash'),
     };
   }
 
