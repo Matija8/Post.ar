@@ -117,8 +117,8 @@
   **/
 
 /**
-  * @api {post} /trash/undoDelete Move messages from trash
-  * @apiName undoDelete
+  * @api {post} /trash/deleteForever Delete message forever
+  * @apiName deleteForever
   * @apiGroup TrashController
   *
   * @apiParam {String} messageId Unique message id.
