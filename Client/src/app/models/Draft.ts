@@ -5,7 +5,7 @@ export class Draft {
   to: string;
   subject: string;
   content: string;
-  // timestamp: string;
+  timestamp?: string;
 
   toEditorMessage(): EditorMessage {
     return {

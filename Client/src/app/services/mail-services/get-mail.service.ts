@@ -4,13 +4,20 @@ import { Folder, SimpleFolder, AggregateFolder, MessageFolder, TrashFolder } fro
 import { HttpWrapperService } from './http-wrapper.service';
 import { Observable, zip } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { Draft } from 'src/app/models/Draft';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GetMailService {
 
-  public folders: {readonly [folderName: string]: Folder};
+  public folders: {
+    inbox: MessageFolder,
+    sent: MessageFolder,
+    all: AggregateFolder,
+    drafts: SimpleFolder<Draft>,
+    trash: TrashFolder,
+  };
 
   constructor(
     private http: HttpWrapperService,
@@ -23,7 +30,7 @@ export class GetMailService {
     this.folders = {
       ...messageFolders,
       all: new AggregateFolder(Object.values(messageFolders)),
-      drafts: new SimpleFolder<any>(this.http, this.secretar, 'http://localhost:8000/drafts', 1007),
+      drafts: new SimpleFolder<Draft>(this.http, this.secretar, 'http://localhost:8000/drafts', 1007),
       trash: new TrashFolder(this.http, this.secretar, 'http://localhost:8000/trashed'),
     };
   }

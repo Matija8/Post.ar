@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { EditorData, EditorMessage, makeEmptyEditorMsg, checkEmpty } from '../../../models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
 import { OpenComposeService } from 'src/app/services/ui-services/open-compose.service';
+import { DraftMailService } from 'src/app/services/mail-services/draft-mail.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
   constructor(
     private sendMail: SendMailService,
     private openCompose: OpenComposeService,
+    private draftMail: DraftMailService,
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +49,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
     }
     const msg = this.openEditors[index].msg;
     if (!checkEmpty(msg)) {
-      // TODO: Save as a draft.
+      this.draftMail.saveDraft(msg);
       // console.log('Editor isn\'t empty!');
     }
     this.openEditors.splice(index, 1);

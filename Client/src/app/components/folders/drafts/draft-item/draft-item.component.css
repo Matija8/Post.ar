@@ -1,0 +1,15 @@
+.draft-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: solid 0.3px black;
+    padding: 2px;
+}
+
+.draft-item > * {
+    margin-right: 10px;
+}
+
+.draft-item-title {
+    font-size: var(--font-size-L);
+}
