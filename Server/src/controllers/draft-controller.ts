@@ -21,7 +21,7 @@ export class DraftController {
     // repositories
     private userRepository = getRepository(User);
     private draftsRepository = getRepository(Drafts)
-    
+
     async drafts(request: Request, response: Response) {
         this.logger.info("start", "/drafts");
 
@@ -36,7 +36,7 @@ export class DraftController {
         this.logger.debug("get user", "/drafts");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
-            relations: [ "drafts" ] 
+            relations: [ "drafts" ]
         });
         if (!user) {
             createResponse(response, 400, 1004, error[1004]);
@@ -55,13 +55,14 @@ export class DraftController {
         let drafts = [];
         for (const draft of user.drafts) {
             drafts.push({
-                message_id: draft.message_id,
+                messageId: draft.message_id,
+                to: draft.to,
                 subject: draft.subject,
                 content: draft.content,
-                from: draft.timestamp
+                timestamp: draft.timestamp
             });
         }
-        
+
         this.logger.debug("encrypt drafts", "/drafts");
         const encrypted = secretar.encrypt({ total: drafts.length, data: JSON.stringify(drafts) });
         if (!encrypted) {
@@ -95,9 +96,9 @@ export class DraftController {
         }
 
         this.logger.debug("get user", "/saveDraft");
-        let user = await this.userRepository.findOne({ 
+        let user = await this.userRepository.findOne({
             where: { username: session.user.username },
-            relations: [ "drafts" ] 
+            relations: [ "drafts" ]
         });
         if (!user) {
             createResponse(response, 400, 1004, error[1004]);
@@ -111,6 +112,7 @@ export class DraftController {
                 message_id: uuidv4(),
                 subject: body.subject,
                 content: body.content,
+                to: body.to,
                 timestamp: new Date().getTime().toString(),
                 user: user
             });
@@ -119,7 +121,7 @@ export class DraftController {
             this.logger.fatal(err, "/saveDraft");
             return;
         }
-        
+
         createResponse(response, 200, 2006, success[2006]);
         this.logger.info("done", "/saveDraft");
     }
@@ -147,7 +149,7 @@ export class DraftController {
         this.logger.debug("get user", "/discardDraft");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
-            relations: [ "drafts" ] 
+            relations: [ "drafts" ]
         });
         if (!user) {
             createResponse(response, 400, 1004, error[1004]);
@@ -163,7 +165,7 @@ export class DraftController {
             this.logger.fatal(err, "/discardDraft");
             return;
         }
-        
+
         createResponse(response, 200, 2011, success[2011]);
         this.logger.info("done", "/discardDraft");
     }
