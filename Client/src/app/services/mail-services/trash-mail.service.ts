@@ -34,7 +34,7 @@ export class TrashMailService {
       sourceFolder.removeByIds(messagesPerFolder.get(folderName));
     }
     // Option 2/
-    const response = this.http.post('http://localhost:8000/trashMessage', {messages});
+    const response = this.http.post('http://localhost:8000/trash/delete', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
@@ -62,7 +62,7 @@ export class TrashMailService {
     // Folders are updated here!
     sourceFolder.removeByIds([messageId]);
 
-    const response = this.http.post('http://localhost:8000/removeTrashMessage', {messageId, type});
+    const response = this.http.post('http://localhost:8000/trash/undoDelete', {messageId, type});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
@@ -89,7 +89,7 @@ export class TrashMailService {
     // Folders are updated here!
     sourceFolder.removeByIds([messageId]);
 
-    const response = this.http.post('http://localhost:8000/deleteMessage', {messageId, type});
+    const response = this.http.post('http://localhost:8000/trash/deleteForever', {messageId, type});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);

@@ -120,7 +120,7 @@ export class AuthService {
     if (!this.sessionIdExists()) {
       return throwError('SESSIONID doesn\'t exist. This is ok.');
     }
-    return this.http.get('http://localhost:8000/checkSession')
+    return this.http.get('http://localhost:8000/user/checkSession')
     .pipe(
       take(1),
       flatMap(
