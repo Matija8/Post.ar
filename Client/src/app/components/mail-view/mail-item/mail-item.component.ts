@@ -16,7 +16,7 @@ export class MailItemComponent extends SelectableItem implements OnInit {
   @Output() starEmitter = new EventEmitter<[TagData, boolean]>();
   @Output() moveToTrashEmitter = new EventEmitter<TagData>();
   public sentByMe: boolean;
-  public isSelected: boolean;
+  public isStarred: boolean;
 
   constructor(public router: Router) {
     super();
@@ -24,11 +24,13 @@ export class MailItemComponent extends SelectableItem implements OnInit {
 
   ngOnInit(): void {
     this.sentByMe = !isReceived(this.msg);
-    this.isSelected = false;
+    this.isStarred = false;
   }
 
   star(): void {
     this.msg.isStarred = !this.msg.isStarred;
+    this.isStarred = !this.isStarred;
+    console.log(this.isStarred);
     this.starEmitter.emit([makeTagData(this.msg), this.msg.isStarred]);
   }
 

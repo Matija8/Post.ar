@@ -1,8 +1,8 @@
 <div class="draft-item unselectable" (click)="OpenCompose()">
     <div>select</div>
-    <input type="checkbox" (click)="$event.stopPropagation()"
+    <mat-checkbox (click)="$event.stopPropagation()"
         [checked]="isSelected"
-        (change)="selectToggle()">
+        (change)="selectToggle()"></mat-checkbox>
     <div class="draft-item-subject"> Subject: {{ draft.subject }} </div>
     <div class="draft-item-to"> To: {{ draft.to }} </div>
 </div>

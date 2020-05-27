@@ -1,11 +1,11 @@
 <!-- List header -->
-<div class="draft-list-header">
+<mat-card class="draft-list-header">
     <div class="left">
       <div> selected: {{ selectedChar() }} </div>
       <div id="none-selected" *ngIf="selectedChar() === 'None'">
-        <button
+        <button mat-raised-button color="primary"
           (click)="refreshFolder()">
-          Refresh
+          refresh
         </button>
       </div>
 
@@ -14,7 +14,7 @@
     <div class="right">
     </div>
 
-  </div>
+  </mat-card>
 
   <!-- List items -->
   <postar-draft-item
