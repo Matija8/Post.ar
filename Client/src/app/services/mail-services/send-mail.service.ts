@@ -20,7 +20,7 @@ export class SendMailService {
 
   send(message: EditorMessage) {
     this.http.post('http://localhost:8000/send', {
-      recipient: message.to,
+      to: message.to,
       subject: message.subject,
       content: message.messageText
     }).subscribe(
