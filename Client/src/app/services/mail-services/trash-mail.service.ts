@@ -51,18 +51,24 @@ export class TrashMailService {
     return response;
   }
 
-  // TODO: Change to array of messages ({messageId: string, type: string}[])
-  // after server gets updated to accept that format.
-  // 'Type' (folder) might not be neccessary.
-  restoreFromTrash(messageId: string, type: string) {
+  restoreFromTrash(messages: TagData[]) {
     // TODO
     console.log('trash-mail service: Restore from trash called (TODO)');
 
-    const sourceFolder = this.getMail.folders[type] as MessageFolder;
-    // Folders are updated here!
-    sourceFolder.removeByIds([messageId]);
+    const messagesPerFolder = new Map<string, string[]>();
+    for (const {messageId, type} of messages) {
+      const newMessages = messagesPerFolder.get(type) || [];
+      newMessages.push(messageId);
+      messagesPerFolder.set(type, newMessages);
+    }
 
-    const response = this.http.post('http://localhost:8000/trash/undoDelete', {messageId, type});
+    for (const folderName of messagesPerFolder.keys()) {
+      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
+      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
+    }
+
+
+    const response = this.http.post('http://localhost:8000/trash/undoDelete', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
@@ -71,7 +77,8 @@ export class TrashMailService {
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
-        sourceFolder.refreshFolder();
+        this.getMail.folders.inbox.refreshFolder();
+        this.getMail.folders.sent.refreshFolder();
         // TODO: A pop-up (modal) that informs user that deleting failed!?
       }
     );
@@ -79,26 +86,34 @@ export class TrashMailService {
     return response;
   }
 
-  deleteForever(messageId: string, type: string) {
+  deleteForever(messages: TagData[]) {
     // TODO
     console.log('trash-mail service: Delete forever called (TODO)');
     // TODO: Add remove by ids to trash.
     // this.getMail.folders.trash.removeByIds();
 
-    const sourceFolder = this.getMail.folders[type] as MessageFolder;
-    // Folders are updated here!
-    sourceFolder.removeByIds([messageId]);
+    const messagesPerFolder = new Map<string, string[]>();
+    for (const {messageId, type} of messages) {
+      const newMessages = messagesPerFolder.get(type) || [];
+      newMessages.push(messageId);
+      messagesPerFolder.set(type, newMessages);
+    }
 
-    const response = this.http.post('http://localhost:8000/trash/deleteForever', {messageId, type});
+    for (const folderName of messagesPerFolder.keys()) {
+      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
+      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
+    }
+
+
+    const response = this.http.post('http://localhost:8000/trash/deleteForever', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
         this.getMail.folders.trash.refreshFolder();
-        this.getMail.folders.all.refreshFolder();
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
-        sourceFolder.refreshFolder();
+        this.getMail.folders.trash.refreshFolder();
         // TODO: A pop-up (modal) that informs user that deleting failed!?
       }
     );

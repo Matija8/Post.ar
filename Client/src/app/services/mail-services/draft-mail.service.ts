@@ -24,7 +24,7 @@ export class DraftMailService {
       console.log('Server requires content != "" to save a draft.');
       return;
     }
-    const response = this.http.post('http://localhost:8000/saveDraft', draftToSave);
+    const response = this.http.post('http://localhost:8000/drafts/save', draftToSave);
     response.subscribe(
       (res: any) => {
         console.log(res);
