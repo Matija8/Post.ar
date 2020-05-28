@@ -97,6 +97,30 @@ export class MessageFolder extends SimpleFolder<Message> {
 }
 
 
+// TODO: Server format tmp.
+export class InboxTmp extends MessageFolder {
+
+  constructor(
+    http: HttpWrapperService,
+    secretar: SecretarService,
+    GET_REQUEST_URL: string,
+    EMPTY_FOLDER_ERR_CODE: number
+  ) {
+    super(http, secretar, GET_REQUEST_URL, EMPTY_FOLDER_ERR_CODE);
+  }
+
+  protected handleResponse(res: any) {
+    const data = this.secretar.decryptAndVerify(
+      res.payload.data,
+      res.payload.secret,
+      res.payload.hash
+    );
+    this.stream.next(data);
+  }
+}
+// /TODO: Server format tmp.
+
+
 export class TrashFolder extends SimpleFolder<Message> {
 
   constructor(
@@ -108,14 +132,22 @@ export class TrashFolder extends SimpleFolder<Message> {
   }
 
   protected handleResponse(res: any): void {
-    const dataJSON = this.secretar.decryptAndVerify(
+    // TODO: Server format tmp.
+    // Before server format change.
+    /* const dataJSON = this.secretar.decryptAndVerify(
       res.payload.data,
       res.payload.secret,
       res.payload.hash
     );
-    const data = JSON.parse(dataJSON);
+    const data = JSON.parse(dataJSON); */
+    const data = this.secretar.decryptAndVerify(
+      res.payload.data,
+      res.payload.secret,
+      res.payload.hash
+    );
     console.log('handleResponse trash folder:', data);
-    this.stream.next(data.inbox.concat(data.sentMessages));
+    this.stream.next(data.inbox.concat(data.sent));
+    // /TODO: Server format tmp.
   }
 
   protected handleError(err: any): void {

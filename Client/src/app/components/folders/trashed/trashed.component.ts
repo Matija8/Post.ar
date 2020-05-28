@@ -55,13 +55,13 @@ export class TrashedComponent extends Selectable implements OnInit, OnDestroy {
   onDeleteForever([messageId, type]: [string, string]): void {
     // TODO: Convert to tagData[], as well as trashMail.deleteForever.
     console.log('Trashed component.ts: onDeleteForever (TODO)');
-    this.trashMail.deleteForever(messageId, type);
+    // this.trashMail.deleteForever(messageId, type);
   }
 
   onRestore([messageId, type]: [string, string]): void {
     // TODO
     console.log('Trashed component.ts: onRestore');
-    this.trashMail.restoreFromTrash(messageId, type);
+    // this.trashMail.restoreFromTrash(messageId, type);
   }
 
 }

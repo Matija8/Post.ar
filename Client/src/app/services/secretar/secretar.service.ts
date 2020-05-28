@@ -31,7 +31,7 @@ export class SecretarService {
       let hashData = forgeMd.sha256.create();
       hashData.update(decipher.output.toString());
       hashData = util.bytesToHex(hashData.digest().data);
-  
+
       const md = forgeMd.sha256.create();
       md.update(hashData);
 
@@ -40,8 +40,12 @@ export class SecretarService {
         util.hexToBytes(hash)
       );
 
+      console.log('Secretar decrypted: ', decrypted);
+      console.log('Verified: ', result);
+
       return result ? decrypted : undefined;
     } catch (err) {
+      console.log(err);
       return undefined;
     }
   }

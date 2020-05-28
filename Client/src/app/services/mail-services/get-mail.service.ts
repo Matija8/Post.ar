@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SecretarService } from '../secretar/secretar.service';
-import { Folder, SimpleFolder, AggregateFolder, MessageFolder, TrashFolder } from 'src/app/models/Folder';
+import { SimpleFolder, AggregateFolder, MessageFolder, TrashFolder, InboxTmp } from 'src/app/models/Folder';
 import { HttpWrapperService } from './http-wrapper.service';
 import { Observable, zip } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -24,7 +24,9 @@ export class GetMailService {
     private secretar: SecretarService,
   ) {
     const messageFolders = {
-      inbox: new MessageFolder(this.http, this.secretar, 'http://localhost:8000/inbox', 1005),
+      // TODO: Server format tmp.
+      inbox: new InboxTmp(this.http, this.secretar, 'http://localhost:8000/inbox', 1005),
+      // /TODO: Server format tmp.
       sent: new MessageFolder(this.http, this.secretar, 'http://localhost:8000/sent', 1009),
     };
     this.folders = {
