@@ -99,13 +99,13 @@ export const Routes = [
         controller: StarredController,
         method: "post",
         path: "/starred/save",
-        handler: "starMessage"
+        handler: "starMessages"
     },
     {
         controller: StarredController,
         method: "post",
         path: "/starred/remove",
-        handler: "removeStarredMessage"
+        handler: "removeStarredMessages"
     },
     // trash controller routes
     {
