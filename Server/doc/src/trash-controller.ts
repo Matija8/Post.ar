@@ -143,5 +143,5 @@
   * @apiError 1000 Unauthorized access
   * @apiError 1001 Invalid payload, field missing or invalid in request
   * @apiError 1013 Invalid message type
-  * @apiError 1023 Successfully deleted message forever
+  * @apiError 1023 Failed to delete messages forever
   **/

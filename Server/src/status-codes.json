@@ -47,6 +47,6 @@
         "1020": "Failed to remove starred message",
         "1021": "Failed to change user theme",
         "1022": "User session not found",
-        "1023": "Successfully deleted message forever"
+        "1023": "Failed to delete messages forever"
     }
 }   

@@ -206,7 +206,7 @@ export class TrashController {
                 this.logger.info("done", "/trash/deleteForever");
             }
         }).catch(err => {
-            createResponse(response, 400, 1019);
+            createResponse(response, 400, 1023);
             this.logger.fatal(err, "/trash/deleteForever");
         });
 
