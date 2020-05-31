@@ -176,34 +176,39 @@ export class TrashController {
 
         this.logger.debug("validate payload", "/trash/deleteForever");
         const body = request.body;
-        if (PayloadValidator.validate(body, ["messageId", "type"])) {
+        if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001);
             this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        this.logger.debug("delete message", "/trash/deleteForever");
-        try {
-            switch (body.type) {
-                case "inbox":
-                    await this.inboxRepository.delete({ messageId: body.messageId });
-                    break;
+        this.logger.debug("delete messages forever", "/trash/deleteForever");
+        await getManager().transaction(async entityManager =>{
+            for (const message of body.messages) {
+                switch (message.type) {
+                    case "inbox":
+                        await entityManager.delete(Inbox,
+                            { messageId: message.messageId }
+                        );
+                        break;
+                    case "sent":
+                        await entityManager.delete(Sent,
+                            { messageId: message.messageId }
+                        );
+                        break;
 
-                case "sent":
-                    await this.sentRepository.delete({ messageId: body.messageId });
-                    break;
-
-                default:
-                    createResponse(response, 400, 1013);
-                    this.logger.info("done", "/trash/deleteForever");
-                    return;
+                    default:
+                        createResponse(response, 400, 1013);
+                        this.logger.info("done", "/trash/deleteForever");
+                        return;
+                }
+                createResponse(response, 200, 2015);
+                this.logger.info("done", "/trash/deleteForever");
             }
-        } catch (err) {
-            createResponse(response, 400, 1023);
+        }).catch(err => {
+            createResponse(response, 400, 1019);
             this.logger.fatal(err, "/trash/deleteForever");
-            this.logger.info("done", "/trash/deleteForever");
-            return;
-        }
+        });
 
         createResponse(response, 200, 2019);
         this.logger.info("done", "/trash/deleteForever");

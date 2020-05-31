@@ -121,9 +121,19 @@
   * @apiName deleteForever
   * @apiGroup TrashController
   *
-  * @apiParam {String} messageId Unique message id.
-  * @apiParam {String[]} type Message type. Allowed values "inbox", "sent".
-  *
+  *  @apiParam {String[]} messages List of message objects
+  * @apiParamExample {json} messages
+  *     [
+  *         {
+  *             "messageId": "567cf053-a302-4d61-b25a-e260d3736f40",
+  *             "type": "inbox"
+  *         },
+  *         {
+  *             "messageId": "67c090c6-6d30-462a-bee1-57a6cd8b8066",
+  *             "type": "sent"
+  *         }
+  *     ]
+  * 
   * @apiDescription Delete message forever.
   * 
   * To access this route, user needs to have an active session.
