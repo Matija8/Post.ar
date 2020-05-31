@@ -202,16 +202,15 @@ export class TrashController {
                         this.logger.info("done", "/trash/deleteForever");
                         return;
                 }
-                createResponse(response, 200, 2015);
-                this.logger.info("done", "/trash/deleteForever");
             }
+
+            createResponse(response, 200, 2019);
+            this.logger.info("done", "/trash/deleteForever");
         }).catch(err => {
             createResponse(response, 400, 1023);
             this.logger.fatal(err, "/trash/deleteForever");
         });
 
-        createResponse(response, 200, 2019);
-        this.logger.info("done", "/trash/deleteForever");
     }
 
 
