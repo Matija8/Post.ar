@@ -210,8 +210,6 @@ export class TrashController {
             createResponse(response, 400, 1023);
             this.logger.fatal(err, "/trash/deleteForever");
         });
-
     }
-
 
 }

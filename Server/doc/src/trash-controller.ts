@@ -141,7 +141,7 @@
   * @apiSuccess (200) {Number} 2019 Successfully deleted message forever
   *
   * @apiError 1000 Unauthorized access
-  * @apiError 1001 Invalid payload, field missing or invalid in request
-  * @apiError 1013 Invalid message type
+  * @apiError 1001 Invalid payload,lid message ty field missing or invalid in request
+  * @apiError 1013 Invape
   * @apiError 1023 Failed to delete messages forever
   **/
