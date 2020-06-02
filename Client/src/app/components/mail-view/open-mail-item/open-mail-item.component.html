@@ -11,7 +11,7 @@
     {{ this.msg.content }}
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button color="warn">delete</button>
+    <button mat-button color="warn" (click)="onDelete()">delete</button>
     <button mat-button color="primary" (click)="onReply()">reply</button>
   </mat-card-actions>
 </mat-card>

@@ -1,20 +1,25 @@
 <!-- List header -->
-<div class="trash-list-header">
+<mat-card class="trash-list-header">
+
   <div class="left">
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected" *ngIf="selectedChar() === 'None'">
-      <button
+    <div id="none-selected" *ngIf="selectedChar() === 'None' else deleteSelectedBlock">
+      <button mat-raised-button color="primary"
         (click)="refreshFolder()">
-        Refresh
+        refresh
       </button>
     </div>
+    <ng-template #deleteSelectedBlock>
+      <!-- //TODO: implement delete selected  -->
+      <button mat-raised-button color="warn">delete selected</button>
+    </ng-template>
 
   </div>
 
   <div class="right">
   </div>
 
-</div>
+</mat-card>
 
 <!-- List items -->
 <postar-trashed-item

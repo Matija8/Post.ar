@@ -95,4 +95,8 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
 
   }
 
+  onDelete(): void {
+
+  }
+
 }

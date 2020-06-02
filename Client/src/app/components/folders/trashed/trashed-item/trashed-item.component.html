@@ -1,15 +1,14 @@
-<div class="trash-item unselectable" [routerLink]="[router.url, msg.messageId]">
-    <div>select</div>
-    <input type="checkbox" (click)="$event.stopPropagation()"
+<mat-card class="trash-item unselectable" [routerLink]="[router.url, msg.messageId]">
+    <p></p>
+    <mat-checkbox (click)="$event.stopPropagation()"
         [checked]="isSelected"
-        (change)="selectToggle()">
-    <button type="button"
-        class="btn btn-danger"
+        (change)="selectToggle()"></mat-checkbox>
+    <p></p>
+    <button mat-raised-button color="warn" type="button"
         (click)="deleteForever($event)">
         delete forever
     </button>
-    <button type="button"
-        class="btn btn-primary"
+    <button mat-raised-button color="primary" type="button"
         (click)="restore($event)">
         restore
     </button>
@@ -17,4 +16,4 @@
     <ng-template #From>
         <div class="trash-item-title"> From: {{ msg.from }} </div>
     </ng-template>
-</div>
+</mat-card>

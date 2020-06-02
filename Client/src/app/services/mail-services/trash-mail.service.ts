@@ -62,12 +62,6 @@ export class TrashMailService {
       messagesPerFolder.set(type, newMessages);
     }
 
-    for (const folderName of messagesPerFolder.keys()) {
-      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
-      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
-    }
-
-
     const response = this.http.post('http://localhost:8000/trash/undoDelete', {messages});
     response.subscribe(
       (res: any): void => {
@@ -89,8 +83,6 @@ export class TrashMailService {
   deleteForever(messages: TagData[]) {
     // TODO
     console.log('trash-mail service: Delete forever called (TODO)');
-    // TODO: Add remove by ids to trash.
-    // this.getMail.folders.trash.removeByIds();
 
     const messagesPerFolder = new Map<string, string[]>();
     for (const {messageId, type} of messages) {
@@ -98,12 +90,6 @@ export class TrashMailService {
       newMessages.push(messageId);
       messagesPerFolder.set(type, newMessages);
     }
-
-    for (const folderName of messagesPerFolder.keys()) {
-      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
-      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
-    }
-
 
     const response = this.http.post('http://localhost:8000/trash/deleteForever', {messages});
     response.subscribe(
