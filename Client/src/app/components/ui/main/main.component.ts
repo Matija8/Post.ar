@@ -14,6 +14,8 @@ export class MainComponent implements OnInit, OnDestroy {
   private insideAFolder: boolean;
   private sub: Subscription = null;
 
+  public opened: boolean;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,

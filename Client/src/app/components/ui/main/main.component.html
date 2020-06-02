@@ -1,18 +1,24 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<postar-header *ngIf="shouldHeaderRender()"></postar-header>
+<postar-header *ngIf="shouldHeaderRender()" (clickEmitter)="sidenav.toggle()"></postar-header>
 
 <main [ngClass]="{'under-header': shouldHeaderRender()}">
 
-    <postar-sidebar
-        *ngIf="shouldSidebarRender()">
-    </postar-sidebar>
+    <mat-sidenav-container style="height: inherit;">
+      <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="sidenav">
+        <postar-compose
+          *ngIf="shouldSidebarRender()">
+        </postar-compose>
+        <postar-sidebar
+          *ngIf="shouldSidebarRender()">
+        </postar-sidebar>
+      </mat-sidenav>
 
-    <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
-        <router-outlet #routerOutlet="outlet" ></router-outlet>
-    </div>
+      <mat-sidenav-content>
+        <div [ngClass]="{'right-of-sidebar': shouldSidebarRender()}">
+          <router-outlet #routerOutlet="outlet" ></router-outlet>
+        </div>
 
-    <postar-compose
-        *ngIf="shouldSidebarRender()">
-    </postar-compose>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
 
 </main>

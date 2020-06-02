@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChangeThemeService } from '../../../services/ui-services/change-theme.service';
 import { AuthService } from '../../../services/mail-services/auth.service';
@@ -17,6 +17,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public letter = ' ';
   public name = ' ';
   public surname = ' ';
+
+  @Output() clickEmitter = new EventEmitter<void>();
 
   constructor(private changeThemeService: ChangeThemeService, private auth: AuthService, private router: Router) { }
 
@@ -52,6 +54,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.auth.userLogout().subscribe(_ => {
       this.router.navigate(['/login']);
     });
+  }
+
+  onMenuClick(): void {
+    this.clickEmitter.emit();
   }
 
 }
