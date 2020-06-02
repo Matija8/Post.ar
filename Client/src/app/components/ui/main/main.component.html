@@ -3,11 +3,8 @@
 
 <main [ngClass]="{'under-header': shouldHeaderRender()}">
 
-    <mat-sidenav-container style="height: inherit;">
+    <mat-sidenav-container style="height: 100%;">
       <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="sidenav">
-        <postar-compose
-          *ngIf="shouldSidebarRender()">
-        </postar-compose>
         <postar-sidebar
           *ngIf="shouldSidebarRender()">
         </postar-sidebar>
@@ -18,7 +15,11 @@
           <router-outlet #routerOutlet="outlet" ></router-outlet>
         </div>
 
+
       </mat-sidenav-content>
     </mat-sidenav-container>
+    <postar-compose
+      *ngIf="shouldSidebarRender()">
+    </postar-compose>
 
 </main>
