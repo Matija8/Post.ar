@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EditorMessage } from '../../models/Compose';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
+import { SecretarService } from '../secretar/secretar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class SendMailService {
   constructor(
     private http: HttpWrapperService,
     private getMail: GetMailService,
-    ) {}
+    private secretar: SecretarService
+  ) {}
 
 
   validTo(to: string): boolean {
@@ -19,10 +21,10 @@ export class SendMailService {
   }
 
   send(message: EditorMessage) {
+    const encryptedMessage = this.secretar.encryptMessage({subject: message.subject, body: message.messageText});
     this.http.post('http://localhost:8000/send', {
       to: message.to,
-      subject: message.subject,
-      content: message.messageText
+      content: encryptedMessage
     }).subscribe(
       (res: any) => {
         console.log(res);
