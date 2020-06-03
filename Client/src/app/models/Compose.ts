@@ -13,20 +13,6 @@ export const makeEmptyEditorMsg = function createEmptyEditorMessage(): EditorMes
   return {to: '', cc: '', bcc: '', subject: '', messageText: ''};
 };
 
-interface ServerDraftFormat {
-  subject: string;
-  to: string;
-  content: string;
-}
-
-export const toDraftable = function convertEditorToFormatForTheServerToSaveAsADraft(edMsg: EditorMessage): ServerDraftFormat {
-  return {
-    subject: edMsg.subject,
-    to: edMsg.to,
-    content: edMsg.messageText
-  };
-};
-
 export const checkEmpty = function checkIfEditorMessageIsEmpty(message: EditorMessage) {
   return Object.values(message).every((field: string) => field === '');
 };

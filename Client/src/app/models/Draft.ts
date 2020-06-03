@@ -1,19 +1,19 @@
 import { EditorMessage } from './Compose';
 
-export class Draft {
+export interface Draft {
   messageId: string;
   to: string;
   subject: string;
-  content: string;
+  body: string;
   timestamp?: string;
-
-  toEditorMessage(): EditorMessage {
-    return {
-      to: this.to,
-      cc: '',
-      bcc: '',
-      subject: this.subject,
-      messageText: this.content,
-    };
-  }
 }
+
+export const toEditorMessage = function DraftToEditorMessage(draft: Draft): EditorMessage {
+  return {
+    to: draft.to,
+    cc: '',
+    bcc: '',
+    subject: draft.subject,
+    messageText: draft.body,
+  };
+};

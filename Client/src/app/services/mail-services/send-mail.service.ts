@@ -3,6 +3,7 @@ import { EditorMessage } from '../../models/Compose';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { SecretarService } from '../secretar/secretar.service';
+import { SMessage } from 'src/app/models/Messages';
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +22,17 @@ export class SendMailService {
   }
 
   send(message: EditorMessage) {
-    const encryptedMessage = this.secretar.encryptMessage({subject: message.subject, body: message.messageText});
+    const contentToEncrypt = {
+      subject: message.subject,
+      content: message.messageText
+    };
+    const content = this.secretar.encryptMessage(contentToEncrypt);
     this.http.post('http://localhost:8000/send', {
       to: message.to,
-      content: encryptedMessage
+      content,
     }).subscribe(
       (res: any) => {
         console.log(res);
-        // TODO: Nemoj da refreshujes nego poruku koju dobijes nazad appenduj na sent!
         this.getMail.folders.sent.refreshFolder();
       },
       (err: any) => {
