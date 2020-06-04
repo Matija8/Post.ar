@@ -1,30 +1,26 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Subscription } from 'rxjs';
-import { Selectable } from 'src/app/models/Selectable/Selectable';
-import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
 import { Draft } from 'src/app/models/Draft';
+import { DraftMailService } from 'src/app/services/mail-services/draft-mail.service';
 
 @Component({
   selector: 'postar-drafts',
   templateUrl: './drafts.component.html',
   styleUrls: ['./drafts.component.css']
 })
-export class DraftsComponent extends Selectable implements OnInit, OnDestroy {
-
-  @Output() refresh = new EventEmitter<void>();
-  @Output() starredEmitter = new EventEmitter<void>();
+export class DraftsComponent implements OnInit, OnDestroy {
 
   public draftsList: Draft[];
 
   private folder = this.getMail.folders.drafts;
+  protected selected: Set<string>;
   private subscription: Subscription = null;
 
   constructor(
     private getMail: GetMailService,
-  ) {
-    super();
-  }
+    private draftService: DraftMailService,
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.folder.contents.subscribe(
@@ -35,7 +31,7 @@ export class DraftsComponent extends Selectable implements OnInit, OnDestroy {
         console.log('Error during drafts subscription: ', error);
       }
     );
-    this.selected = new TagDataSet();
+    this.selected = new Set<string>();
   }
 
   ngOnDestroy(): void {
@@ -46,12 +42,31 @@ export class DraftsComponent extends Selectable implements OnInit, OnDestroy {
     this.selected = null;
   }
 
+  onSelect([draftId, add]: [string, boolean]): void {
+    if (add) {
+      this.selected.add(draftId);
+    } else {
+      this.selected.delete(draftId);
+    }
+  }
+
   selectedChar(): string {
-    return super.selectedChar(this.draftsList);
+    const numOfMsgItems = this.draftsList ? this.draftsList.length : 0;
+    if (this.selected.size === 0) {
+      return 'None';
+    }
+    if (this.selected.size >= numOfMsgItems) {
+      return 'All';
+    }
+    return 'Some';
   }
 
   refreshFolder(): void {
     console.log('Refreshing drafts!');
+  }
+
+  onDelete(draftId: string): void {
+    this.draftService.discardDraft(draftId);
   }
 
 }

@@ -21,9 +21,14 @@ export class DraftMailService {
     if (!edMsg) {
       return throwError('Bad editor message!');
     }
-    const content = this.secretar.encryptMessage({ body: edMsg.messageText });
-    const draftToSave = {
+    if (!edMsg.to) {
+      return throwError('Server needs "to" to save the draft!');
+    }
+    const content = this.secretar.encryptMessage({
       subject: edMsg.subject,
+      body: edMsg.messageText,
+    });
+    const draftToSave = {
       to: edMsg.to,
       content,
     };
@@ -40,6 +45,23 @@ export class DraftMailService {
     return response.pipe(take(1));
   }
 
-  // TODO: discardDraft() {}
+  discardDraft(draftId: string): void {
+    const response = this.http.post('http://localhost:8000/drafts/discard', { messageId: draftId });
+    response.subscribe(
+      (res: any) => {
+        console.log(res);
+        this.getMail.folders.drafts.refreshFolder();
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
+  discardDrafts(draftIds: string[]): void {
+    for (const draftId of draftIds) {
+      this.discardDraft(draftId);
+    }
+  }
 
 }

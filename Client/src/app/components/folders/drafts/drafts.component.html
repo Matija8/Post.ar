@@ -20,5 +20,6 @@
   <postar-draft-item
   *ngFor="let draft of draftsList" [draft]=draft
     (selectEmitter)="onSelect($event)"
+    (deleteEmitter)="onDelete($event)"
     >
   </postar-draft-item>

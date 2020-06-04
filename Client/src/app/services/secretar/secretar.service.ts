@@ -40,8 +40,8 @@ export class SecretarService {
         util.hexToBytes(hash)
       );
 
-      console.log('Secretar decrypted: ', decrypted);
-      console.log('Verified: ', result);
+      // console.log('Secretar decrypted: ', decrypted);
+      // console.log('Verified: ', result);
 
       return result ? decrypted : undefined;
     } catch (err) {
