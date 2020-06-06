@@ -9,8 +9,18 @@
       </button>
     </div>
     <ng-template #deleteSelectedBlock>
-      <!-- //TODO: implement delete selected  -->
-      <button mat-raised-button color="warn">delete selected</button>
+      <button mat-raised-button color="warn"
+        (click)="batchDelete()">
+        delete selected
+      </button>
+      <button mat-raised-button color="primary"
+        (click)="batchStar(true)">
+        star
+      </button>
+      <button mat-raised-button color="primary"
+        (click)="batchStar(false)">
+        unstar
+      </button>
     </ng-template>
 
   </div>

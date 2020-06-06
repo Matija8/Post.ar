@@ -30,8 +30,4 @@ export class Selectable {
     return 'Some';
   }
 
-  clearSelected(): void {
-    this.selected.clear();
-  }
-
 }
