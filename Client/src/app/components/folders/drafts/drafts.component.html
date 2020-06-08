@@ -2,12 +2,20 @@
 <mat-card class="draft-list-header">
     <div class="left">
       <div> selected: {{ selectedChar() }} </div>
-      <div id="none-selected" *ngIf="selectedChar() === 'None'">
+      <div id="none-selected"
+        *ngIf="selectedChar() === 'None';
+        else someSelected">
         <button mat-raised-button color="primary"
           (click)="refreshFolder()">
           refresh
         </button>
       </div>
+      <ng-template #someSelected>
+        <button mat-raised-button color="warn"
+          (click)="batchDelete()">
+          delete selected
+        </button>
+      </ng-template>
 
     </div>
 

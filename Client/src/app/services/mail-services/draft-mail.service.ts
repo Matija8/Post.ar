@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, zip } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EditorMessage } from 'src/app/models/Compose';
 import { SecretarService } from '../secretar/secretar.service';
@@ -35,7 +35,7 @@ export class DraftMailService {
     const response = this.http.post('http://localhost:8000/drafts/save', draftToSave);
     response.subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
         this.getMail.folders.drafts.refreshFolder();
       },
       (err: any) => {
@@ -45,23 +45,35 @@ export class DraftMailService {
     return response.pipe(take(1));
   }
 
-  discardDraft(draftId: string): void {
+  discardDraft(draftId: string): Observable<any> {
     const response = this.http.post('http://localhost:8000/drafts/discard', { messageId: draftId });
     response.subscribe(
       (res: any) => {
-        console.log(res);
-        this.getMail.folders.drafts.refreshFolder();
+        // console.log(res);
       },
       (err: any) => {
         console.log(err);
       }
     );
+    return response.pipe(take(1));
   }
 
-  discardDrafts(draftIds: string[]): void {
+  discardDrafts(draftIds: string[]): Observable<any> {
+    const responses = [];
     for (const draftId of draftIds) {
-      this.discardDraft(draftId);
+      responses.push(this.discardDraft(draftId));
     }
+    console.log(responses);
+    const zipped = zip(...responses).pipe(take(1));
+    zipped.subscribe(
+      (res: any) => {
+        // console.log(res);
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+    return zipped;
   }
 
 }
