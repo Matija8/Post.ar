@@ -49,10 +49,11 @@ export class DraftMailService {
     const response = this.http.post('http://localhost:8000/drafts/discard', { messageId: draftId });
     response.subscribe(
       (res: any) => {
-        // console.log(res);
+        this.getMail.folders.drafts.refreshFolder();
       },
       (err: any) => {
         console.log(err);
+        this.getMail.folders.drafts.refreshFolder();
       }
     );
     return response.pipe(take(1));
@@ -67,9 +68,10 @@ export class DraftMailService {
     const zipped = zip(...responses).pipe(take(1));
     zipped.subscribe(
       (res: any) => {
-        // console.log(res);
+        this.getMail.folders.drafts.refreshFolder();
       },
       (err: any) => {
+        this.getMail.folders.drafts.refreshFolder();
         console.log(err);
       }
     );

@@ -12,7 +12,7 @@
       </div>
       <ng-template #someSelected>
         <button mat-raised-button color="warn"
-          (click)="batchDelete()">
+          (click)="deleteSelected()">
           delete selected
         </button>
       </ng-template>
@@ -26,7 +26,9 @@
 
   <!-- List items -->
   <postar-draft-item
-  *ngFor="let draft of draftsList" [draft]=draft
+  *ngFor="let draft of draftsList"
+    [draft]="draft"
+    [selected]="itemIsSelected(draft)"
     (selectEmitter)="onSelect($event)"
     (deleteEmitter)="onDelete($event)"
     >

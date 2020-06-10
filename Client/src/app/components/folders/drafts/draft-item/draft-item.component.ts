@@ -10,9 +10,9 @@ import { OpenComposeService } from 'src/app/services/ui-services/open-compose.se
 })
 export class DraftItemComponent implements OnInit {
   @Input() draft: Draft;
+  @Input() selected: boolean;
   @Output() selectEmitter = new EventEmitter<[string, boolean]>();
   @Output() deleteEmitter = new EventEmitter<string>();
-  public isSelected: boolean;
 
   constructor(
     public router: Router,
@@ -20,7 +20,6 @@ export class DraftItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isSelected = false;
   }
 
   OpenCompose() {
@@ -32,8 +31,7 @@ export class DraftItemComponent implements OnInit {
   }
 
   selectToggle() {
-    this.isSelected = !this.isSelected;
-    this.selectEmitter.emit([this.draft.messageId, this.isSelected]);
+    this.selectEmitter.emit([this.draft.messageId, !this.selected]);
   }
 
   deleteDraft(event: MouseEvent) {

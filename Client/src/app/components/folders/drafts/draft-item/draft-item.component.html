@@ -1,7 +1,7 @@
 <mat-card class="draft-item unselectable" (click)="OpenCompose()">
     <p></p>
     <mat-checkbox (click)="$event.stopPropagation()"
-        [checked]="isSelected"
+        [checked]="selected"
         (change)="selectToggle()"></mat-checkbox>
     <p></p>
     <button mat-raised-button color="warn" type="button"

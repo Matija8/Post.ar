@@ -15,7 +15,7 @@ export class DraftsComponent implements OnInit, OnDestroy {
   public draftsList: Draft[];
 
   private folder = this.getMail.folders.drafts;
-  protected selected: Set<string>;
+  private selected: Set<string>;
   private subscription: Subscription = null;
 
   constructor(
@@ -23,30 +23,47 @@ export class DraftsComponent implements OnInit, OnDestroy {
     private draftService: DraftMailService,
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.selected = new Set<string>();
     this.subscription = this.folder.contents.subscribe(
       (newDrafts: Draft[]): void => {
         this.draftsList = newDrafts;
-        if (this.selected) {
-          this.selected.clear();
-        }
+        this.selected = this.refreshSelectedSet(this.selected, this.draftsList);
       },
       (error: any): void => {
         console.log('Error during drafts subscription: ', error);
+        this.selected = this.refreshSelectedSet(this.selected, this.draftsList);
       }
     );
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.subscription !== null) {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
-    this.selected = null;
   }
 
-  onSelect([draftId, add]: [string, boolean]): void {
+  private refreshSelectedSet(selected: Set<string>, draftsList: Draft[]): Set<string> {
+    // Returns new set with deleted ids removed.
+    const newSelected = new Set<string>();
+    if (!selected) {
+      return newSelected;
+    }
+    const draftIds = draftsList.map(draft => draft.messageId);
+    for (const id of draftIds) {
+      if (selected.has(id)) {
+        newSelected.add(id);
+      }
+    }
+    return newSelected;
+  }
+
+  public itemIsSelected(draft: Draft): boolean {
+    return this.selected.has(draft.messageId);
+  }
+
+  public onSelect([draftId, add]: [string, boolean]): void {
     if (add) {
       this.selected.add(draftId);
     } else {
@@ -54,45 +71,28 @@ export class DraftsComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectedChar(): string {
-    const numOfMsgItems = this.draftsList ? this.draftsList.length : 0;
-    if (this.selected.size === 0) {
+  public selectedChar(): string {
+    const draftSize = this.draftsList ? this.draftsList.length : 0;
+    const selectedSize = this.selected ? this.selected.size : 0;
+    if (selectedSize === 0) {
       return 'None';
     }
-    if (this.selected.size >= numOfMsgItems) {
+    if (selectedSize >= draftSize) {
       return 'All';
     }
     return 'Some';
   }
 
-  refreshFolder(): void {
+  public refreshFolder(): void {
     this.folder.refreshFolder();
   }
 
-  onDelete(draftId: string): void {
-    this.draftService.discardDraft(draftId)
-    .pipe(take(1))
-    .subscribe(
-      res => {
-        this.draftsList = this.draftsList.filter(draft => draft.messageId !== draftId);
-        this.selected.delete(draftId);
-      },
-      err => this.folder.refreshFolder()
-    );
+  public onDelete(draftId: string): void {
+    this.draftService.discardDraft(draftId);
   }
 
-  batchDelete() {
-    console.log('Batch delete!');
-    const response = this.draftService.discardDrafts([...this.selected.values()]);
-    response.pipe(take(1))
-    .subscribe(
-      (res) => {
-        this.folder.refreshFolder();
-      },
-      (err) => {
-        this.folder.refreshFolder();
-      }
-    );
+  public deleteSelected(): void {
+    this.draftService.discardDrafts([...this.selected.values()]);
   }
 
 }
