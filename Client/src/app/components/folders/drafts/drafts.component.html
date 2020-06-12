@@ -1,35 +1,35 @@
 <!-- List header -->
 <mat-card class="draft-list-header">
-    <div class="left">
-      <div> selected: {{ selectedChar() }} </div>
-      <div id="none-selected"
-        *ngIf="selectedChar() === 'None';
-        else someSelected">
-        <button mat-raised-button color="primary"
-          (click)="refreshFolder()">
-          refresh
-        </button>
-      </div>
-      <ng-template #someSelected>
-        <button mat-raised-button color="warn"
-          (click)="deleteSelected()">
-          delete selected
-        </button>
-      </ng-template>
-
+  <div class="left">
+    <div> selected: {{ selectedChar() }} </div>
+    <div id="none-selected"
+      *ngIf="selectedChar() === 'None';
+      else someSelected">
+      <button mat-raised-button color="primary"
+        (click)="refreshFolder()">
+        refresh
+      </button>
     </div>
+    <ng-template #someSelected>
+      <button mat-raised-button color="warn"
+        (click)="deleteSelected()">
+        delete selected
+      </button>
+    </ng-template>
 
-    <div class="right">
-    </div>
+  </div>
 
-  </mat-card>
+  <div class="right">
+  </div>
 
-  <!-- List items -->
-  <postar-draft-item
-  *ngFor="let draft of draftsList"
-    [draft]="draft"
-    [selected]="itemIsSelected(draft)"
-    (selectEmitter)="onSelect($event)"
-    (deleteEmitter)="onDelete($event)"
-    >
-  </postar-draft-item>
+</mat-card>
+
+<!-- List items -->
+<postar-draft-item
+*ngFor="let draft of draftsList"
+  [draft]="draft"
+  [selected]="itemIsSelected(draft)"
+  (selectEmitter)="onSelect($event)"
+  (deleteEmitter)="onDelete($event)"
+  >
+</postar-draft-item>

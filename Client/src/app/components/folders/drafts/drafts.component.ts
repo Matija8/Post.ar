@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Subscription } from 'rxjs';
 import { Draft } from 'src/app/models/Draft';
 import { DraftMailService } from 'src/app/services/mail-services/draft-mail.service';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'postar-drafts',
@@ -42,6 +41,10 @@ export class DraftsComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
+  }
+
+  public refreshFolder(): void {
+    this.folder.refreshFolder();
   }
 
   private refreshSelectedSet(selected: Set<string>, draftsList: Draft[]): Set<string> {
@@ -83,16 +86,13 @@ export class DraftsComponent implements OnInit, OnDestroy {
     return 'Some';
   }
 
-  public refreshFolder(): void {
-    this.folder.refreshFolder();
-  }
-
   public onDelete(draftId: string): void {
     this.draftService.discardDraft(draftId);
   }
 
   public deleteSelected(): void {
     this.draftService.discardDrafts([...this.selected.values()]);
+    this.selected.clear();
   }
 
 }
