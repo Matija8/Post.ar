@@ -15,7 +15,7 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
 
   public msg: Message;
   private folderName: string;
-  private folder: Folder;
+  private folder: Folder<Message>;
   private routeSub: Subscription = null;
   private folderSub: Subscription = null;
 

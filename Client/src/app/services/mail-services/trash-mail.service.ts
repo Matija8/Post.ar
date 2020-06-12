@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
-import { MessageFolder } from 'src/app/models/Folder';
 import { TagData } from 'src/app/models/TagData/TagData';
 
 @Injectable({
@@ -16,32 +15,13 @@ export class TrashMailService {
   ) {}
 
   moveToTrash(messages: TagData[]): Observable<any> {
-    // Option 1:
-    /* for (const {messageId, type} of messages) {
-      const sourceFolder = this.getMail.folders[type] as MessageFolder;
-      sourceFolder.removeByIds([messageId]);
-    } */
-    // Option 1/
-    // Option 2:
-    const messagesPerFolder = new Map<string, string[]>();
-    for (const {messageId, type} of messages) {
-      const newMessages = messagesPerFolder.get(type) || [];
-      newMessages.push(messageId);
-      messagesPerFolder.set(type, newMessages);
-    }
-    for (const folderName of messagesPerFolder.keys()) {
-      const sourceFolder = this.getMail.folders[folderName] as MessageFolder;
-      sourceFolder.removeByIds(messagesPerFolder.get(folderName));
-    }
-    // Option 2/
     const response = this.http.post('http://localhost:8000/trash/delete', {messages});
     response.subscribe(
       (res: any): void => {
-        console.log('trash-mail-service', res);
-        this.getMail.folders.trash.refreshFolder();
+        this.getMail.folders.inbox.refreshFolder();
+        this.getMail.folders.sent.refreshFolder();
       },
       (err: any): void => {
-        console.log('trash-mail-service', err);
         this.getMail.folders.inbox.refreshFolder();
         this.getMail.folders.sent.refreshFolder();
         // TODO: A pop-up (modal) that informs user that deleting failed!?

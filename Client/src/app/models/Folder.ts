@@ -1,18 +1,18 @@
-import { BehaviorSubject, Observable, of, combineLatest, zip } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, zip } from 'rxjs';
 import { skipWhile, map, take } from 'rxjs/operators';
 import { Message } from './Messages';
 import { SecretarService } from '../services/secretar/secretar.service';
 import { HttpWrapperService } from '../services/mail-services/http-wrapper.service';
 
-export abstract class Folder {
-  public readonly contents: Observable<any[]>;
+export abstract class Folder<T> {
+  public readonly contents: Observable<T[]>;
   public abstract refreshFolder(): Observable<boolean>;
   public abstract emptyFolder(): Observable<boolean>;
   public abstract waitForActivation(): Observable<boolean>;
 }
 
 
-export class SimpleFolder<T> extends Folder {
+export class SimpleFolder<T> extends Folder<T> {
   protected readonly stream = new BehaviorSubject<T[]>(null);
   public readonly contents: Observable<T[]> = Object.freeze(this.stream.asObservable());
 
@@ -110,24 +110,7 @@ export class SimpleFolder<T> extends Folder {
 }
 
 
-export class MessageFolder extends SimpleFolder<Message> {
-
-  constructor(
-    http: HttpWrapperService,
-    secretar: SecretarService,
-    GET_REQUEST_URL: string,
-    EMPTY_FOLDER_ERR_CODE: number
-  ) {
-    super(http, secretar, GET_REQUEST_URL, EMPTY_FOLDER_ERR_CODE);
-  }
-
-  public removeByIds(idsToDelete: string[]): void {
-    this.stream.next(this.stream.getValue().filter(msg => !idsToDelete.includes(msg.messageId)));
-  }
-}
-
-
-export class InboxFolder extends MessageFolder {
+export class InboxFolder extends SimpleFolder<Message> {
 
   constructor(
     http: HttpWrapperService,
@@ -179,12 +162,13 @@ export class TrashFolder extends SimpleFolder<Message> {
 }
 
 
-export class AggregateFolder {
+export class AggregateFolder<T> extends Folder<T> {
 
-  public readonly contents: Observable<Message[]>;
+  public readonly contents: Observable<T[]>;
 
-  constructor(private simpleFolders: SimpleFolder<Message>[]) {
-    this.contents = combineLatest(simpleFolders.map(simpleFolder => simpleFolder.contents))
+  constructor(private folders: SimpleFolder<T>[]) {
+    super();
+    this.contents = combineLatest(folders.map(folder => folder.contents))
     .pipe(
       // Flatten arrays:
       map(arrayOfContents => Array.prototype.concat.apply([], arrayOfContents)
@@ -194,7 +178,7 @@ export class AggregateFolder {
 
   public refreshFolder(): Observable<boolean> {
     return zip(
-      ...this.simpleFolders.map(folder => folder.refreshFolder())
+      ...this.folders.map(folder => folder.refreshFolder())
     ).pipe(
       map(refreshStatusArray => refreshStatusArray.every(status => status === true)),
       take(1)
@@ -203,7 +187,7 @@ export class AggregateFolder {
 
   public emptyFolder(): Observable<boolean> {
     return zip(
-      ...this.simpleFolders.map(folder => folder.emptyFolder())
+      ...this.folders.map(folder => folder.emptyFolder())
     ).pipe(
       map(_ => true),
       take(1)
@@ -212,11 +196,25 @@ export class AggregateFolder {
 
   public waitForActivation(): Observable<boolean> {
     return combineLatest(
-      this.simpleFolders.map(folder => folder.waitForActivation())
+      this.folders.map(folder => folder.waitForActivation())
     )
     .pipe(
       map(activationSignals => activationSignals.every(signal => !!signal)),
       take(1)
     );
   }
+}
+
+
+export class FilteredFolder<T> extends AggregateFolder<T> {
+
+  public readonly contents: Observable<T[]>;
+
+  constructor(folders: SimpleFolder<T>[], predicate: (item: T) => boolean) {
+    super(folders);
+    this.contents = this.contents.pipe(
+      map(contents => contents.filter(predicate))
+    );
+  }
+
 }

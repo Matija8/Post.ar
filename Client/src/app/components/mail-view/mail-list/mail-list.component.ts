@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Message } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 import { Selectable } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
 import { TagData } from 'src/app/models/TagData/TagData';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { Folder } from 'src/app/models/Folder';
 
 @Component({
   selector: 'postar-mail-list',
@@ -13,11 +14,9 @@ import { Subject, Subscription } from 'rxjs';
   styleUrls: ['./mail-list.component.css']
 })
 export class MailListComponent extends Selectable implements OnInit, OnDestroy {
-  @Input() messagesList: Message[];
-  @Input() clearSelectedSubject: Subject<void>;
-  private clearSelectedSub: Subscription = null;
-  @Output() refresh = new EventEmitter<void>();
-  @Output() starredEmitter = new EventEmitter<void>();
+  @Input() folder: Folder<Message>;
+  private folderSub: Subscription = null;
+  public messages: Message[];
 
   constructor(
     private tagMail: TagMailService,
@@ -27,29 +26,27 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.clearSelectedSubject) {
-      this.clearSelectedSub = this.clearSelectedSubject.subscribe(
-        () => this.selected.clear()
-      );
-    }
+    this.folderSub = this.folder.contents.subscribe(
+      (messages: Message[]): void => {
+        this.messages = messages;
+      }
+    );
     this.selected = new TagDataSet();
   }
 
   ngOnDestroy(): void {
-    this.selected = null;
-    if (this.clearSelectedSub !== null) {
-      this.clearSelectedSub.unsubscribe();
-      this.clearSelectedSub = null;
+    if (this.folderSub !== null) {
+      this.folderSub.unsubscribe();
+      this.folderSub = null;
     }
   }
 
   selectedChar(): string {
-    return super.selectedChar(this.messagesList);
+    return super.selectedChar(this.messages);
   }
 
   onStar([message, starred]: [TagData, boolean]): void {
     this.tagMail.star([message], starred);
-    this.starredEmitter.emit();
   }
 
   onDelete(message: TagData): void {
@@ -65,6 +62,6 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
   batchStar(star: boolean): void {
     this.tagMail.star(this.selected.values(), star);
     this.selected.clear();
-    this.refresh.emit();
+    this.folder.refreshFolder();
   }
 }

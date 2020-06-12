@@ -4,7 +4,7 @@
     <div> selected: {{ selectedChar() }} </div>
     <div id="none-selected" *ngIf="selectedChar() === 'None'; else deleteSelectedBlock">
       <button mat-raised-button color="primary" id="refresh-btn"
-        (click)="refresh.emit();">
+        (click)="folder.refreshFolder()">
         refresh
       </button>
     </div>
@@ -31,7 +31,7 @@
 </mat-card>
 
 <postar-mail-item
-*ngFor="let msg of messagesList" [msg]=msg
+*ngFor="let msg of messages" [msg]=msg
     (selectEmitter)="onSelect($event)"
     (starEmitter)="onStar($event)"
     (moveToTrashEmitter)="onDelete($event)">
