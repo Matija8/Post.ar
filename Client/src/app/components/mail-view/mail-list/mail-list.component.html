@@ -31,8 +31,10 @@
 </mat-card>
 
 <postar-mail-item
-*ngFor="let msg of messages" [msg]=msg
-    (selectEmitter)="onSelect($event)"
-    (starEmitter)="onStar($event)"
-    (moveToTrashEmitter)="onDelete($event)">
+*ngFor="let msg of messages"
+  [msg]=msg
+  [selected]="itemIsSelected(msg)"
+  (selectEmitter)="onSelect($event)"
+  (starEmitter)="onStar($event)"
+  (moveToTrashEmitter)="onDelete($event)">
 </postar-mail-item>

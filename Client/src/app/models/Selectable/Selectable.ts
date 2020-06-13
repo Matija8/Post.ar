@@ -1,9 +1,6 @@
 import { Message } from '../Messages';
-import { TagData } from '../TagData/TagData';
+import { TagData, makeTagData } from '../TagData/TagData';
 import { TagDataSet } from '../TagData/TagDataSet';
-import { Draft } from '../Draft';
-
-type messageLike = Draft | Message;
 
 export class Selectable {
 
@@ -19,7 +16,7 @@ export class Selectable {
     }
   }
 
-  selectedChar(messagesList: messageLike[]): string {
+  selectedChar(messagesList: Message[]): string {
     const numOfMsgItems = messagesList ? messagesList.length : 0;
     if (this.selected.size === 0) {
       return 'None';
@@ -28,6 +25,21 @@ export class Selectable {
       return 'All';
     }
     return 'Some';
+  }
+
+  protected refreshSelectedSet(selected: TagDataSet, messages: Message[]): TagDataSet {
+    // Returns new set with deleted ids removed.
+    const newSelected = new TagDataSet();
+    if (!selected) {
+      return newSelected;
+    }
+    const tagDataItems = messages.map(message => makeTagData(message));
+    for (const item of tagDataItems) {
+      if (selected.has(item)) {
+        newSelected.add(item);
+      }
+    }
+    return newSelected;
   }
 
 }

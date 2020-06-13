@@ -10,16 +10,17 @@ import { TagData, makeTagData } from 'src/app/models/TagData/TagData';
   styleUrls: ['./mail-item.component.css']
 })
 
-export class MailItemComponent extends SelectableItem implements OnInit {
+export class MailItemComponent implements OnInit {
 
   @Input() msg: Message;
+  @Input() selected: boolean;
   @Output() starEmitter = new EventEmitter<[TagData, boolean]>();
   @Output() moveToTrashEmitter = new EventEmitter<TagData>();
+  @Output() selectEmitter = new EventEmitter<[TagData, boolean]>();
   public sentByMe: boolean;
   public isStarred: boolean;
 
   constructor(public router: Router) {
-    super();
   }
 
   ngOnInit(): void {
@@ -35,7 +36,7 @@ export class MailItemComponent extends SelectableItem implements OnInit {
   }
 
   selectToggle() {
-    super.selectToggle(makeTagData(this.msg));
+    this.selectEmitter.emit([makeTagData(this.msg), !this.selected]);
   }
 
   moveToTrash(event: MouseEvent) {

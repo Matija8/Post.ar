@@ -4,7 +4,7 @@ import { TagMailService } from 'src/app/services/mail-services/tag-mail.service'
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 import { Selectable } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
-import { TagData } from 'src/app/models/TagData/TagData';
+import { TagData, makeTagData } from 'src/app/models/TagData/TagData';
 import { Subscription } from 'rxjs';
 import { Folder } from 'src/app/models/Folder';
 
@@ -25,43 +25,48 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
     super();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.selected = new TagDataSet();
     this.folderSub = this.folder.contents.subscribe(
       (messages: Message[]): void => {
         this.messages = messages;
+        this.selected = this.refreshSelectedSet(this.selected, messages);
       }
     );
     this.selected = new TagDataSet();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.folderSub !== null) {
       this.folderSub.unsubscribe();
       this.folderSub = null;
     }
   }
 
-  selectedChar(): string {
+  public itemIsSelected(message: Message): boolean {
+    return this.selected.has(makeTagData(message));
+  }
+
+  public selectedChar(): string {
     return super.selectedChar(this.messages);
   }
 
-  onStar([message, starred]: [TagData, boolean]): void {
+  public onStar([message, starred]: [TagData, boolean]): void {
     this.tagMail.star([message], starred);
   }
 
-  onDelete(message: TagData): void {
+  public onDelete(message: TagData): void {
     this.trashMail.moveToTrash([message]);
     this.selected.delete(message);
   }
 
-  batchDelete(): void {
+  public batchDelete(): void {
     this.trashMail.moveToTrash(this.selected.values());
     this.selected.clear();
   }
 
-  batchStar(star: boolean): void {
+  public batchStar(star: boolean): void {
     this.tagMail.star(this.selected.values(), star);
     this.selected.clear();
-    this.folder.refreshFolder();
   }
 }
