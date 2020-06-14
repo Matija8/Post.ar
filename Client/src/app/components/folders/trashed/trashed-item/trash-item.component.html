@@ -1,7 +1,7 @@
 <mat-card class="trash-item unselectable" [routerLink]="[router.url, msg.messageId]">
     <p></p>
     <mat-checkbox (click)="$event.stopPropagation()"
-        [checked]="isSelected"
+        [checked]="selected"
         (change)="selectToggle()"></mat-checkbox>
     <p></p>
     <button mat-raised-button color="warn" type="button"

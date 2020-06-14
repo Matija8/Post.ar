@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 import { Selectable } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
-import { TagData, messageType } from 'src/app/models/TagData/TagData';
+import { TagData } from 'src/app/models/TagData/TagData';
 
 @Component({
   selector: 'postar-trash',
@@ -14,10 +14,8 @@ import { TagData, messageType } from 'src/app/models/TagData/TagData';
 })
 export class TrashComponent extends Selectable implements OnInit, OnDestroy {
   private folder = this.getMail.folders.trash;
-  private subscription: Subscription = null;
-  public messages: TagData[] = [];
-
-  public trashedMessages: Message[];
+  private folderSub: Subscription = null;
+  public messages: Message[];
 
   constructor(
     private getMail: GetMailService,
@@ -27,23 +25,24 @@ export class TrashComponent extends Selectable implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.folder.contents.subscribe(
+    this.selected = new TagDataSet();
+    this.folderSub = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.trashedMessages = messages;
+        this.messages = messages;
+        this.selected = this.refreshSelectedSet(this.selected, messages);
       },
       (error: any): void => {
         console.log('Error during trashed subscription: ', error);
+        this.selected.clear();
       }
     );
-    this.selected = new TagDataSet();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription !== null) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
+    if (this.folderSub !== null) {
+      this.folderSub.unsubscribe();
+      this.folderSub = null;
     }
-    this.selected = null;
   }
 
   refreshFolder(): void {
@@ -51,21 +50,23 @@ export class TrashComponent extends Selectable implements OnInit, OnDestroy {
   }
 
   selectedChar(): string {
-    return super.selectedChar(this.trashedMessages);
+    return super.selectedChar(this.messages);
   }
 
-  onDeleteForever([messageId, type]: [string, messageType]): void {
-    // TODO: Convert to tagData[], as well as trashMail.deleteForever.
-    console.log('Trashed component.ts: onDeleteForever (TODO)');
-    this.messages.push({messageId, type});
-    this.trashMail.deleteForever(this.messages);
+  onDeleteForever(message: TagData): void {
+    this.trashMail.deleteForever([message]);
   }
 
-  onRestore([messageId, type]: [string, messageType]): void {
-    // TODO
-    console.log('Trashed component.ts: onRestore: messageId: ', messageId, ' type: ', type);
-    this.messages.push({messageId, type});
-    this.trashMail.restoreFromTrash(this.messages);
+  onRestore(message: TagData): void {
+    this.trashMail.restoreFromTrash([message]);
+  }
+
+  deleteSelected(): void {
+    this.trashMail.deleteForever(this.selected.values());
+  }
+
+  restoreSelected(): void {
+    this.trashMail.restoreFromTrash(this.selected.values());
   }
 
 }

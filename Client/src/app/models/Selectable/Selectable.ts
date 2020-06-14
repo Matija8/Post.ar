@@ -27,8 +27,11 @@ export class Selectable {
     return 'Some';
   }
 
+  public itemIsSelected(message: Message): boolean {
+    return this.selected.has(makeTagData(message));
+  }
+
   protected refreshSelectedSet(selected: TagDataSet, messages: Message[]): TagDataSet {
-    // Returns new set with deleted ids removed.
     const newSelected = new TagDataSet();
     if (!selected) {
       return newSelected;

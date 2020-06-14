@@ -3,17 +3,22 @@
 
   <div class="left">
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected" *ngIf="selectedChar() === 'None' else deleteSelectedBlock">
+    <div id="none-selected" *ngIf="selectedChar() === 'None' else someSelected">
       <button mat-raised-button color="primary"
         (click)="refreshFolder()">
         refresh
       </button>
     </div>
-    <ng-template #deleteSelectedBlock>
-      <!-- //TODO: implement delete selected  -->
-      <button mat-raised-button color="warn">delete selected</button>
+    <ng-template #someSelected>
+      <button mat-raised-button color="primary"
+      (click)="restoreSelected()">
+      restore selected
+    </button>
+    <button mat-raised-button color="warn"
+    (click)="deleteSelected()">
+      delete selected
+      </button>
     </ng-template>
-
   </div>
 
   <div class="right">
@@ -22,10 +27,12 @@
 </mat-card>
 
 <!-- List items -->
-<postar-trashed-item
-*ngFor="let msg of trashedMessages" [msg]=msg
+<postar-trash-item
+*ngFor="let msg of messages"
+  [msg]=msg
+  [selected]="itemIsSelected(msg)"
   (selectEmitter)="onSelect($event)"
   (deleteForeverEmitter)="onDeleteForever($event)"
   (restoreEmitter)="onRestore($event)"
   >
-</postar-trashed-item>
+</postar-trash-item>

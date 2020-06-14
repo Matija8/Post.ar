@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Message, isReceived } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
-import { SelectableItem } from 'src/app/models/Selectable/SelectableItem';
 import { TagData, makeTagData } from 'src/app/models/TagData/TagData';
 
 @Component({

@@ -1,43 +1,39 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Message, isReceived } from 'src/app/models/Messages';
 import { Router } from '@angular/router';
-import { SelectableItem } from 'src/app/models/Selectable/SelectableItem';
-import { msgType, makeTagData } from 'src/app/models/TagData/TagData';
+import { makeTagData, TagData } from 'src/app/models/TagData/TagData';
 
 @Component({
-  selector: 'postar-trashed-item',
+  selector: 'postar-trash-item',
   templateUrl: './trash-item.component.html',
   styleUrls: ['./trash-item.component.css']
 })
-export class TrashItemComponent extends SelectableItem implements OnInit {
+export class TrashItemComponent implements OnInit {
   @Input() msg: Message;
-  @Output() restoreEmitter = new EventEmitter<[string, string]>();
-  @Output() deleteForeverEmitter = new EventEmitter<[string, string]>();
+  @Input() selected: boolean;
+  @Output() selectEmitter = new EventEmitter<[TagData, boolean]>();
+  @Output() restoreEmitter = new EventEmitter<TagData>();
+  @Output() deleteForeverEmitter = new EventEmitter<TagData>();
   public sentByMe: boolean;
 
-  constructor(public router: Router) {
-    super();
-  }
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
     this.sentByMe = !isReceived(this.msg);
-    this.isSelected = false;
   }
 
   selectToggle() {
-    super.selectToggle(makeTagData(this.msg));
+    this.selectEmitter.emit([makeTagData(this.msg), !this.selected]);
   }
 
   deleteForever(event: MouseEvent) {
-    // TODO: convert to tagData
     event.stopPropagation();
-    this.deleteForeverEmitter.emit([this.msg.messageId, msgType(this.msg)]);
+    this.deleteForeverEmitter.emit(makeTagData(this.msg));
   }
 
   restore(event: MouseEvent) {
-    // TODO
     event.stopPropagation();
-    this.restoreEmitter.emit([this.msg.messageId, msgType(this.msg)]);
+    this.restoreEmitter.emit(makeTagData(this.msg));
   }
 
 }

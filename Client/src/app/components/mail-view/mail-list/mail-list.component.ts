@@ -4,7 +4,7 @@ import { TagMailService } from 'src/app/services/mail-services/tag-mail.service'
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 import { Selectable } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
-import { TagData, makeTagData } from 'src/app/models/TagData/TagData';
+import { TagData } from 'src/app/models/TagData/TagData';
 import { Subscription } from 'rxjs';
 import { Folder } from 'src/app/models/Folder';
 
@@ -41,10 +41,6 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
       this.folderSub.unsubscribe();
       this.folderSub = null;
     }
-  }
-
-  public itemIsSelected(message: Message): boolean {
-    return this.selected.has(makeTagData(message));
   }
 
   public selectedChar(): string {
