@@ -22,8 +22,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { BadURLComponent } from './components/bad-url/bad-url.component';
 import { ComposeComponent } from './components/compose/compose-controller/compose.component';
 import { ComposeItemComponent } from './components/compose/compose-item/compose-item.component';
-import { TrashedComponent } from './components/folders/trashed/trashed.component';
-import { TrashedItemComponent } from './components/folders/trashed/trashed-item/trashed-item.component';
+import { TrashComponent } from './components/folders/trashed/trash.component';
+import { TrashItemComponent } from './components/folders/trashed/trashed-item/trash-item.component';
 import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { DraftItemComponent } from './components/folders/drafts/draft-item/draft-item.component';
 
@@ -75,8 +75,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     BadURLComponent,
     ComposeItemComponent,
     OpenMailItemComponent,
-    TrashedComponent,
-    TrashedItemComponent,
+    TrashComponent,
+    TrashItemComponent,
     DraftItemComponent,
   ],
   imports: [

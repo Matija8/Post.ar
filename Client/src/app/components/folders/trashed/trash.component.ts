@@ -9,10 +9,10 @@ import { TagData, messageType } from 'src/app/models/TagData/TagData';
 
 @Component({
   selector: 'postar-trash',
-  templateUrl: './trashed.component.html',
-  styleUrls: ['./trashed.component.css']
+  templateUrl: './trash.component.html',
+  styleUrls: ['./trash.component.css']
 })
-export class TrashedComponent extends Selectable implements OnInit, OnDestroy {
+export class TrashComponent extends Selectable implements OnInit, OnDestroy {
   private folder = this.getMail.folders.trash;
   private subscription: Subscription = null;
   public messages: TagData[] = [];

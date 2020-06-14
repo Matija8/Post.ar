@@ -6,10 +6,10 @@ import { msgType, makeTagData } from 'src/app/models/TagData/TagData';
 
 @Component({
   selector: 'postar-trashed-item',
-  templateUrl: './trashed-item.component.html',
-  styleUrls: ['./trashed-item.component.css']
+  templateUrl: './trash-item.component.html',
+  styleUrls: ['./trash-item.component.css']
 })
-export class TrashedItemComponent extends SelectableItem implements OnInit {
+export class TrashItemComponent extends SelectableItem implements OnInit {
   @Input() msg: Message;
   @Output() restoreEmitter = new EventEmitter<[string, string]>();
   @Output() deleteForeverEmitter = new EventEmitter<[string, string]>();
