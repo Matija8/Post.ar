@@ -33,7 +33,7 @@ export class Selectable {
 
   protected refreshSelectedSet(selected: TagDataSet, messages: Message[]): TagDataSet {
     const newSelected = new TagDataSet();
-    if (!selected) {
+    if (!selected || !messages) {
       return newSelected;
     }
     const tagDataItems = messages.map(message => makeTagData(message));

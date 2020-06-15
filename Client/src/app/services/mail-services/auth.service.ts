@@ -27,6 +27,12 @@ export class AuthService {
     private router: Router,
   ) {
     window.addEventListener('storage', this.oneTabLoggedInChange.bind(this));
+    http.UnauthorizedEmitter.subscribe(() => {
+      console.log('Unauthorized! Logging out.');
+      if (this.loggedIn()) {
+        this.userLogout();
+      }
+    });
   }
 
   registerUser(user: RegisterData): Observable<object> {

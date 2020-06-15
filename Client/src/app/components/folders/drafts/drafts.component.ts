@@ -26,7 +26,7 @@ export class DraftsComponent implements OnInit, OnDestroy {
     this.selected = new Set<string>();
     this.subscription = this.folder.contents.subscribe(
       (newDrafts: Draft[]): void => {
-        this.draftsList = newDrafts;
+        this.draftsList = newDrafts || [];
         this.selected = this.refreshSelectedSet(this.selected, this.draftsList);
       },
       (error: any): void => {
@@ -50,7 +50,7 @@ export class DraftsComponent implements OnInit, OnDestroy {
   private refreshSelectedSet(selected: Set<string>, draftsList: Draft[]): Set<string> {
     // Returns new set with deleted ids removed.
     const newSelected = new Set<string>();
-    if (!selected) {
+    if (!selected || !draftsList) {
       return newSelected;
     }
     const draftIds = draftsList.map(draft => draft.messageId);

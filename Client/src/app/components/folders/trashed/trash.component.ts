@@ -28,7 +28,7 @@ export class TrashComponent extends Selectable implements OnInit, OnDestroy {
     this.selected = new TagDataSet();
     this.folderSub = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.messages = messages.sort(sortByTime);
+        this.messages = messages ? messages.sort(sortByTime) : [];
         this.selected = this.refreshSelectedSet(this.selected, messages);
       },
       (error: any): void => {
