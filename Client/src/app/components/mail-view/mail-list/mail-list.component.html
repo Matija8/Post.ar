@@ -1,35 +1,40 @@
 <mat-card class="mail-list-header">
 
-  <div class="left">
+  <div class="mail-header-left">
+
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected" *ngIf="selectedChar() === 'None'; else deleteSelectedBlock">
+    <div *ngIf="selectedChar() === 'None';
+      else someSelected">
       <button mat-raised-button color="primary" id="refresh-btn"
         (click)="folder.refreshFolder()">
         refresh
       </button>
     </div>
-    <ng-template #deleteSelectedBlock>
-      <button mat-raised-button color="warn"
-        (click)="batchDelete()">
-        delete selected
-      </button>
-      <button mat-raised-button color="primary"
-        (click)="batchStar(true)">
-        star
-      </button>
-      <button mat-raised-button color="primary"
-        (click)="batchStar(false)">
-        unstar
-      </button>
+    <ng-template #someSelected>
+      <div>
+        <button mat-raised-button color="warn"
+          (click)="deleteSelected()">
+          delete <!-- Looks better than "move to trash". -->
+        </button>
+        <button mat-raised-button color="primary"
+          (click)="starSelected(true)">
+          star
+        </button>
+        <button mat-raised-button color="primary"
+          (click)="starSelected(false)">
+          unstar
+        </button>
+      </div>
     </ng-template>
 
+  </div> <!-- /mail-header-left -->
+
+  <div class="mail-header-right">
   </div>
 
-  <div class="right">
-  </div>
+</mat-card> <!-- /mail-header -->
 
-</mat-card>
-
+<!-- List items -->
 <postar-mail-item
 *ngFor="let msg of messages"
   [msg]=msg

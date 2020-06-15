@@ -1,0 +1,38 @@
+.mail-list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* border: solid 0.5px black; */
+    padding: 5px;
+    min-height: 40px;
+}
+
+mat-card.mail-list-header {
+    padding: 5px;
+    display: flex;
+}
+
+.mail-header-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+}
+
+.mail-header-left button {
+    margin-left: 10px;
+}
+
+.mail-header-left > * {
+    margin-left: 10px;
+}
+
+.mail-header-right {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}

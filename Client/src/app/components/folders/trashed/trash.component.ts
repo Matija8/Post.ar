@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Message } from 'src/app/models/Messages';
+import { Message, sortByTime } from 'src/app/models/Messages';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Subscription } from 'rxjs';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
@@ -28,7 +28,7 @@ export class TrashComponent extends Selectable implements OnInit, OnDestroy {
     this.selected = new TagDataSet();
     this.folderSub = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.messages = messages;
+        this.messages = messages.sort(sortByTime);
         this.selected = this.refreshSelectedSet(this.selected, messages);
       },
       (error: any): void => {

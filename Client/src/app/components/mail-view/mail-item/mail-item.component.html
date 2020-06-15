@@ -1,19 +1,32 @@
-<mat-card class="mail-item unselectable" [routerLink]="[router.url, msg.messageId]">
-  <p></p>
-  <mat-checkbox (click)="$event.stopPropagation()"
+<mat-card class="mail-item unselectable">
+  <!-- TODO: Align checkbox vecticaly -->
+  <mat-checkbox
+    (click)="$event.stopPropagation()"
     [checked]="selected"
-    (change)="selectToggle()">
-  </mat-checkbox>
-  <p></p>
-  <button mat-button (click)="$event.stopPropagation(); star()">
-    <mat-icon>{{ msg.isStarred ? 'star' : 'star_border' }}</mat-icon>
-  </button>
-  <button mat-raised-button color="warn" type="button"
-    (click)="moveToTrash($event)">
-    delete
-  </button>
-  <div class="mail-item-title" *ngIf="sentByMe; else From"> To: {{ msg.to }} </div>
-  <ng-template #From>
-      <div class="mail-item-title"> From: {{ msg.from }} </div>
-  </ng-template>
+    (change)="selectToggle()"
+  ></mat-checkbox>
+
+  <mat-icon style="cursor: pointer;" (click)="$event.stopPropagation(); star()">
+    {{ msg.isStarred ? "star" : "star_border" }}
+  </mat-icon>
+
+  <div> <!-- <div> is here to prevent button text misalign -->
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      (click)="$event.stopPropagation(); moveToTrash()"
+    >
+      delete
+    </button>
+  </div>
+
+  <div class="mail-item-link" [routerLink]="[router.url, msg.messageId]">
+    <div class="mail-item-title" *ngIf="sentByMe; else From">
+      To: {{ msg.to }}
+    </div>
+    <ng-template #From>
+      <div class="mail-item-title">From: {{ msg.from }}</div>
+    </ng-template>
+  </div>
 </mat-card>

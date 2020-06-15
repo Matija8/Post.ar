@@ -34,3 +34,7 @@ export function isSent(msg: Message): msg is SMessage {
   }
   return false;
 }
+
+export const sortByTime = function timestampSortLatestFirst(a: Message, b: Message) {
+  return b.timestamp - a.timestamp;
+};

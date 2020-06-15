@@ -1,15 +1,1 @@
-.trash-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: solid 0.3px black;
-    padding: 2px;
-}
-
-.trash-item > * {
-    margin-right: 10px;
-}
-
-.trash-item-title {
-    font-size: var(--font-size-L);
-}
+/* Check in global styles for mail-item.css */

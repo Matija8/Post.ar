@@ -34,8 +34,7 @@ export class DraftItemComponent implements OnInit {
     this.selectEmitter.emit([this.draft.messageId, !this.selected]);
   }
 
-  deleteDraft(event: MouseEvent) {
-    event.stopPropagation();
+  deleteDraft() {
     this.deleteEmitter.emit(this.draft.messageId);
   }
 

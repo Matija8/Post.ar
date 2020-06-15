@@ -1,30 +1,34 @@
-<!-- List header -->
-<mat-card class="trash-list-header">
+<mat-card class="mail-list-header">
 
-  <div class="left">
+  <div class="mail-header-left">
+
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected" *ngIf="selectedChar() === 'None' else someSelected">
+    <div *ngIf="selectedChar() === 'None';
+      else someSelected">
       <button mat-raised-button color="primary"
         (click)="refreshFolder()">
         refresh
       </button>
     </div>
     <ng-template #someSelected>
-      <button mat-raised-button color="primary"
-      (click)="restoreSelected()">
-      restore selected
-    </button>
-    <button mat-raised-button color="warn"
-    (click)="deleteSelected()">
-      delete selected
-      </button>
+      <div>
+        <button mat-raised-button color="warn"
+          (click)="deleteSelected()">
+          delete forever
+        </button>
+        <button mat-raised-button color="primary"
+          (click)="restoreSelected()">
+          restore
+        </button>
+      </div>
     </ng-template>
+
+  </div> <!-- /mail-header-left -->
+
+  <div class="mail-header-right">
   </div>
 
-  <div class="right">
-  </div>
-
-</mat-card>
+</mat-card> <!-- /mail-header -->
 
 <!-- List items -->
 <postar-trash-item
@@ -33,6 +37,5 @@
   [selected]="itemIsSelected(msg)"
   (selectEmitter)="onSelect($event)"
   (deleteForeverEmitter)="onDeleteForever($event)"
-  (restoreEmitter)="onRestore($event)"
-  >
+  (restoreEmitter)="onRestore($event)">
 </postar-trash-item>

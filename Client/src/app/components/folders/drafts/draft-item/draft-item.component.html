@@ -1,13 +1,26 @@
-<mat-card class="draft-item unselectable" (click)="OpenCompose()">
-    <p></p>
-    <mat-checkbox (click)="$event.stopPropagation()"
-        [checked]="selected"
-        (change)="selectToggle()"></mat-checkbox>
-    <p></p>
-    <button mat-raised-button color="warn" type="button"
-        (click)="deleteDraft($event)">
-        delete
+<mat-card class="mail-item unselectable">
+
+  <mat-checkbox
+    (click)="$event.stopPropagation()"
+    [checked]="selected"
+    (change)="selectToggle()"
+  ></mat-checkbox>
+
+  <div>
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      (click)="$event.stopPropagation(); deleteDraft()"
+    > delete
     </button>
-    <div class="draft-item-subject"> Subject: {{ draft.subject }} </div>
-    <div class="draft-item-to"> To: {{ draft.to }} </div>
+  </div>
+
+  <div class="mail-item-link" (click)="OpenCompose()">
+    <!-- TODO: Substring if len > max? -->
+    <div class="mail-item-title">
+      {{ draft.subject || '(no subject)' }} - {{ (draft.to || '(no to)') }}
+    </div>
+  </div>
+
 </mat-card>

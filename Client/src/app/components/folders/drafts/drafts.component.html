@@ -1,9 +1,9 @@
-<!-- List header -->
-<mat-card class="draft-list-header">
-  <div class="left">
+<mat-card class="mail-list-header">
+
+  <div class="mail-header-left">
+
     <div> selected: {{ selectedChar() }} </div>
-    <div id="none-selected"
-      *ngIf="selectedChar() === 'None';
+    <div *ngIf="selectedChar() === 'None';
       else someSelected">
       <button mat-raised-button color="primary"
         (click)="refreshFolder()">
@@ -11,18 +11,20 @@
       </button>
     </div>
     <ng-template #someSelected>
-      <button mat-raised-button color="warn"
-        (click)="deleteSelected()">
-        delete selected
-      </button>
+      <div>
+        <button mat-raised-button color="warn"
+          (click)="deleteSelected()">
+          delete
+        </button>
+      </div>
     </ng-template>
 
+  </div> <!-- /mail-header-left -->
+
+  <div class="mail-header-right">
   </div>
 
-  <div class="right">
-  </div>
-
-</mat-card>
+</mat-card> <!-- /mail-header -->
 
 <!-- List items -->
 <postar-draft-item
@@ -30,6 +32,5 @@
   [draft]="draft"
   [selected]="itemIsSelected(draft)"
   (selectEmitter)="onSelect($event)"
-  (deleteEmitter)="onDelete($event)"
-  >
+  (deleteEmitter)="onDelete($event)">
 </postar-draft-item>

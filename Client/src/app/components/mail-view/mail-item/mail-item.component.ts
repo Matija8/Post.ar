@@ -38,8 +38,7 @@ export class MailItemComponent implements OnInit {
     this.selectEmitter.emit([makeTagData(this.msg), !this.selected]);
   }
 
-  moveToTrash(event: MouseEvent) {
-    event.stopPropagation();
+  moveToTrash() {
     this.moveToTrashEmitter.emit(makeTagData(this.msg));
   }
 }

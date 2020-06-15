@@ -1,0 +1,40 @@
+.mail-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* border: solid 0.3px black; */
+    padding: 5px;
+    margin-top: 1px;
+}
+
+.mail-item:hover {
+    background-color: lightblue;
+}
+
+.mail-item > * {
+    margin-left: 20px;
+    white-space: nowrap;
+}
+
+.mail-item-title {
+    font-size: var(--font-size-L);
+}
+
+.mail-item-link {
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    /* TODO: Make height fit parent, Don't use padding for this */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+mat-card.mail-item {
+    display: flex;
+    padding: 0;
+}
+
+mat-checkbox {
+    padding-top: 7px;
+}

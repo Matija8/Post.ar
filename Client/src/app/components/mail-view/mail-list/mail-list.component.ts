@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Message } from 'src/app/models/Messages';
+import { Message, sortByTime } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 import { Selectable } from 'src/app/models/Selectable/Selectable';
@@ -29,7 +29,7 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
     this.selected = new TagDataSet();
     this.folderSub = this.folder.contents.subscribe(
       (messages: Message[]): void => {
-        this.messages = messages;
+        this.messages = messages.sort(sortByTime);
         this.selected = this.refreshSelectedSet(this.selected, messages);
       }
     );
@@ -56,12 +56,12 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
     this.selected.delete(message);
   }
 
-  public batchDelete(): void {
+  public deleteSelected(): void {
     this.trashMail.moveToTrash(this.selected.values());
     this.selected.clear();
   }
 
-  public batchStar(star: boolean): void {
+  public starSelected(star: boolean): void {
     this.tagMail.star(this.selected.values(), star);
     this.selected.clear();
   }
