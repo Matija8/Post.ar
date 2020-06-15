@@ -39,8 +39,7 @@ export class RegisterComponent implements OnInit {
       (res: any) => {
         console.log('Response from registerUser:', res);
         alert('You have successfuly registered!\nYou will now be redirected to the login page');
-        this.router.navigate(['/login'])
-        .then(() => alert(`You can log in now`));
+        this.router.navigate(['/login']);
       },
       (err: any) => {
         console.log('Error from registerUser:', err);
