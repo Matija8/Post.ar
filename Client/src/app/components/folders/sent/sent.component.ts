@@ -3,8 +3,10 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
 
 @Component({
   selector: 'postar-sent',
-  templateUrl: './sent.component.html',
-  styleUrls: ['./sent.component.css']
+  template: `
+    <postar-mail-list
+      [folder]=folder>
+    </postar-mail-list>`,
 })
 export class SentComponent {
 

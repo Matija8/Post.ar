@@ -3,8 +3,10 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
 
 @Component({
   selector: 'postar-starred',
-  templateUrl: './starred.component.html',
-  styleUrls: ['./starred.component.css']
+  template: `
+    <postar-mail-list
+      [folder]=folder>
+    </postar-mail-list>`,
 })
 export class StarredComponent {
 

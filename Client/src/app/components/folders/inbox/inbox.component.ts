@@ -3,8 +3,10 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
 
 @Component({
   selector: 'postar-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.css']
+  template: `
+    <postar-mail-list
+      [folder]=folder>
+    </postar-mail-list>`,
 })
 export class InboxComponent {
 
