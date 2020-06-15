@@ -13,6 +13,7 @@ import { LoggedInGuard } from './services/guards/logged-in.guard';
 import { FolderGuard } from './services/guards/folder.guard';
 import { TrashComponent } from './components/folders/trashed/trash.component';
 import { AuthFirstGuard } from './services/guards/auth-first.guard';
+import { AllComponent } from './components/folders/all/all.component';
 
 
 const routes: Routes = [
@@ -76,9 +77,20 @@ const routes: Routes = [
   { path: 'starred',
     canActivate: [FolderGuard],
     component: StarredComponent,
-    data: {folderName: 'all'}
+    data: {folderName: 'starred'}
   },
   { path: 'starred/:msgId',
+    canActivate: [FolderGuard],
+    component: OpenMailItemComponent,
+    data: {folderName: 'starred'}
+  },
+
+  { path: 'all',
+    canActivate: [FolderGuard],
+    component: AllComponent,
+    data: {folderName: 'all'}
+  },
+  { path: 'all/:msgId',
     canActivate: [FolderGuard],
     component: OpenMailItemComponent,
     data: {folderName: 'all'}

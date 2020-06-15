@@ -26,6 +26,7 @@ import { TrashComponent } from './components/folders/trashed/trash.component';
 import { TrashItemComponent } from './components/folders/trashed/trashed-item/trash-item.component';
 import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { DraftItemComponent } from './components/folders/drafts/draft-item/draft-item.component';
+import { AllComponent } from './components/folders/all/all.component';
 
 // Mail services.
 import { AuthService } from './services/mail-services/auth.service';
@@ -78,6 +79,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     TrashComponent,
     TrashItemComponent,
     DraftItemComponent,
+    AllComponent,
   ],
   imports: [
     BrowserModule,
