@@ -5,6 +5,7 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
   selector: 'postar-inbox',
   template: `
     <postar-mail-list
+      [emptyFolderTipText]="'Inbox is empty!'"
       [folder]=folder>
     </postar-mail-list>`,
 })

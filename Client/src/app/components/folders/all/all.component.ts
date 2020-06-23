@@ -5,6 +5,7 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
   selector: 'postar-all',
   template: `
     <postar-mail-list
+      [emptyFolderTipText]="'You have no mail.'"
       [folder]=folder>
     </postar-mail-list>`,
 })

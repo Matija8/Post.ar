@@ -5,6 +5,7 @@ import { GetMailService } from '../../../services/mail-services/get-mail.service
   selector: 'postar-starred',
   template: `
     <postar-mail-list
+      [emptyFolderTipText]="'No starred messages!'"
       [folder]=folder>
     </postar-mail-list>`,
 })

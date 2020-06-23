@@ -15,6 +15,7 @@ import { Folder } from 'src/app/models/Folder';
 })
 export class MailListComponent extends Selectable implements OnInit, OnDestroy {
   @Input() folder: Folder<Message>;
+  @Input() emptyFolderTipText: string;
   private folderSub: Subscription = null;
   public messages: Message[];
 

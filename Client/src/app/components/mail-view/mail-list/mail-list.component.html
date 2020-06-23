@@ -35,6 +35,11 @@
 </mat-card> <!-- /mail-header -->
 
 <!-- List items -->
+<postar-list-tip
+  *ngIf="!messages || messages.length === 0"
+  [message]="emptyFolderTipText || 'Folder is empty!'">
+</postar-list-tip>
+
 <postar-mail-item
 *ngFor="let msg of messages"
   [msg]=msg

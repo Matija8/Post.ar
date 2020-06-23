@@ -1,0 +1,11 @@
+mat-card {
+    display: flex;
+    justify-content: center;
+    margin-top: 1px;
+    padding: 10px;
+    min-height: 20px;
+}
+
+mat-card:hover {
+    cursor: default;
+}

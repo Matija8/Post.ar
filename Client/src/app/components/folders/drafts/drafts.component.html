@@ -27,6 +27,11 @@
 </mat-card> <!-- /mail-header -->
 
 <!-- List items -->
+<postar-list-tip
+  *ngIf="!draftsList || draftsList.length === 0"
+  [message]="'You don\'t have any saved drafts.'">
+</postar-list-tip>
+
 <postar-draft-item
 *ngFor="let draft of draftsList"
   [draft]="draft"

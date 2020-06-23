@@ -31,6 +31,11 @@
 </mat-card> <!-- /mail-header -->
 
 <!-- List items -->
+<postar-list-tip
+  *ngIf="!messages || messages.length === 0"
+  [message]="'No trash here!'">
+</postar-list-tip>
+
 <postar-trash-item
 *ngFor="let msg of messages"
   [msg]=msg
