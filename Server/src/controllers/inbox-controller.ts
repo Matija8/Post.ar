@@ -11,8 +11,8 @@ import { secretar } from "../utils/secretar";
 
 // entities
 import { User } from "../entity/user";
-import { Inbox } from "../entity/mail/inbox";
-import { Sent } from "../entity/mail/sent";
+import { Inbox } from "../entity/folders/inbox";
+import { Sent } from "../entity/folders/sent";
 
 export class InboxController {
 
@@ -22,17 +22,16 @@ export class InboxController {
     private userRepository = getRepository(User);
 
     async inbox(request: Request, response: Response) {
-        this.logger.info("start", "/inbox");
+        this.logger.info("/inbox");
 
-        this.logger.debug("validate user", "/inbox");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/inbox");
             return;
         }
 
-        this.logger.debug("get user", "/inbox");
+        this.logger.debug("get user");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
             relations: [ "inbox" ]
@@ -40,21 +39,19 @@ export class InboxController {
 
         if (!user) {
             createResponse(response, 400, 1004);
-            this.logger.info("done", "/inbox");
             return;
         }
 
-        this.logger.debug("check user's inbox", "/inbox");
+        this.logger.debug("check user's inbox");
         if (!user.inbox || user.inbox.length == 0) {
             createResponse(response, 400, 1005);
-            this.logger.info("done", "/inbox");
             return;
         }
 
         // filter user inbox 
         user.inbox = user.inbox.filter(message => !message.isDeleted);
 
-        this.logger.debug("get user's inbox", "/inbox");
+        this.logger.debug("get user's inbox");
         let messages = [];
         for (const message of user.inbox) {
             messages.push({
@@ -67,54 +64,48 @@ export class InboxController {
             });
         }
 
-        this.logger.debug("encrypt mail list", "/inbox");
+        this.logger.debug("encrypt mail list");
         const encrypted = secretar.encrypt(messages);
         if (!encrypted) {
             createResponse(response, 400, 1010);
-            this.logger.info("done", "/inbox");
             return;
         }
 
         createResponse(response, 200, 2002, encrypted);
-        this.logger.info("done", "/inbox");
     }
 
     async send(request: Request, response: Response) {
-        this.logger.info("start", "/mail/send");
+        this.logger.info("/mail/send");
 
-        this.logger.debug("validate user", "/mail/send");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("validate payload", "/mail/send");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["to", "content"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/mail/send");
             return;
         }
 
         // user cannot mail himself
-        this.logger.debug("check if mail is valid", "/mail/send");
+        this.logger.debug("check if mail is valid");
         if (body.to == session.user.username) {
             createResponse(response, 400, 1006);
-            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("get recipient", "/mail/send");
+        this.logger.debug("get recipient");
         let recipient = await this.userRepository.findOne({ where: { username: body.to } });
         if (!recipient) {
             createResponse(response, 400, 1006);
-            this.logger.info("done", "/mail/send");
             return;
         }
 
-        this.logger.debug("save message to inbox and sent mail box", "/mail/send");
+        this.logger.debug("save message to inbox and sent mail box");
         await getManager().transaction(async entityManager => {
             const timestamp = new Date().getTime().toString();
             const messageId = uuidv4();
@@ -143,38 +134,34 @@ export class InboxController {
             const encrypted = secretar.encrypt({ messageId: messageId, timestamp: timestamp, ...body });
             if (!encrypted) {
                 createResponse(response, 400, 1010);
-                this.logger.info("done", "/mail/send");
                 return;
             }
     
             createResponse(response, 200, 2003, encrypted);
-            this.logger.info("done", "/mail/send");
         }).catch(err => {
-            this.logger.fatal(err, "/mail/send");
+            this.logger.fatal("failed to send multiple messages", err);
             createResponse(response, 400, 1006);
         });
     }
 
     async markAsRead(request: Request, response: Response) {
-        this.logger.info("start", "/mail/markAsRead");
+        this.logger.info("/mail/markAsRead");
 
-        this.logger.debug("validate user", "/mail/markAsRead");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/mail/markAsRead");
             return;
         }
 
-        this.logger.debug("validate payload", "/mail/markAsRead");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageIds"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/mail/markAsRead");
             return;
         }
 
-        this.logger.debug("update read messages", "/mail/markAsRead");
+        this.logger.debug("update read messages");
         await getManager().transaction(async entityManager => {
             for (const messageId of body.messageIds)
                 await entityManager.update(Inbox,
@@ -183,33 +170,30 @@ export class InboxController {
                 );
 
             createResponse(response, 200, 2007);
-            this.logger.info("done", "/mail/markAsRead");
         }).catch(err => {
             createResponse(response, 400, 1011);
-            this.logger.fatal(err, "/mail/markAsRead");
+            this.logger.fatal("failed to mark messages as read", err);
         });
     }
 
     async markAsUnread(request: Request, response: Response) {
-        this.logger.info("start", "/mail/markAsUnread");
+        this.logger.info("/mail/markAsUnread");
 
-        this.logger.debug("validate user", "/mail/markAsUnread");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/mail/markAsUnread");
             return;
         }
 
-        this.logger.debug("validate payload", "/mail/markAsUnread");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messageIds"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/markAsUnread");
             return;
         }
 
-        this.logger.debug("update read messages", "/mail/markAsUnread");
+        this.logger.debug("update read messages");
         await getManager().transaction(async entityManager => {
             for (const messageId of body.messageIds)
                 await entityManager.update(Inbox,
@@ -218,10 +202,9 @@ export class InboxController {
                 );
 
             createResponse(response, 200, 2012);
-            this.logger.info("done", "/mail/markAsUnread");
         }).catch(err => {
             createResponse(response, 400, 1017);
-            this.logger.fatal(err, "/mail/markAsUnread");
+            this.logger.fatal("failed to mark messages as unread", err);
         });
     }
 

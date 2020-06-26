@@ -9,8 +9,8 @@ import { Logger } from "../utils/logger";
 import { secretar } from "../utils/secretar";
 
 // entities
-import { Inbox } from "../entity/mail/inbox";
-import { Sent } from "../entity/mail/sent";
+import { Inbox } from "../entity/folders/inbox";
+import { Sent } from "../entity/folders/sent";
 import { User } from "../entity/user";
 
 export class TrashController {
@@ -18,21 +18,18 @@ export class TrashController {
     private logger = new Logger("trash-controller");
 
     private userRepository = getRepository(User);
-    private inboxRepository = getRepository(Inbox);
-    private sentRepository = getRepository(Sent);
 
     async trash(request: Request, response: Response) {
-        this.logger.info("start", "/trash");
+        this.logger.info("/trash");
 
-        this.logger.debug("validate user", "/trash");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/trash");
             return;
         }
 
-        this.logger.debug("get user mesages", "/trash");
+        this.logger.debug("get user mesages");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
             relations: [ "inbox", "sent" ]
@@ -40,50 +37,45 @@ export class TrashController {
 
         if (!user) {
             createResponse(response, 401, 1018);
-            this.logger.info("done", "/trash");
             return;
         }
 
-        this.logger.debug("filter messages", "/trash");
+        this.logger.debug("filter messages");
         const inboxMessages = user.inbox.filter(message => message.isDeleted)
                                         .map(message => { message["type"] = "inbox"; return message; });
 
         const sentMessages = user.sent.filter(message => message.isDeleted)
                                       .map(message => { message["type"] = "sent"; return message; });
 
-        this.logger.debug("encrypt messages", "/trash");
+        this.logger.debug("encrypt messages");
         const encrypted = secretar.encrypt({ inbox: inboxMessages, sent: sentMessages });
         if (!encrypted) {
             createResponse(response, 400, 1010);
-            this.logger.info("done", "/trash");
             return;
         }
 
         createResponse(response, 200, 2013, encrypted);
-        this.logger.info("done", "/trash");
     }
 
     async deleteMessages(request: Request, response: Response) {
-        this.logger.info("start", "/trash/delete");
+        this.logger.info("/trash/delete");
 
-        this.logger.debug("validate user", "/trash/delete");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/trash/delete");
             return;
         }
 
-        this.logger.debug("validate payload", "/trash/delete");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/trash/delete");
             return;
         }
 
-        this.logger.debug("save trashed message", "/trash/delete");
-        await getManager().transaction(async entityManager =>{
+        this.logger.debug("save trashed message");
+        await getManager().transaction(async entityManager => {
             for (const message of body.messages) {
                 switch (message.type) {
                     case "inbox":
@@ -100,40 +92,36 @@ export class TrashController {
                         break;
 
                     default:
-                        createResponse(response, 400, 1013);
-                        this.logger.info("done", "/trash/delete");
-                        return;
+                        throw Error("invalid message type");
                 }
-                createResponse(response, 200, 2014);
-                this.logger.info("done", "/trashMtrash/deleteessage");
             }
+
+            createResponse(response, 200, 2014);
         }).catch(err => {
             createResponse(response, 400, 1019);
-            this.logger.fatal(err, "/trash/delete");
+            this.logger.fatal("failed to delete messages", err);
         });
     }
 
     async undoDeletedMessages(request: Request, response: Response) {
-        this.logger.info("start", "/trash/undoDelete");
+        this.logger.info("/trash/undoDelete");
 
-        this.logger.debug("validate user", "/trash/undoDelete");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/trash/undoDelete");
             return;
         }
 
-        this.logger.debug("validate payload", "/trash/undoDelete");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/trash/undoDelete");
             return;
         }
 
-        this.logger.debug("remove trashed message", "/trash/undoDelete");
-        await getManager().transaction(async entityManager =>{
+        this.logger.debug("remove messages from trash");
+        await getManager().transaction(async entityManager => {
             for (const message of body.messages) {
                 switch (message.type) {
                     case "inbox":
@@ -150,40 +138,36 @@ export class TrashController {
                         break;
 
                     default:
-                        createResponse(response, 400, 1013);
-                        this.logger.info("done", "/trash/undoDelete");
-                        return;
+                        throw Error("invalid message type");
                 }
-                createResponse(response, 200, 2015);
-                this.logger.info("done", "/trash/undoDelete");
             }
+            
+            createResponse(response, 200, 2015);
         }).catch(err => {
             createResponse(response, 400, 1019);
-            this.logger.fatal(err, "/trash/undoDelete");
+            this.logger.fatal("failed to remove messages from trash", err);
         });
     }
 
     async deleteForever(request: Request, response: Response) {
-        this.logger.info("start", "/trash/deleteForever");
+        this.logger.info("/trash/deleteForever");
 
-        this.logger.debug("validate user", "/trash/deleteForever");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        this.logger.debug("validate payload", "/trash/deleteForever");
+        this.logger.debug("validate payload");
         const body = request.body;
         if (PayloadValidator.validate(body, ["messages"])) {
             createResponse(response, 400, 1001);
-            this.logger.info("done", "/trash/deleteForever");
             return;
         }
 
-        this.logger.debug("delete messages forever", "/trash/deleteForever");
-        await getManager().transaction(async entityManager =>{
+        this.logger.debug("delete messages forever");
+        await getManager().transaction(async entityManager => {
             for (const message of body.messages) {
                 switch (message.type) {
                     case "inbox":
@@ -198,17 +182,14 @@ export class TrashController {
                         break;
 
                     default:
-                        createResponse(response, 400, 1013);
-                        this.logger.info("done", "/trash/deleteForever");
-                        return;
+                        throw Error("invalid message type");
                 }
             }
 
             createResponse(response, 200, 2019);
-            this.logger.info("done", "/trash/deleteForever");
         }).catch(err => {
             createResponse(response, 400, 1023);
-            this.logger.fatal(err, "/trash/deleteForever");
+            this.logger.fatal("failed to delete messages forever", err);
         });
     }
 

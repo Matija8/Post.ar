@@ -19,10 +19,12 @@ export const Properties = {
     keepMeLoggedIn: { type: Boolean, required: true },
 
     messages: {
-        type: Array, required: true,
+        type: Array, 
+        required: true,
         each: {
-            messageId: { type: String },
-            type: { type: String },
+            messageId: { type: String, required: true },
+            type: { type: String, required: true },
         }
     }
+
 }

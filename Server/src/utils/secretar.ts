@@ -42,7 +42,7 @@ class SecretarModel {
 
             return { data: encrypted, secret: superSecret, hash: signature };
         } catch (err) {
-            this.logger.fatal(err);
+            this.logger.fatal("failed to encrypt data", err);
             return undefined;
         }
     }

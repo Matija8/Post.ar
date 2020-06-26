@@ -6,6 +6,7 @@ import { User } from "../../entity/user";
 export class Session {
 
     static readonly VALID_HOURS = 2;
+    static readonly ADDITIONAL_MINUTES = 45;
 
     private validUntil: Moment
 
@@ -18,7 +19,7 @@ export class Session {
     }
 
     refreshSession() {
-        this.validUntil = moment().add(Session.VALID_HOURS, "hours");
+        this.validUntil = moment().add(Session.ADDITIONAL_MINUTES, "minutes");
     }
 
 }

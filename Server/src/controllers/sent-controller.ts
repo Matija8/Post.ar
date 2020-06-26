@@ -18,38 +18,35 @@ export class SentController {
     private userRepository  = getRepository(User);
 
     async sent(request: Request, response: Response) {
-        this.logger.info("start", "/sent");
+        this.logger.info("/sent");
 
-        this.logger.debug("validate user", "/sent");
+        this.logger.debug("validate user");
         const session = SessionManager.find(request.cookies["SESSIONID"]);
         if (!session) {
             createResponse(response, 401, 1000);
-            this.logger.info("done", "/sent");
             return;
         }
 
-        this.logger.debug("get user", "/sent");
+        this.logger.debug("get user");
         let user = await this.userRepository.findOne({
             where: { username: session.user.username },
             relations: [ "sent" ]
         });
         if (!user) {
             createResponse(response, 400, 1004);
-            this.logger.info("done", "/sent");
             return;
         }
 
-        this.logger.debug("check sent mail", "/sent");
+        this.logger.debug("check sent mail");
         if (!user.sent || user.sent.length == 0) {
             createResponse(response, 400, 1009);
-            this.logger.info("done", "/sent");
             return;
         }
 
         // filter user inbox
         user.sent = user.sent.filter(message => !message.isDeleted);
 
-        this.logger.debug("get user sent mail", "/sent");
+        this.logger.debug("get user sent mail");
         let sentMail = [];
         for (const message of user.sent)
             sentMail.push({
@@ -60,16 +57,14 @@ export class SentController {
                 timestamp: message.timestamp,
             });
 
-        this.logger.debug("encrypt user's sent mail", "/sent");
+        this.logger.debug("encrypt user's sent mail");
         const encrypted = secretar.encrypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
         if (!encrypted) {
             createResponse(response, 400, 1010);
-            this.logger.info("done", "/sent");
             return;
         }
 
         createResponse(response, 200, 2005, encrypted);
-        this.logger.info("done", "/sent");
     }
 
 }

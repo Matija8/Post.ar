@@ -25,10 +25,10 @@
 ## To generate documentation run from server's root directory:
 
 ```bash
-    apidoc -i doc/src/ -o doc/apidoc/
+    apidoc -i documentation/src/ -o documentation/apidoc/
 ```
 
-### After generating documentation open ``doc/apidoc/index.html`` in your browser
+### After generating documentation open ``documentation/apidoc/index.html`` in your browser
 
 ## To install apidoc run:
 

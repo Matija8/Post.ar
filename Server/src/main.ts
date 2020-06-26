@@ -37,5 +37,5 @@ createConnection().then(connection => {
         
     logger.info(`server started at ${process.env.PORT} port`);
 }).catch(err => {
-    logger.fatal(err);
+    logger.fatal("fatal error", err);
 });

@@ -1,8 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
-import { Inbox } from "./mail/inbox";
-import { Sent } from "./mail/sent";
-import { Drafts } from "./mail/drafts";
+import { Inbox } from "./folders/inbox";
+import { Sent } from "./folders/sent";
+import { Drafts } from "./folders/drafts";
+
+export enum UserTheme {
+    LIGHT = "default",
+    DARK = "dark"
+}
 
 @Entity()
 export class User {
@@ -36,9 +41,8 @@ export class User {
 
     @Column({
         nullable: false,
-        enum: ["default", "dark"]
     })
-    theme: string;
+    theme: UserTheme;
 
     @Column({
         nullable: false,

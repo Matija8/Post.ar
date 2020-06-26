@@ -1,4 +1,5 @@
 import * as log4js from "log4js";
+const chalk = require("chalk");
 
 export class Logger {
     
@@ -9,40 +10,28 @@ export class Logger {
         this.logger.level = "debug";
     }
 
-    info(message: any, route: string = null): void {
-        if (route == null) {
-            this.logger.info(message);
-        } else {
-            message = typeof message == "object" ? JSON.stringify(message, null, 2) : message;
-            this.logger.info(`${route} - ${message}`);
-        }
+    info(message: string, data?: any): void {
+        this.logger.info(chalk.yellowBright(message));
+        if (data)
+            console.log(data);
     }
 
-    debug(message: any, route: string = null): void {
-        if (route == null) {
-            this.logger.debug(message);
-        } else {
-            message = typeof message == "object" ? JSON.stringify(message, null, 2) : message;
-            this.logger.debug(`${route} - ${message}`);
-        }
+    debug(message: string, data?: any): void {
+        this.logger.debug(chalk.greenBright(message));
+        if (data)
+            console.log(data);
     }
 
-    error(message: any, route: string = null): void {
-        if (route == null) {
-            this.logger.error(message);
-        } else {
-            message = typeof message == "object" ? JSON.stringify(message, null, 2) : message;
-            this.logger.error(`${route} - ${message}`);
-        }
+    error(message: string, data?: any): void {
+        this.logger.error(chalk.redBright(message));
+        if (data)
+            console.log(data);
     }
 
-    fatal(message: any, route: string = null): void {
-        if (route == null) {
-            this.logger.fatal(message);
-        } else {
-            message = typeof message == "object" ? JSON.stringify(message, null, 2) : message;
-            this.logger.fatal(`${route} - ${message}`);
-        }
+    fatal(message: string, data?: any): void {
+        this.logger.fatal(chalk.magentaBright(message));
+        if (data)
+            console.log(data);
     }
 
 }
