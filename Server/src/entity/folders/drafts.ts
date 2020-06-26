@@ -13,7 +13,7 @@ export class Drafts {
     @Column({ unique: true, nullable: false })
     messageId: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     to: string;
 
     @Column({ nullable: false })

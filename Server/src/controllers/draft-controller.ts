@@ -81,10 +81,14 @@ export class DraftController {
         const body = request.body;
 
         this.logger.debug("validate payload");
-        if (PayloadValidator.validate(body, ["to", "content"])) {
+        if (PayloadValidator.validate(body, ["content"])) {
             createResponse(response, 400, 1001);
             return;
         }
+
+        let messageTo: string = null; 
+        if (body.to !== undefined && body.to !== null && typeof body.to === "string")
+            messageTo = body.to;
 
         this.logger.debug("get user");
         let user = await this.userRepository.findOne({
@@ -100,7 +104,7 @@ export class DraftController {
         try {
             await this.draftsRepository.insert({
                 messageId: uuidv4(),
-                to: body.to,
+                to: messageTo,
                 content: body.content,
                 timestamp: new Date().getTime().toString(),
                 user: user
