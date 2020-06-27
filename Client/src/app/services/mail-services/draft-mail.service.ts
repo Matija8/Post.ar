@@ -21,18 +21,12 @@ export class DraftMailService {
     if (!edMsg) {
       return throwError('Bad editor message!');
     }
-    if (!edMsg.to) {
-      return throwError('Server needs "to" to save the draft!');
-    }
     const content = this.secretar.encryptMessage({
+      to: edMsg.to,
       subject: edMsg.subject,
       body: edMsg.messageText,
     });
-    const draftToSave = {
-      to: edMsg.to,
-      content,
-    };
-    const response = this.http.post('http://localhost:8000/drafts/save', draftToSave);
+    const response = this.http.post('http://localhost:8000/drafts/save', { content });
     response.subscribe(
       (res: any) => {
         // console.log(res);
