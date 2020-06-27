@@ -1,38 +1,4 @@
-<!-- <div class="col-md-6 mx-auto">
-  <div class="card">
-    <div class="card-header">
-      <h3>Log In</h3>
-    </div>
-    <div class="card-body">
-      <form class="form">
-        <div class="form-group">
-          <label>Email</label>
-          <input name="email" type="text" [(ngModel)]="this.email" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input name="password" type="password" [(ngModel)]="this.password" class="form-control" required>
-          <div style="display: flex; align-items: center; margin-top: 4px;">
-            <label style="margin: 0; margin-right: 5px;"> Keep me logged in!</label>
-            <input type="checkbox"
-              [checked]="keepMeLoggedIn" (change)="keepMeLoggedIn = !keepMeLoggedIn"
-            >
-            <p class="login-warning"
-              [style.visibility]="warning"
-              style="margin: 0; margin-left: auto;"
-            >
-              Failed to log in!
-            </p>
-          </div>
-        </div>
-        <button type="button" (click)="LogIn()" class="btn btn-primary float-left" [disabled]="!(email && password)">Log In</button>
-        <button class="btn btn-secondary float-right" routerLink="/register" routerLinkActive="active">Register</button>
-      </form>
-    </div>
-  </div>
-</div> -->
 <form>
-
   <div class="container wrapper">
     <div class="content-wrapper">
 
@@ -49,7 +15,11 @@
             <div class="form-group">
               <label class="label-title" for="exampleInputEmail1">Email address</label>
               <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                placeholder="username@post.ar" [(ngModel)]="this.email" class="form-control" required>
+                name="email"
+                placeholder="username@post.ar"
+                [(ngModel)]="this.email"
+                required
+              >
             </div>
           </div>
         </div>
@@ -58,7 +28,9 @@
           <div class="col">
             <div class="form-group">
               <label class="label-title" for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+              <input type="password" class="form-control" id="exampleInputPassword1"
+                name="password"
+                placeholder="Password"
                 [(ngModel)]="this.password"
                 required
               >
@@ -106,8 +78,7 @@
           </div>
         </div>
       </div>
-      
-    </div>
 
+    </div>
   </div>
 </form>
