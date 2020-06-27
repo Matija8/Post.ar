@@ -168,18 +168,25 @@ export class AuthService {
   }
 
   public userLogout(): Observable<boolean> {
-    this.userDataSource.next(null);
-    return zip(
-      this.getMail.emptyFolders(),
-      this.currentUserData.pipe(skipWhile(userData => userData !== null)),
-      this.http.get('http://localhost:8000/logout').pipe(take(1))
-    ).pipe(
-      flatMap(_ => {
+    return this.getMail.emptyFolders().pipe( // 1) Empty folders.
+      flatMap(_ => { // 2) Set user data to null.
+        this.userDataSource.next(null);
+        return this.currentUserData.pipe(
+          skipWhile(userData => userData !== null),
+          take(1)
+        );
+      }),
+      flatMap(_ => { // 3) Tell the server to remove this session.
+        return this.http.get('http://localhost:8000/logout').pipe(
+          catchError(err => of(true)), // The server is down, otherwise this always succeeds.
+          take(1)
+        );
+      }),
+      flatMap(_ => { // Clean up.
         this.cookie.delete('SESSIONID');
         this.oneTabLoggedIn = false;
         return of(true);
       }),
-      take(1)
     );
   }
 
