@@ -22,7 +22,7 @@ export class DraftItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  OpenCompose() {
+  openCompose() {
     this.deleteEmitter.emit(this.draft.messageId);
     this.openComposeService.addEditor({
       msg: toEditorMessage(this.draft),
@@ -37,5 +37,30 @@ export class DraftItemComponent implements OnInit {
   deleteDraft() {
     this.deleteEmitter.emit(this.draft.messageId);
   }
+
+  draftTitleSubject(): string {
+    const MAX_SUBJ_LEN = 30;
+    const subject = this.draft.subject;
+    if (!subject) {
+      return '(no subject)';
+    }
+    if (subject.length > MAX_SUBJ_LEN) {
+      return subject.substr(0, MAX_SUBJ_LEN - 3) + '...';
+    }
+    return subject;
+  }
+
+  draftTitleRecepient(): string {
+    const MAX_RECP_LEN = 30;
+    const recepient = this.draft.to;
+    if (!recepient) {
+      return '';
+    }
+    if (recepient.length > MAX_RECP_LEN) {
+      return recepient.substr(0, MAX_RECP_LEN - 3) + '...';
+    }
+    return recepient;
+  }
+
 
 }

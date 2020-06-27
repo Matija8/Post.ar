@@ -16,10 +16,11 @@
     </button>
   </div>
 
-  <div class="mail-item-link" (click)="OpenCompose()">
-    <!-- TODO: Substring if len > max? -->
+  <div class="mail-item-link" (click)="openCompose()">
     <div class="mail-item-title">
-      {{ draft.subject || '(no subject)' }} - {{ (draft.to || '(no to)') }}
+      <span> {{ 'Subject: ' + draftTitleSubject() }} </span>
+      <span style="margin-left: 10px;"> {{ draft.to ? 'To: ' : '' }} </span>
+      <span style="font-style: italic;"> {{ draftTitleRecepient() }} </span>
     </div>
   </div>
 
