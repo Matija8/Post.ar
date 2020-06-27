@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     this.keepMeLoggedIn = this.auth.keepMeLoggedIn;
   }
 
-  LogIn(): void {
+  logIn(): void {
     if (this.requestPending) {
       return;
     }

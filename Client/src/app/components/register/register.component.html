@@ -1,38 +1,154 @@
-<div class="col-md-6 mx-auto">
-  <div class="card">
-    <div class="card-header">
-      <h3>Register</h3>
-    </div>
-    <div class="card-body">
-      <form class="form">
-        <div class="form-group">
-          <label>First name:</label>
-          <input name="name" type="text" [(ngModel)]="name" class="form-control" required>
+<form>
+  <div class="container wrapper">
+    <div class="content-wrapper">
+
+      <div class="welcome-wrapper">
+
+        <div class="welcome-title-wrapper">
+          <div class="row">
+            <div class="col welcome-title">
+              <label>Register</label>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Last name:</label>
-          <input name="surname" type="text" [(ngModel)]="surname" class="form-control" required>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="name">First name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="Your name"
+                [(ngModel)]="name"
+                required
+              />
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Username:</label>
-          <input id="email" name="email" type="text" [(ngModel)]="email" class="form-control" required>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="surname">Last name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="surname"
+                name="surname"
+                placeholder="Your last name"
+                [(ngModel)]="surname"
+                required
+              />
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Password:</label>
-          <input name="password" type="password" [(ngModel)]="password" class="form-control" required>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="email">Email adress</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="New email adress"
+                [(ngModel)]="email"
+                required
+                />
+                <!-- TODO1: @post.ar (float right) -->
+                <!-- TODO2: (below) <div> TODO: Invisbile email error? Reactive forms? </div> -->
+                  <!-- [ngClass]= valid=...? -->
+            </div>
+          </div>
         </div>
-        <label>Retype password:</label>
-        <input name="retype-password" type="password" [(ngModel)]="retypePassword" class="form-control" required>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Your password"
+                [(ngModel)]="password"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col" style="margin-top: 10px;">
+            <div class="form-group">
+              <input
+                type="retypePassword"
+                class="form-control"
+                id="retype-password"
+                name="retype-password"
+                placeholder="Please retype your password"
+                [(ngModel)]="retypePassword"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /welcome-wrapper -->
+
+      <div class="login-and-register">
+
+        <div class="row">
+          <div class="col-md-4 text-center button-wrapper">
+            <button
+              type="submit"
+              class="btn btn-primary login-button"
+              (click)="registerUser()"
+              [disabled]="!validParams()"
+            >
+              Register
+            </button>
+          </div>
+        </div>
+
         <p class="login-warning" [style.visibility]="warning">
           Failed to register!
         </p>
-        <button (click)="registerUser()" type="button" class="btn btn-primary float-left" [disabled]="!validParams()">
-          Register
-        </button>
-        <button class="btn btn-secondary float-right" routerLink="/login" routerLinkActive="active">
-          Log In
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
+
+
+      <!-- <div class="show-password">
+        <div class="row">
+          <div class="col">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                [checked]="showPasswd" (change)="showPasswd=!showPasswd"
+              >
+              <label class="custom-control-label" for="customSwitch1">Show password</label>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+        <div class="create-an-account-label">
+          <label class="label"
+            >Already have an account?
+            <a
+              routerLink="/login"
+              routerLinkActive="active"
+              class="register-link"
+            >
+              Sign in
+            </a>.
+          </label>
+        </div>
+
+      </div>
+
+    </div> <!-- content-wrapper -->
+  </div> <!-- container wrapper -->
+</form>
