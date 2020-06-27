@@ -1,4 +1,4 @@
-<div class="col-md-6 mx-auto">
+<!-- <div class="col-md-6 mx-auto">
   <div class="card">
     <div class="card-header">
       <h3>Log In</h3>
@@ -30,4 +30,84 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
+<form>
+
+  <div class="container wrapper">
+    <div class="content-wrapper">
+
+      <div class="welcome-wrapper">
+        <div class="welcome-title-wrapper">
+          <div class="row">
+            <div class="col welcome-title">
+              <label>Login</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="exampleInputEmail1">Email address</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="username@post.ar" [(ngModel)]="this.email" class="form-control" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-title" for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+                [(ngModel)]="this.password"
+                required
+              >
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="remember-me">
+        <div class="row">
+          <div class="col">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                [checked]="keepMeLoggedIn" (change)="keepMeLoggedIn = !keepMeLoggedIn"
+              >
+              <label class="custom-control-label" for="customSwitch1">Remember me</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-and-register">
+
+        <div class="row">
+
+          <div class="col-md-4 text-center button-wrapper">
+            <button type="submit" class="btn btn-primary login-button" (click)="LogIn()"
+            [disabled]="!(email && password)"
+            >Login</button>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col">
+            <div class="create-an-account-label">
+              <label class="label">New to Postar?
+                <a routerLink="/register" routerLinkActive="active" class="register-link">
+                  Create an account
+                </a>.
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+</form>

@@ -1,4 +1,106 @@
-:host {
-    display: block;
-    margin-top: calc( 2 * var(--header-height) );
+@font-face {
+    font-family: "Roboto";
+    src: url("../../../assets/fonts/Roboto/Roboto-Regular.ttf");
 }
+
+@font-face {
+    font-family: "Roboto Medium";
+    src: url("../../../assets/fonts/Roboto/Roboto-Medium.ttf");
+}
+
+input,
+select.form-control {
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+input:focus,
+select.form-control:focus {
+  background: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.content-wrapper {
+    margin: 50px 50px 0px 50px;
+}
+
+.wrapper {
+    width: 500px;
+    height: 600px;
+    
+    -webkit-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
+    -moz-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
+    box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
+
+    border-radius: 20px;
+    background: #eff0f1;
+    background: linear-gradient(to right, #eff0f1, #ffffff);
+
+}
+
+.col {
+    margin-top: 20px;
+}
+
+.label-title {
+    font-family: "Roboto Medium";
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.welcome-title {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-family: "Roboto Medium";
+    font-size: xx-large;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.welcome-title-wrapper { 
+    width: 400px;
+    padding: 20px;
+    margin: 10px auto;
+}
+
+.welcome-title-wrapper:after {
+    content: "";
+    height: 1px;
+    background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(41, 182, 246,1) 50%,rgba(0,0,0,0) 100%);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.welcome-wrapper {
+    margin-top: 20px;
+}
+
+.register-link {
+    color:  #2196f3;
+}
+
+.button-wrapper {
+    text-align: center;
+    margin: 0 auto;   
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.login-and-register {
+    text-align: center;
+    margin: 0 auto;    
+}
+
+.login-button {
+    text-transform: uppercase;
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+
