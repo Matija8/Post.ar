@@ -112,7 +112,7 @@ export class UserController {
         };
         
         // encrypt user data
-        const encrypted = secretar.encrypt(userData);
+        const encrypted = secretar.encryptResponseData(userData);
         if (!encrypted) {
             createResponse(response, 400, 1010);
             return;
@@ -150,7 +150,7 @@ export class UserController {
         };
         
        // encrypt user data
-       const encrypted = secretar.encrypt(userData);
+       const encrypted = secretar.encryptResponseData(userData);
        if (!encrypted) {
            createResponse(response, 400, 1010);
            return;

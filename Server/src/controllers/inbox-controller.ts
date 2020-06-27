@@ -57,7 +57,7 @@ export class InboxController {
             messages.push({
                 messageId: message.messageId,
                 from: message.from,
-                content: message.content,
+                content: secretar.decryptMessage(message.content),
                 isRead: message.isRead,
                 isStarred: message.isStarred,
                 timestamp: message.timestamp
@@ -65,7 +65,7 @@ export class InboxController {
         }
 
         this.logger.debug("encrypt mail list");
-        const encrypted = secretar.encrypt(messages);
+        const encrypted = secretar.encryptResponseData(messages);
         if (!encrypted) {
             createResponse(response, 400, 1010);
             return;
@@ -110,10 +110,12 @@ export class InboxController {
             const timestamp = new Date().getTime().toString();
             const messageId = uuidv4();
 
+            const encryptedMessage = secretar.encryptMessage(body.content);
+
             await entityManager.insert(Inbox, {
                 messageId: messageId,
                 from: session.user.username,
-                content: body.content,
+                content: encryptedMessage,
                 isRead: false,
                 isStarred: false,
                 isDeleted: false,
@@ -124,14 +126,14 @@ export class InboxController {
             await entityManager.insert(Sent, {
                 messageId: messageId,
                 to: recipient.username,
-                content: body.content,
+                content: encryptedMessage,
                 isStarred: false,
                 isDeleted: false,
                 timestamp: timestamp,
                 user: session.user
             });
 
-            const encrypted = secretar.encrypt({ messageId: messageId, timestamp: timestamp, ...body });
+            const encrypted = secretar.encryptResponseData({ messageId: messageId, timestamp: timestamp, ...body });
             if (!encrypted) {
                 createResponse(response, 400, 1010);
                 return;

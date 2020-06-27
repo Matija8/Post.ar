@@ -43,13 +43,21 @@ export class StarredController {
 
         this.logger.debug("filter messages");
         const inboxMessages = user.inbox.filter(message => message.isStarred)
-                                        .map(message => { message["type"] = "inbox"; return message; });
+                                        .map(message => { 
+                                            message["type"] = "inbox";
+                                            message.content = secretar.decryptMessage(message.content);
+                                            return message;
+                                        });
         
         const sentMessages = user.sent.filter(message => message.isStarred)
-                                      .map(message => { message["type"] = "sent"; return message; });
+                                      .map(message => {
+                                          message["type"] = "sent";
+                                          message.content = secretar.decryptMessage(message.content);
+                                          return message;
+                                      });
 
         this.logger.debug("encrypt messages");
-        const encrypted = secretar.encrypt({ inbox: inboxMessages, sent: sentMessages });
+        const encrypted = secretar.encryptResponseData({ inbox: inboxMessages, sent: sentMessages });
         if (!encrypted) {
             createResponse(response, 400, 1010);
             return;

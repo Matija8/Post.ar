@@ -52,13 +52,13 @@ export class SentController {
             sentMail.push({
                 messageId: message.messageId,
                 to: message.to,
-                content: message.content,
+                content: secretar.decryptMessage(message.content),
                 isStarred: message.isStarred,
                 timestamp: message.timestamp,
             });
 
         this.logger.debug("encrypt user's sent mail");
-        const encrypted = secretar.encrypt({ total: sentMail.length, data: JSON.stringify(sentMail) });
+        const encrypted = secretar.encryptResponseData({ total: sentMail.length, data: JSON.stringify(sentMail) });
         if (!encrypted) {
             createResponse(response, 400, 1010);
             return;

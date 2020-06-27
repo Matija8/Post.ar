@@ -53,13 +53,13 @@ export class DraftController {
             drafts.push({
                 messageId: draft.messageId,
                 to: draft.to,
-                content: draft.content,
+                content: secretar.decryptMessage(draft.content),
                 timestamp: draft.timestamp
             });
         }
 
         this.logger.debug("encrypt drafts");
-        const encrypted = secretar.encrypt({ total: drafts.length, data: JSON.stringify(drafts) });
+        const encrypted = secretar.encryptResponseData({ total: drafts.length, data: JSON.stringify(drafts) });
         if (!encrypted) {
             createResponse(response, 400, 1010);
             return;
@@ -105,7 +105,7 @@ export class DraftController {
             await this.draftsRepository.insert({
                 messageId: uuidv4(),
                 to: messageTo,
-                content: body.content,
+                content: secretar.encryptMessage(body.content),
                 timestamp: new Date().getTime().toString(),
                 user: user
             });
