@@ -1,14 +1,22 @@
+<!-- Minimized -->
 <div *ngIf="this.editorData.size === 'minimized'" class="compose-item-minimized">
 
   <div class="compose-item-menubar">
-    <button class="compose-menubar-button" (click)="changeSize('normal')">_</button>
-    <!--<button class="compose-menubar-button">◻️</button>-->
-    <button class="compose-menubar-button" (click)="closeClick()">X</button>
+    <span class="compose-item-menubar-left">
+      {{ headerText() }} ({{ "id: " + index }})
+    </span>
+    <div class="compose-item-menubar-right">
+      <button class="compose-menubar-button" (click)="changeSize('normal')">_</button>
+      <!--<button class="compose-menubar-button">◻️</button>-->
+      <button class="compose-menubar-button" (click)="closeClick()">X</button>
+    </div>
   </div>
 
 </div>
+<!-- /Minimized -->
 
 
+<!-- Normal -->
 <div *ngIf="this.editorData.size === 'normal'" class="compose-item-medium">
 
   <div class="compose-item-menubar">
@@ -24,20 +32,28 @@
 
   <div class="compose-item-body">
     <form class="form">
+
       <mat-form-field>
-        <mat-label for="">To:</mat-label>
+        <mat-label for="">To</mat-label>
         <input matInput name="to" type="text" [(ngModel)]="editorData.msg.to" required>
       </mat-form-field>
+
       <mat-form-field>
         <mat-label for="">Subject</mat-label>
         <input matInput name="subject" type="text" [(ngModel)]="editorData.msg.subject" required>
       </mat-form-field>
+
       <mat-form-field>
         <mat-label for="">Message</mat-label>
-        <textarea matInput name="msg" type="text" [(ngModel)]="editorData.msg.messageText" required></textarea>
+        <textarea matInput name="msg" type="text" [(ngModel)]="editorData.msg.messageText" required
+          id="compose-textarea">
+        </textarea>
       </mat-form-field>
+
       <button mat-raised-button color="primary" type="button" (click)="clickSend()" [disabled]="sendBtnDisabled()" >Send</button>
+
     </form>
   </div>
 
 </div>
+<!-- /Normal -->

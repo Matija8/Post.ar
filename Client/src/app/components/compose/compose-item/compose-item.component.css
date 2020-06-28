@@ -9,6 +9,11 @@
     --compose-header-height: 30px;
 }
 
+#compose-textarea {
+    resize: none;
+    height: 7rem; /* number of rows */
+}
+
 .compose-item-minimized {
     width: var(--compose-item-width, 250px);
     bottom:0;
