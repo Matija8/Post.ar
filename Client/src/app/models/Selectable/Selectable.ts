@@ -2,6 +2,10 @@ import { Message } from '../Messages';
 import { TagData, makeTagData } from '../TagData/TagData';
 import { TagDataSet } from '../TagData/TagDataSet';
 
+
+export type selectFilter = 'all' | 'none' | 'starred' | 'notStarred' | 'read' | 'notRead';
+
+
 export class Selectable {
 
   protected selected: TagDataSet;
@@ -43,6 +47,33 @@ export class Selectable {
       }
     }
     return newSelected;
+  }
+
+  protected filterMessages(messages: Message[], filter: selectFilter): TagDataSet {
+    const set = new TagDataSet();
+    const addItemsToSet = (items: any[]) => items.forEach(item => set.add(makeTagData(item)));
+    // Strategy pattern insetad of switch?
+    switch (filter) {
+      case 'all':
+        addItemsToSet(messages);
+        break;
+      case 'none':
+        // Don't add anything.
+        break;
+      case 'starred':
+        addItemsToSet(messages.filter(item => item.isStarred));
+        break;
+      case 'notStarred':
+        addItemsToSet(messages.filter(item => !item.isStarred));
+        break;
+      case 'read':
+        addItemsToSet(messages.filter(item => item.isRead));
+        break;
+      case 'notRead':
+        addItemsToSet(messages.filter(item => !item.isRead));
+        break;
+    }
+    return set;
   }
 
 }

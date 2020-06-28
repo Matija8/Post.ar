@@ -56,6 +56,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { SelectedIconComponent } from './components/mail-view/selected-icon/selected-icon.component';
 
 
 
@@ -82,6 +85,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     DraftItemComponent,
     AllComponent,
     ListTipComponent,
+    SelectedIconComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,7 +100,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatMenuModule,
+    MatTooltipModule,
   ],
   providers: [
     AuthService,

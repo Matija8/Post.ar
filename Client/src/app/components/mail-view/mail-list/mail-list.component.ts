@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Message, sortByTime } from 'src/app/models/Messages';
 import { TagMailService } from 'src/app/services/mail-services/tag-mail.service';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
-import { Selectable } from 'src/app/models/Selectable/Selectable';
+import { Selectable, selectFilter } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
 import { TagData } from 'src/app/models/TagData/TagData';
 import { Subscription } from 'rxjs';
@@ -66,4 +66,17 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
     this.tagMail.star(this.selected.values(), star);
     this.selected.clear();
   }
+
+  public selectByFilter(filter: selectFilter) {
+    this.selected = super.filterMessages(this.messages, filter);
+  }
+
+  toggleAllSelected() {
+    if (this.selected.size > 0) {
+      this.selected.clear();
+    } else {
+      this.selectByFilter('all');
+    }
+  }
+
 }

@@ -2,34 +2,117 @@
 
   <div class="mail-header-left">
 
-    <div> selected: {{ selectedChar() }} </div>
+
+    <!-- selectMenu -->
+    <div class="selectMenuBtn">
+      <postar-selected-icon
+        [selectedChar]="selectedChar()"
+        (toggle)="toggleAllSelected()">
+      </postar-selected-icon>
+      <mat-icon matTooltip="Select"
+        style="cursor: pointer;"
+        [matMenuTriggerFor]="selectMenu"
+      >
+        keyboard_arrow_down
+      </mat-icon>
+    </div>
+
+    <mat-menu #selectMenu="matMenu">
+
+      <button mat-menu-item (click)="selectByFilter('all')">
+        <span>All</span>
+      </button>
+      <button mat-menu-item (click)="selectByFilter('none')">
+        <span>None</span>
+      </button>
+      <button mat-menu-item (click)="selectByFilter('starred')">
+        <span>Starred</span>
+      </button>
+      <button mat-menu-item (click)="selectByFilter('notStarred')">
+        <span>Not starred</span>
+      </button>
+      <!-- TODO: read/unread... -->
+
+    </mat-menu>
+    <!-- /selectMenu -->
+
+
+    <!-- None Selected -->
     <div *ngIf="selectedChar() === 'None';
       else someSelected">
-      <button mat-raised-button color="primary" id="refresh-btn"
-        (click)="folder.refreshFolder()">
-        refresh
+
+
+      <button mat-icon-button aria-label="Refresh folder button"
+        (click)="folder.refreshFolder()"
+      >
+        <mat-icon matTooltip="Refresh">
+          refresh
+        </mat-icon>
       </button>
+
+      <!-- noneSelected3DotMenu -->
+      <button mat-icon-button [matMenuTriggerFor]="noneSelected3DotMenu" aria-label="Extra options">
+        <mat-icon matTooltip="More">
+          more_vert
+        </mat-icon>
+      </button>
+      <mat-menu #noneSelected3DotMenu="matMenu">
+        <!-- <button mat-menu-item>
+          <span> Action </span>
+        </button> -->
+        <button mat-menu-item disabled>
+          <span> Select messages to see more actions </span>
+        </button>
+      </mat-menu>
+      <!-- /noneSelected3DotMenu -->
+
+
     </div>
+    <!-- /None Selected -->
+
+
+    <!-- Some Selected -->
     <ng-template #someSelected>
       <div>
-        <button mat-raised-button color="warn"
+        <button mat-icon-button aria-label="Delete selected button"
           (click)="deleteSelected()">
-          delete <!-- Looks better than "move to trash". -->
-        </button>
-        <button mat-raised-button color="primary"
-          (click)="starSelected(true)">
-          star
-        </button>
-        <button mat-raised-button color="primary"
-          (click)="starSelected(false)">
-          unstar
+            <mat-icon matTooltip="Delete">
+              delete
+            </mat-icon>
         </button>
       </div>
+
+      <!-- someSelected3DotMenu -->
+      <button mat-icon-button [matMenuTriggerFor]="someSelected3DotMenu" aria-label="Extra options">
+        <mat-icon matTooltip="More">
+          more_vert
+        </mat-icon>
+      </button>
+      <mat-menu #someSelected3DotMenu="matMenu">
+        <button mat-menu-item
+          (click)="starSelected(true)"
+        >
+          <mat-icon> star </mat-icon>
+          <span> Add star </span>
+        </button>
+        <button mat-menu-item
+          (click)="starSelected(false)"
+        >
+          <mat-icon> star_border </mat-icon>
+          <span> Remove star </span>
+        </button>
+      </mat-menu>
+      <!-- /someSelected3DotMenu -->
+
     </ng-template>
+    <!-- /Some Selected -->
+
+
 
   </div> <!-- /mail-header-left -->
 
   <div class="mail-header-right">
+    Messages: {{ messages.length }}
   </div>
 
 </mat-card> <!-- /mail-header -->

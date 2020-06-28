@@ -1,0 +1,11 @@
+<div [ngSwitch]="selectedChar"
+    (click)="toggle.emit()"
+    style="cursor: pointer;"
+>
+
+    <mat-icon *ngSwitchCase="'All'"> check_box </mat-icon>
+    <mat-icon *ngSwitchCase="'Some'"> indeterminate_check_box </mat-icon>
+
+    <mat-icon *ngSwitchDefault> check_box_outline_blank </mat-icon>
+
+</div>

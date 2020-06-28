@@ -25,14 +25,18 @@ mat-card.mail-list-header {
     margin-left: 10px;
 }
 
-.mail-header-left > * {
-    margin-left: 10px;
-}
-
 .mail-header-right {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
     justify-content: flex-end;
     height: 100%;
+}
+
+.selectMenuBtn {
+    cursor: default;
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+    margin-left: 10px;
 }

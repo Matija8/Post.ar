@@ -11,6 +11,11 @@ a:hover {
 }
 
 
+*:focus {
+    outline: none !important;
+}
+
+
 body {
     padding: 0;
     margin: 0;
@@ -21,6 +26,11 @@ body {
 .login-warning {
     visibility: hidden;
     color: rgb(250, 10, 10);
+}
+
+
+.mat-tooltip {
+    font-size: medium !important;
 }
 
 
