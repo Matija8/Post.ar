@@ -13,11 +13,11 @@ import { take } from 'rxjs/operators';
 export class RegisterComponent implements OnInit {
 
   // Form data:
-  public name: string;
-  public surname: string;
-  public email: string;
-  public password: string;
-  public retypePassword: string;
+  public name = '';
+  public surname = '';
+  public email = '';
+  public password = '';
+  public retypePassword = '';
 
   public warning: 'hidden'|'visible';
   private requestPending: boolean;
@@ -33,10 +33,10 @@ export class RegisterComponent implements OnInit {
       return;
     }
     const registrationData: RegisterData = {
-      name: this.name,
-      surname: this.surname,
-      email: this.email,
-      password: this.password
+      name: this.name.trim(),
+      surname: this.surname.trim(),
+      email: this.email.trim(),
+      password: this.password.trim()
     };
     this.warning = 'hidden';
     this.auth.registerUser(registrationData)
@@ -54,8 +54,14 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  validParams() {
-    return (this.name && this.surname && this.email && this.password && this.password === this.retypePassword);
+  validParams(): boolean {
+    const nameReg = /^[a-zA-Z][a-zA-Z']*$/;
+    const validName = nameReg.test(this.name.trim()) && nameReg.test(this.surname.trim());
+
+    const validPasswd = this.password !== '' && this.password === this.retypePassword;
+    const validEmail = /^([a-zA-Z][a-zA-Z_0-9]*$)/.test(this.email.trim());
+
+    return validName && validPasswd && validEmail;
   }
 
 }

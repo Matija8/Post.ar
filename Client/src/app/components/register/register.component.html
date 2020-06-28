@@ -49,19 +49,17 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label class="label-title" for="email">Email adress</label>
+              <label class="label-title" for="email">Username</label>
               <input
                 type="text"
                 class="form-control"
                 id="email"
                 name="email"
-                placeholder="New email adress"
+                placeholder="Your username"
                 [(ngModel)]="email"
                 required
               />
-                <!-- TODO1: @post.ar (float right) -->
-                <!-- TODO2: (below) <div> TODO: Invisbile email error? Reactive forms? </div> -->
-                  <!-- [ngClass]= valid=...? -->
+              <!-- TODO: Appendovati @post.ar na username/email -->
             </div>
           </div>
         </div>
@@ -87,7 +85,7 @@
           <div class="col" style="margin-top: 10px;">
             <div class="form-group">
               <input
-                type="retypePassword"
+                type="password"
                 class="form-control"
                 id="retype-password"
                 name="retype-password"

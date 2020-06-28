@@ -12,8 +12,8 @@ import { SecretarService } from 'src/app/services/secretar/secretar.service';
 export class LoginComponent implements OnInit {
 
   // Form data:
-  public email: string;
-  public password: string;
+  public email = '';
+  public password = '';
 
   public warning: 'hidden'|'visible';
   private requestPending: boolean;
@@ -40,12 +40,17 @@ export class LoginComponent implements OnInit {
     }
     this.requestPending = true;
     this.warning = 'hidden';
-    const loginData: LoginData = { username: this.email, password: this.password, keepMeLoggedIn: this.keepMeLoggedIn };
+    const email = this.email.trim();
+    const username = email.endsWith('@post.ar') ? email : `${email}@post.ar`;
+    const loginData: LoginData = {
+      username,
+      password: this.password,
+      keepMeLoggedIn: this.keepMeLoggedIn
+    };
     this.auth.userLogin(loginData)
     .subscribe(
       (userData: User) => {
         this.requestPending = false;
-        // console.log(userData);
         this.router.navigate(['/inbox']);
       },
       (err: any) => {
@@ -54,6 +59,11 @@ export class LoginComponent implements OnInit {
         this.warning = 'visible';
       }
     );
+  }
+
+  validParams(): boolean {
+    const validEmail = /^[a-zA-Z][a-zA-Z_0-9]*?(@post\.ar)?$/.test(this.email.trim());
+    return validEmail && (this.password !== '');
   }
 
 }

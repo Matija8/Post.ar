@@ -19,7 +19,7 @@
               <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                 name="email"
                 placeholder="username@post.ar"
-                [(ngModel)]="this.email"
+                [(ngModel)]="email"
                 required
               >
             </div>
@@ -60,7 +60,7 @@
         <div class="row">
           <div class="col-md-4 text-center button-wrapper">
             <button type="submit" class="btn btn-primary login-button" (click)="logIn()"
-              [disabled]="!(email && password)"
+              [disabled]="!validParams()"
             >
               Login
             </button>
