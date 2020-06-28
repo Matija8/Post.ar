@@ -31,7 +31,7 @@ select.form-control:focus {
 
 .wrapper {
   width: 500px;
-  height: 750px;
+  height: 770px;
 
   -webkit-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
   -moz-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
@@ -97,7 +97,8 @@ select.form-control:focus {
 
 .login-button {
   text-transform: uppercase;
-  width: 100px;
+  padding-left: 15px;
+  padding-right: 15px;
   height: 40px;
   border-radius: 20px;
 }

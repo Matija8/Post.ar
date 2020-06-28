@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators';
 })
 export class RegisterComponent implements OnInit {
 
+  // Form data:
   public name: string;
   public surname: string;
   public email: string;
@@ -19,6 +20,7 @@ export class RegisterComponent implements OnInit {
   public retypePassword: string;
 
   public warning: 'hidden'|'visible';
+  private requestPending: boolean;
 
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -27,21 +29,25 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser() {
+    if (this.requestPending) {
+      return;
+    }
     const registrationData: RegisterData = {
       name: this.name,
       surname: this.surname,
       email: this.email,
       password: this.password
     };
+    this.warning = 'hidden';
     this.auth.registerUser(registrationData)
-    .pipe(take(1))
     .subscribe(
       (res: any) => {
-        console.log('Response from registerUser:', res);
+        this.requestPending = false;
         alert('You have successfuly registered!\nYou will now be redirected to the login page');
         this.router.navigate(['/login']);
       },
       (err: any) => {
+        this.requestPending = false;
         console.log('Error from registerUser:', err);
         this.warning = 'visible';
       }

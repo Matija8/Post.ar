@@ -11,8 +11,10 @@ import { SecretarService } from 'src/app/services/secretar/secretar.service';
 })
 export class LoginComponent implements OnInit {
 
+  // Form data:
   public email: string;
   public password: string;
+
   public warning: 'hidden'|'visible';
   private requestPending: boolean;
 
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.requestPending = true;
+    this.warning = 'hidden';
     const loginData: LoginData = { username: this.email, password: this.password, keepMeLoggedIn: this.keepMeLoggedIn };
     this.auth.userLogin(loginData)
     .subscribe(

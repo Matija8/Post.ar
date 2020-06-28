@@ -97,7 +97,8 @@ select.form-control:focus {
 
 .login-button {
     text-transform: uppercase;
-    width: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
     height: 40px;
     border-radius: 20px;
 }

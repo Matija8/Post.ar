@@ -60,10 +60,17 @@
         <div class="row">
           <div class="col-md-4 text-center button-wrapper">
             <button type="submit" class="btn btn-primary login-button" (click)="logIn()"
-            [disabled]="!(email && password)"
-            >Login</button>
+              [disabled]="!(email && password)"
+            >
+              Login
+            </button>
           </div>
         </div>
+
+        <p class="login-warning" [style.visibility]="warning">
+          Failed to login!
+        </p>
+
 
         <div class="row">
           <div class="col">
