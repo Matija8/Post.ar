@@ -57,6 +57,14 @@ export class MailListComponent extends Selectable implements OnInit, OnDestroy {
     this.selected.delete(message);
   }
 
+  public onRead([messageId, markAsRead]: [string, boolean]): void {
+    if (markAsRead) {
+      this.tagMail.markAsRead([messageId]);
+    } else {
+      this.tagMail.markAsUnread([messageId]);
+    }
+  }
+
   public deleteSelected(): void {
     this.trashMail.moveToTrash(this.selected.values());
     this.selected.clear();

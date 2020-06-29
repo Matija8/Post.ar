@@ -14,6 +14,8 @@
 
     --border-color1: black;
 
+    --mail-item-background-color: lightblue;
+
 }
 
 body {
@@ -57,11 +59,13 @@ body {
 
     --background-color-outer: rgb(50, 50, 50);
     --background-color-inner: rgb(120, 120, 120);
-    --background-color-link-hover: rgb(120, 50, 50);
+    --background-color-link-hover: rgb(130, 50, 50);
 
 
     --text-color1: rgb(220, 220, 220);
     --text-color2: black;
 
     --border-color1: white;
+
+    --mail-item-background-color: rgba(240, 20, 20, 0.1);
 }

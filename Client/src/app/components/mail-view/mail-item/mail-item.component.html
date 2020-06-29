@@ -1,32 +1,65 @@
 <mat-card class="mail-item unselectable">
-  <!-- TODO: Align checkbox vecticaly -->
-  <mat-checkbox
-    (click)="$event.stopPropagation()"
-    [checked]="selected"
-    (change)="selectToggle()"
-  ></mat-checkbox>
 
-  <mat-icon style="cursor: pointer;" (click)="$event.stopPropagation(); star()">
-    {{ msg.isStarred ? "star" : "star_border" }}
-  </mat-icon>
+  <!-- mail-item-left -->
+  <div class="mail-item-left">
+    <mat-checkbox
+      (click)="$event.stopPropagation()"
+      [checked]="selected"
+      (change)="selectToggle()"
+    ></mat-checkbox>
 
-  <div> <!-- <div> is here to prevent button text misalign -->
-    <button
-      mat-raised-button
-      color="warn"
-      type="button"
-      (click)="$event.stopPropagation(); moveToTrash()"
-    >
-      delete
-    </button>
+    <mat-icon style="cursor: pointer;" (click)="$event.stopPropagation(); star()">
+      {{ msg.isStarred ? "star" : "star_border" }}
+    </mat-icon>
   </div>
+  <!--/mail-item-left -->
 
-  <div class="mail-item-link" [routerLink]="[router.url, msg.messageId]">
+
+  <!-- mail-item-center -->
+  <div class="mail-item-center" (click)="bodyClick()">
+
     <div class="mail-item-title" *ngIf="sentByMe; else From">
       To: {{ msg.to }}
     </div>
     <ng-template #From>
-      <div class="mail-item-title">From: {{ msg.from }}</div>
+      <div class="mail-item-title">From: {{ msg.from || 'No sender' }}</div>
     </ng-template>
+
   </div>
+  <!--/mail-item-center -->
+
+
+  <!-- mail-item-right -->
+  <div class="mail-item-right">
+    <button mat-icon-button
+      (click)="$event.stopPropagation(); moveToTrash()"
+    >
+      <mat-icon matTooltip="Delete">
+        delete
+      </mat-icon>
+    </button>
+
+    <!-- Read/Unread -->
+    <button mat-icon-button
+      *ngIf="!sentByMe"
+      (click)="$event.stopPropagation(); toggleRead()"
+    >
+      <mat-icon matTooltip="Mark as read"
+        *ngIf="!msg.isRead; else read"
+      >
+        mark_email_read
+      </mat-icon>
+      <ng-template #read>
+        <mat-icon matTooltip="Mark as unread">
+          mark_email_unread
+        </mat-icon>
+      </ng-template>
+    </button>
+    <!--/Read/Unread -->
+
+  </div>
+  <!--/mail-item-right -->
+
+
+
 </mat-card>

@@ -32,13 +32,10 @@ export class TagMailService {
     return response;
   }
 
-  markAsRead(messages: TagData[]) {
-    const messageIds: string[] = [];
-    for (const {messageId, type} of messages) {
-      messageIds.push(messageId);
-    }
-
-    const response = this.http.post('http://localhost:8000/inbox/markAsRead', messageIds);
+  private markAsReadOrUnread(messageIds: string[], markRead: boolean): Observable<any> {
+    const baseUrl = 'http://localhost:8000/inbox/';
+    const url = baseUrl + (markRead ? 'markAsRead' : 'markAsUnread');
+    const response = this.http.post(url, { messageIds });
     response.subscribe(
       (res: any): void => {
         this.getMail.folders.inbox.refreshFolder();
@@ -50,22 +47,12 @@ export class TagMailService {
     return response;
   }
 
-  markAsUnread(messages: TagData[]) {
-    const messageIds: string[] = [];
-    for (const {messageId, type} of messages) {
-      messageIds.push(messageId);
-    }
+  markAsRead(messageIds: string[]): Observable<any> {
+    return this.markAsReadOrUnread(messageIds, true);
+  }
 
-    const response = this.http.post('http://localhost:8000/inbox/markAsUnread', messageIds);
-    response.subscribe(
-      (res: any): void => {
-        this.getMail.folders.inbox.refreshFolder();
-      },
-      (err: any): void => {
-        console.log(err);
-      }
-    );
-    return response;
+  markAsUnread(messageIds: string[]): Observable<any> {
+    return this.markAsReadOrUnread(messageIds, false);
   }
 
 }

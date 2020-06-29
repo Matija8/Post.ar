@@ -16,22 +16,18 @@ export class MailItemComponent implements OnInit {
   @Output() starEmitter = new EventEmitter<[TagData, boolean]>();
   @Output() moveToTrashEmitter = new EventEmitter<TagData>();
   @Output() selectEmitter = new EventEmitter<[TagData, boolean]>();
-  public sentByMe: boolean;
-  public isStarred: boolean;
+  @Output() markReadEmitter = new EventEmitter<[string, boolean]>();
+  public sentByMe = true;
 
-  constructor(public router: Router) {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
     this.sentByMe = !isReceived(this.msg);
-    this.isStarred = false;
   }
 
   star(): void {
-    this.msg.isStarred = !this.msg.isStarred;
-    this.isStarred = !this.isStarred;
-    console.log(this.isStarred);
-    this.starEmitter.emit([makeTagData(this.msg), this.msg.isStarred]);
+    this.starEmitter.emit([makeTagData(this.msg), !this.msg.isStarred]);
   }
 
   selectToggle() {
@@ -40,5 +36,17 @@ export class MailItemComponent implements OnInit {
 
   moveToTrash() {
     this.moveToTrashEmitter.emit(makeTagData(this.msg));
+  }
+
+  toggleRead() {
+    // Only inbox messages have the isRead attribute.
+    this.markReadEmitter.emit([(this.msg.messageId), !this.msg.isRead]);
+  }
+
+  bodyClick() {
+    if (!this.msg.isRead && !this.sentByMe) {
+      this.markReadEmitter.emit([(this.msg.messageId), !this.msg.isRead]);
+    }
+    this.router.navigate([this.router.url, this.msg.messageId]);
   }
 }
