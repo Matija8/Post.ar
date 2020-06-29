@@ -72,15 +72,18 @@
         </button>
       </div>
 
-      <!-- someSelected3DotMenu ->
+      <!-- someSelected3DotMenu -->
       <button mat-icon-button [matMenuTriggerFor]="someSelected3DotMenu" aria-label="Extra options">
         <mat-icon matTooltip="More">
           more_vert
         </mat-icon>
       </button>
       <mat-menu #someSelected3DotMenu="matMenu">
+        <button mat-menu-item disabled>
+          <span> No actions for this folder </span>
+        </button>
       </mat-menu>
-      <!- /someSelected3DotMenu -->
+      <!--/someSelected3DotMenu -->
 
     </ng-template>
     <!-- /Some Selected -->
