@@ -95,4 +95,21 @@ export class DraftsComponent implements OnInit, OnDestroy {
     this.selected.clear();
   }
 
+  public selectAll(): void {
+    this.selected.clear();
+    this.draftsList.forEach( draft => this.selected.add(draft.messageId));
+  }
+
+  public deselectAll(): void {
+    this.selected.clear();
+  }
+
+  public toggleAllSelected(): void {
+    if (this.selected.size > 0) {
+      this.selected.clear();
+    } else {
+      this.selectAll();
+    }
+  }
+
 }
