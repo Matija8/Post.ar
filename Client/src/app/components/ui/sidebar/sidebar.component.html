@@ -1,11 +1,37 @@
 
-<button id="compose-button" (click)="addCompose()"> Compose </button>
+<div
+  id="compose-button"
+  (click)="addCompose()"
+>
+  <mat-icon>add</mat-icon>
+  Compose
+</div>
 
 <ul id="sidebar-links">
-  <a routerLink="/inbox" routerLinkActive="active">Inbox</a>
-  <a routerLink="/sent" routerLinkActive="active">Sent</a>
-  <a routerLink="/starred" routerLinkActive="active">Starred</a>
-  <a routerLink="/all" routerLinkActive="active">All Mail</a>
-  <a routerLink="/drafts" routerLinkActive="active">Drafts</a>
-  <a routerLink="/trash" routerLinkActive="active">Trash</a>
+
+  <a routerLink="/inbox" routerLinkActive="active">
+    <mat-icon>inbox</mat-icon>
+    <span>Inbox</span>
+  </a>
+  <a routerLink="/sent" routerLinkActive="active">
+    <mat-icon>send</mat-icon>
+    <span>Sent</span>
+  </a>
+  <a routerLink="/starred" routerLinkActive="active">
+    <mat-icon>star</mat-icon>
+    <span>Starred</span>
+  </a>
+  <a routerLink="/all" routerLinkActive="active">
+    <mat-icon>mail</mat-icon>
+    <span>All Mail</span>
+  </a>
+  <a routerLink="/drafts" routerLinkActive="active">
+    <mat-icon>drafts</mat-icon>
+    <span>Drafts</span>
+  </a>
+  <a routerLink="/trash" routerLinkActive="active">
+    <mat-icon>delete</mat-icon>
+    <span>Trash</span>
+  </a>
+
 </ul>

@@ -33,6 +33,10 @@ mat-card.mail-list-header {
     height: 100%;
 }
 
+.mail-header-right > * {
+    margin-right: 10px;
+}
+
 .selectMenuBtn {
     cursor: default;
     display: flex;

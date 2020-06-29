@@ -1,24 +1,47 @@
 
 <div id="header-left">
-  <button mat-button (click)="onMenuClick()" style="margin-left: 5px; margin-right: 5px;"><mat-icon>menu</mat-icon>Menu</button>
-</div>
+  <button mat-icon-button
+    (click)="onMenuClick()"
+    matTooltip="Sidebar"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+</div> <!-- /header-left -->
+
 
 <div id="header-center">
-    <h1><a id="header-title" [routerLink]="['/']">Postar</a></h1>
-</div>
+  <h1><a id="header-title" [routerLink]="['/']">Postar</a></h1>
+</div> <!-- /header-center -->
+
 
 <div id="header-right">
-    <button (click)="toggleTheme()">change theme</button>
 
-    <div id="show-menu" [style.visibility]="showMenuBtnVisibile"
-        (click)="dropdownHidden=!dropdownHidden" class="unselectable"
-    >
-        {{ letter }}
-    </div>
-    <mat-list id="dropdown-menu" [hidden]="dropdownHidden">
-        <mat-list-item><a (click)="logOut()">Logout</a></mat-list-item>
-        <br>
-        <mat-list-item> {{ name }} {{ surname }} </mat-list-item>
-    </mat-list>
+  <button mat-icon-button
+    (click)="toggleTheme()"
+    matTooltip="Theme"
+  >
+    <mat-icon>style</mat-icon>
+  </button>
 
-</div>
+  <div
+    id="show-menu"
+    [style.visibility]="showMenuBtnVisibile"
+    (click)="dropdownHidden = !dropdownHidden"
+    class="unselectable"
+  >
+    {{ letter }}
+  </div>
+
+  <mat-list id="dropdown-menu" [hidden]="dropdownHidden">
+
+    <mat-list-item>
+      {{ name }} {{ surname }}
+    </mat-list-item>
+
+    <mat-list-item>
+      <a (click)="logOut()">Logout</a>
+    </mat-list-item>
+
+  </mat-list>
+
+</div> <!-- /header-right -->

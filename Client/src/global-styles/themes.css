@@ -34,12 +34,12 @@ body {
             /* dropdown menu */
             --dropdown-menu-width: 11rem;
             --dropdown-menu-circile-radius: 2.1rem;
-            --dropdown-menu-background-color: var(--background-color-inner);
+            --dropdown-menu-background-color: white;
             --dropdown-menu-text-color: var(--text-color1);
             --dropdown-menu-border-color: black;
 
         /* sidebar */
-        --sidebar-width: 8rem;
+        --sidebar-width: 200px;
         --sidebar-background-color: var(--header-background-color);
         --sidebar-composeBtn-background-color: white;
         --sidebar-link-hover-background-color: var(--background-color-link-hover);

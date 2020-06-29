@@ -5,6 +5,10 @@
     background-color: var(--header-background-color);
 }
 
+h1 {
+    margin: 0;
+}
+
 
 #header-left, #header-center, #header-right {
     display: flex;
@@ -33,12 +37,13 @@
     justify-content: flex-end;
 }
 
+#header-left:first-child {
+    margin-left: 20px;
+}
+
 
 button {
-    background-color: var(--header-button-background-color);
     align-self: center;
-    height: fit-content;
-    padding: 4px;
     margin-right: 20px;
 }
 
