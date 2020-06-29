@@ -22,7 +22,9 @@
       To: {{ msg.to }}
     </div>
     <ng-template #From>
-      <div class="mail-item-title">From: {{ msg.from || 'No sender' }}</div>
+      <div [ngClass]="{'mail-item-title': msg.isRead, 'mail-item-title-bold': !msg.isRead}">
+        From: {{ msg.from || 'No sender' }}
+      </div>
     </ng-template>
 
   </div>

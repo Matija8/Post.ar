@@ -57,6 +57,11 @@
     font-size: var(--font-size-L);
 }
 
+.mail-item-title-bold {
+    font-size: var(--font-size-L);
+    font-weight: bold;
+}
+
 mat-card.mail-item {
     display: flex;
     padding: 0;
