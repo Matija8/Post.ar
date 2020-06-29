@@ -63,7 +63,8 @@ export class LoginComponent implements OnInit {
 
   validParams(): boolean {
     const validEmail = /^[a-zA-Z][a-zA-Z_0-9]*?(@post\.ar)?$/.test(this.email.trim());
-    return validEmail && (this.password !== '');
+    const validPasswdLen = (this.password.length >= 8) && (this.password.length <= 64);
+    return validEmail && validPasswdLen;
   }
 
 }
