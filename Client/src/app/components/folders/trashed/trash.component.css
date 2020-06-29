@@ -1,1 +1,5 @@
 /* Check in global styles for mail-list.css */
+
+#delete-forever-btn:hover {
+    background-color: rgba(20, 20, 20, 0.1);
+}

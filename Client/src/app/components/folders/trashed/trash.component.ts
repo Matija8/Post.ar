@@ -3,7 +3,7 @@ import { Message, sortByTime } from 'src/app/models/Messages';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Subscription } from 'rxjs';
 import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
-import { Selectable } from 'src/app/models/Selectable/Selectable';
+import { Selectable, selectFilter } from 'src/app/models/Selectable/Selectable';
 import { TagDataSet } from 'src/app/models/TagData/TagDataSet';
 import { TagData } from 'src/app/models/TagData/TagData';
 
@@ -13,7 +13,7 @@ import { TagData } from 'src/app/models/TagData/TagData';
   styleUrls: ['./trash.component.css']
 })
 export class TrashComponent extends Selectable implements OnInit, OnDestroy {
-  private folder = this.getMail.folders.trash;
+  public folder = this.getMail.folders.trash;
   private folderSub: Subscription = null;
   public messages: Message[];
 
@@ -67,6 +67,18 @@ export class TrashComponent extends Selectable implements OnInit, OnDestroy {
 
   restoreSelected(): void {
     this.trashMail.restoreFromTrash(this.selected.values());
+  }
+
+  public selectByFilter(filter: selectFilter) {
+    this.selected = super.filterMessages(this.messages, filter);
+  }
+
+  toggleAllSelected() {
+    if (this.selected.size > 0) {
+      this.selected.clear();
+    } else {
+      this.selectByFilter('all');
+    }
   }
 
 }

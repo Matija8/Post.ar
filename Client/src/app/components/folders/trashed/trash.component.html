@@ -2,35 +2,113 @@
 
   <div class="mail-header-left">
 
-    <div> selected: {{ selectedChar() }} </div>
+
+    <!-- selectMenu -->
+    <div class="selectMenuBtn">
+      <postar-selected-icon
+        [selectedChar]="selectedChar()"
+        (toggle)="toggleAllSelected()">
+      </postar-selected-icon>
+      <mat-icon matTooltip="Select"
+        style="cursor: pointer;"
+        [matMenuTriggerFor]="selectMenu"
+      >
+        keyboard_arrow_down
+      </mat-icon>
+    </div>
+
+    <mat-menu #selectMenu="matMenu">
+
+      <button mat-menu-item (click)="selectByFilter('all')">
+        <span>All</span>
+      </button>
+      <button mat-menu-item (click)="selectByFilter('none')">
+        <span>None</span>
+      </button>
+      <!-- TODO: read/unread... -->
+
+    </mat-menu>
+    <!-- /selectMenu -->
+
+
+    <!-- None Selected -->
     <div *ngIf="selectedChar() === 'None';
       else someSelected">
-      <button mat-raised-button color="primary"
-        (click)="refreshFolder()">
-        refresh
+
+
+      <button mat-icon-button aria-label="Refresh folder button"
+        (click)="folder.refreshFolder()"
+      >
+        <mat-icon matTooltip="Refresh">
+          refresh
+        </mat-icon>
       </button>
+
+      <!-- noneSelected3DotMenu -->
+      <button mat-icon-button [matMenuTriggerFor]="noneSelected3DotMenu" aria-label="Extra options">
+        <mat-icon matTooltip="More">
+          more_vert
+        </mat-icon>
+      </button>
+      <mat-menu #noneSelected3DotMenu="matMenu">
+        <!-- <button mat-menu-item>
+          <span> Action </span>
+        </button> -->
+        <button mat-menu-item disabled>
+          <span> Select messages to see more actions </span>
+        </button>
+      </mat-menu>
+      <!-- /noneSelected3DotMenu -->
+
+
     </div>
+    <!-- /None Selected -->
+
+
+    <!-- Some Selected -->
     <ng-template #someSelected>
       <div>
-        <button mat-raised-button color="warn"
-          (click)="deleteSelected()">
-          delete forever
-        </button>
-        <button mat-raised-button color="primary"
-          (click)="restoreSelected()">
-          restore
+        <button mat-flat-button
+          id="delete-forever-btn"
+          (click)="deleteSelected()"
+        >
+          Delete forever
         </button>
       </div>
+
+      <!-- someSelected3DotMenu -->
+      <button mat-icon-button [matMenuTriggerFor]="someSelected3DotMenu" aria-label="Extra options">
+        <mat-icon matTooltip="More">
+          more_vert
+        </mat-icon>
+      </button>
+      <mat-menu #someSelected3DotMenu="matMenu">
+        <button mat-menu-item
+          (click)="restoreSelected()"
+        >
+          <span> Restore </span>
+        </button>
+      </mat-menu>
+      <!-- /someSelected3DotMenu -->
+
     </ng-template>
+    <!-- /Some Selected -->
+
 
   </div> <!-- /mail-header-left -->
 
   <div class="mail-header-right">
+    <span> Messages: {{ messages.length }} </span>
   </div>
 
 </mat-card> <!-- /mail-header -->
 
 <!-- List items -->
+<!-- <postar-list-tip>
+  [message]="'Messages that have been in Trash' +
+    'more than 30 days will be automatically deleted.'"
+</postar-list-tip> -->
+
 <postar-list-tip
   *ngIf="!messages || messages.length === 0"
   [message]="'No trash here!'">
