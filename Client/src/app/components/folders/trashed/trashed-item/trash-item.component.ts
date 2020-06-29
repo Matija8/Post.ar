@@ -14,9 +14,9 @@ export class TrashItemComponent implements OnInit {
   @Output() selectEmitter = new EventEmitter<[TagData, boolean]>();
   @Output() restoreEmitter = new EventEmitter<TagData>();
   @Output() deleteForeverEmitter = new EventEmitter<TagData>();
-  public sentByMe: boolean;
+  public sentByMe = true;
 
-  constructor(public router: Router) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.sentByMe = !isReceived(this.msg);
@@ -26,14 +26,18 @@ export class TrashItemComponent implements OnInit {
     this.selectEmitter.emit([makeTagData(this.msg), !this.selected]);
   }
 
-  deleteForever(event: MouseEvent) {
-    event.stopPropagation();
+  deleteForever() {
     this.deleteForeverEmitter.emit(makeTagData(this.msg));
   }
 
-  restore(event: MouseEvent) {
-    event.stopPropagation();
+  restore() {
     this.restoreEmitter.emit(makeTagData(this.msg));
+  }
+
+  bodyClick(): void {
+    // TODO: Disable click for messages in trash?
+    // At least make a new open-mail-item component for trash items.
+    this.router.navigate([this.router.url, this.msg.messageId]);
   }
 
 }

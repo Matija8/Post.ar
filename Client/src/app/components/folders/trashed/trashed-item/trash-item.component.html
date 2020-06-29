@@ -1,37 +1,51 @@
 <mat-card class="mail-item unselectable">
 
-  <mat-checkbox
-    (click)="$event.stopPropagation()"
-    [checked]="selected"
-    (change)="selectToggle()"
-  ></mat-checkbox>
+  <!-- mail-item-left -->
+  <div class="mail-item-left">
 
-  <div>
-    <button
-      mat-raised-button
-      color="warn"
-      type="button"
-      (click)="deleteForever($event)"
-    > delete forever
-    </button>
+    <mat-checkbox
+      [checked]="selected"
+      (change)="selectToggle()"
+    ></mat-checkbox>
   </div>
 
-  <div>
-    <button
-      mat-raised-button
-      color="primary"
-      type="button"
-      (click)="restore($event)"
-    > restore
-    </button>
-  </div>
+  <!--/mail-item-left -->
 
-  <div class="mail-item-link" [routerLink]="[router.url, msg.messageId]">
+
+  <!-- mail-item-center -->
+  <div class="mail-item-center" (click)="bodyClick()">
+
     <div class="mail-item-title" *ngIf="sentByMe; else From">
       To: {{ msg.to }}
     </div>
     <ng-template #From>
-      <div class="mail-item-title">From: {{ msg.from }}</div>
+      <div class="mail-item-title">From: {{ msg.from || 'No sender' }}</div>
     </ng-template>
+
   </div>
+  <!--/mail-item-center -->
+
+
+  <!-- mail-item-right -->
+  <div class="mail-item-right">
+
+    <button mat-flat-button
+      (click)="restore()"
+    >
+      Restore
+    </button>
+
+    <button mat-icon-button
+      (click)="deleteForever()"
+    >
+      <mat-icon matTooltip="Delete forever">
+        delete
+      </mat-icon>
+    </button>
+
+  </div>
+  <!--/mail-item-right -->
+
+
+
 </mat-card>
