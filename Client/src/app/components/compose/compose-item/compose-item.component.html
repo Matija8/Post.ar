@@ -35,17 +35,17 @@
 
       <mat-form-field>
         <mat-label for="">To</mat-label>
-        <input matInput name="to" type="text" [(ngModel)]="editorData.msg.to" required>
+        <input matInput name="to" type="text" [(ngModel)]="editorData.msg.to" >
       </mat-form-field>
 
       <mat-form-field>
         <mat-label for="">Subject</mat-label>
-        <input matInput name="subject" type="text" [(ngModel)]="editorData.msg.subject" required>
+        <input matInput name="subject" type="text" [(ngModel)]="editorData.msg.subject" >
       </mat-form-field>
 
       <mat-form-field>
         <mat-label for="">Message</mat-label>
-        <textarea matInput name="msg" type="text" [(ngModel)]="editorData.msg.messageText" required
+        <textarea matInput name="msg" type="text" [(ngModel)]="editorData.msg.messageText" 
           id="compose-textarea">
         </textarea>
       </mat-form-field>

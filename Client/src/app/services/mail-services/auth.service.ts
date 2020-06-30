@@ -7,6 +7,7 @@ import { GetMailService } from './get-mail.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { take, flatMap, skipWhile, map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Endpoint } from 'src/app/endpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class AuthService {
   }
 
   registerUser(user: RegisterData): Observable<object> {
-    return this.http.post('http://localhost:8000/register', {
+    return this.http.post(Endpoint.REGISTER, {
       name: user.name,
       surname: user.surname,
       username: user.email,
@@ -99,7 +100,7 @@ export class AuthService {
   }
 
   public userLogin(user: LoginData): Observable<User> {
-    return this.http.post('http://localhost:8000/login', user).pipe(
+    return this.http.post(Endpoint.LOGIN, user).pipe(
       take(1),
       flatMap(
         (res: any) => {
@@ -126,7 +127,7 @@ export class AuthService {
     if (!this.sessionIdExists()) {
       return throwError('SESSIONID doesn\'t exist. This is ok.');
     }
-    return this.http.get('http://localhost:8000/user/checkSession')
+    return this.http.get(Endpoint.USER + '/checkSession')
     .pipe(
       take(1),
       flatMap(
@@ -177,7 +178,7 @@ export class AuthService {
         );
       }),
       flatMap(_ => { // 3) Tell the server to remove this session.
-        return this.http.get('http://localhost:8000/logout').pipe(
+        return this.http.get(Endpoint.LOGOUT).pipe(
           catchError(err => of(true)), // The server is down, otherwise this always succeeds.
           take(1)
         );

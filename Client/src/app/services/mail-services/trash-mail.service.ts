@@ -3,6 +3,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
 import { TagData } from 'src/app/models/TagData/TagData';
+import { Endpoint } from 'src/app/endpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class TrashMailService {
   ) {}
 
   moveToTrash(messages: TagData[]): Observable<any> {
-    const response = this.http.post('http://localhost:8000/trash/delete', {messages});
+    const response = this.http.post(Endpoint.TRASH + '/delete', {messages});
     response.subscribe(
       (res: any): void => {
         this.getMail.folders.trash.refreshFolder();
@@ -31,7 +32,7 @@ export class TrashMailService {
   }
 
   restoreFromTrash(messages: TagData[]): Observable<any> {
-    const response = this.http.post('http://localhost:8000/trash/undoDelete', {messages});
+    const response = this.http.post(Endpoint.TRASH + '/undoDelete', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
@@ -48,7 +49,7 @@ export class TrashMailService {
   }
 
   deleteForever(messages: TagData[]): Observable<any> {
-    const response = this.http.post('http://localhost:8000/trash/deleteForever', {messages});
+    const response = this.http.post(Endpoint.TRASH + '/deleteForever', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);

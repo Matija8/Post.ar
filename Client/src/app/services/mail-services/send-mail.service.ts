@@ -4,6 +4,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { GetMailService } from './get-mail.service';
 import { SecretarService } from '../secretar/secretar.service';
 import { SMessage } from 'src/app/models/Messages';
+import { Endpoint } from 'src/app/endpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class SendMailService {
       content: message.messageText
     };
     const content = this.secretar.encryptMessage(contentToEncrypt);
-    this.http.post('http://localhost:8000/send', {
+    this.http.post(Endpoint.SEND, {
       to: message.to,
       content,
     }).subscribe(

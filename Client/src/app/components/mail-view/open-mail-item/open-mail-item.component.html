@@ -5,7 +5,6 @@
     <mat-card-title> {{ this.msg.subject }}</mat-card-title>
     <mat-card-subtitle *ngIf="this.msg.from">  From: {{ this.msg.from }} </mat-card-subtitle>
     <mat-card-subtitle *ngIf="this.msg.to">  To: {{ this.msg.to }} </mat-card-subtitle>
-    <mat-card-subtitle> Cc: {{ this.msg.cc }} </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     {{ this.msg.content }}

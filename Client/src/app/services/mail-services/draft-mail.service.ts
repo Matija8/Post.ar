@@ -5,6 +5,7 @@ import { Observable, throwError, zip } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EditorMessage } from 'src/app/models/Compose';
 import { SecretarService } from '../secretar/secretar.service';
+import { Endpoint } from 'src/app/endpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class DraftMailService {
       subject: edMsg.subject,
       body: edMsg.messageText,
     });
-    const response = this.http.post('http://localhost:8000/drafts/save', { content });
+    const response = this.http.post(Endpoint.DRAFTS + '/save', { content });
     response.subscribe(
       (res: any) => {
         // console.log(res);
@@ -40,7 +41,7 @@ export class DraftMailService {
   }
 
   discardDraft(draftId: string): Observable<any> {
-    const response = this.http.post('http://localhost:8000/drafts/discard', { messageId: draftId });
+    const response = this.http.post(Endpoint.DRAFTS + '/discard', { messageId: draftId });
     response.subscribe(
       (res: any) => {
         this.getMail.folders.drafts.refreshFolder();

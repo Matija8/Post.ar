@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { TagData } from 'src/app/models/TagData/TagData';
 import { Folder } from 'src/app/models/Folder';
 import { Message } from 'src/app/models/Messages';
+import { Endpoint } from 'src/app/endpoint';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class TagMailService {
 
   star(messages: TagData[], value: boolean): Observable<any> {
     const response = value ?
-        this.http.post('http://localhost:8000/starred/save', {messages})
-      : this.http.post('http://localhost:8000/starred/remove', {messages});
+        this.http.post(Endpoint.STARRED + '/save', {messages})
+      : this.http.post(Endpoint.STARRED + '/remove', {messages});
     response.subscribe(
       (res: any): void => {
         this.getMail.folders.all.refreshFolder();
@@ -33,7 +34,7 @@ export class TagMailService {
   }
 
   private markAsReadOrUnread(messageIds: string[], markRead: boolean): Observable<any> {
-    const baseUrl = 'http://localhost:8000/inbox/';
+    const baseUrl = Endpoint.INBOX + '/';
     const url = baseUrl + (markRead ? 'markAsRead' : 'markAsUnread');
     const response = this.http.post(url, { messageIds });
     response.subscribe(
