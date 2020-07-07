@@ -1,0 +1,45 @@
+
+<div class="compose-item-menubar">
+  <span class="compose-item-menubar-left">
+  </span>
+  <div class="compose-item-menubar-right">
+    <button class="compose-menubar-button" (click)="minimize()">
+      <!-- <mat-icon>minimize</mat-icon> -->
+      _
+    </button>
+    <button class="compose-menubar-button" (click)="unMaximizeClick()">
+      <!-- <mat-icon>open_in_full</mat-icon> -->
+      □
+    </button>
+    <button class="compose-menubar-button" (click)="closeClick()">
+      <!-- <mat-icon>close</mat-icon> -->
+      X
+    </button>
+  </div>
+</div>
+
+
+<form class="form" id="maximized-compose-item-body">
+
+  <mat-form-field>
+    <mat-label for="">To</mat-label>
+    <input matInput name="to" type="text" [(ngModel)]="editorData.msg.to" >
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="">Subject</mat-label>
+    <input matInput name="subject" type="text" [(ngModel)]="editorData.msg.subject" >
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="">Message</mat-label>
+    <textarea matInput name="msg" type="text" [(ngModel)]="editorData.msg.messageText"
+      class="compose-textarea">
+    </textarea>
+  </mat-form-field>
+
+  <div id="maximized-compose-item-btn-div">
+    <button mat-raised-button color="primary" type="button" (click)="clickSend()" [disabled]="sendBtnDisabled()" >Send</button>
+  </div>
+
+</form>

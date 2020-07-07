@@ -3,14 +3,12 @@ export type editorSize = 'normal' | 'minimized';
 
 export interface EditorMessage {
   to: string;
-  cc: string; // string[]?
-  bcc: string;
   subject: string;
   messageText: string;
 }
 
 export const makeEmptyEditorMsg = function createEmptyEditorMessage(): EditorMessage {
-  return {to: '', cc: '', bcc: '', subject: '', messageText: ''};
+  return {to: '', subject: '', messageText: ''};
 };
 
 export const checkEmpty = function checkIfEditorMessageIsEmpty(message: EditorMessage) {

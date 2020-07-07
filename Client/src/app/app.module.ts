@@ -28,6 +28,7 @@ import { DraftsComponent } from './components/folders/drafts/drafts.component';
 import { DraftItemComponent } from './components/folders/drafts/draft-item/draft-item.component';
 import { AllComponent } from './components/folders/all/all.component';
 import { ListTipComponent } from './components/mail-view/list-tip/list-tip.component';
+import { MaximizedComposeItemComponent } from './components/compose/maximized-compose-item/maximized-compose-item.component';
 
 // Mail services.
 import { AuthService } from './services/mail-services/auth.service';
@@ -86,6 +87,7 @@ import { SelectedIconComponent } from './components/mail-view/selected-icon/sele
     AllComponent,
     ListTipComponent,
     SelectedIconComponent,
+    MaximizedComposeItemComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ export class ComposeComponent implements OnInit, OnDestroy {
 
   public readonly MAX_OPEN = 3;
   public openEditors: EditorData[] = [];
+  public maximizedEditor: { data: EditorData, index: number } = null;
 
   constructor(
     private sendMail: SendMailService,
@@ -40,24 +41,57 @@ export class ComposeComponent implements OnInit, OnDestroy {
   addEditor(msg: EditorMessage): void {
     msg = msg || makeEmptyEditorMsg();
     this.openEditors.push({ msg, size: 'normal' });
-    // console.log(`Opening: ${this.openEditors.length - 1}`);
   }
 
-  closeEditor(index: number): void {
-    if (index < 0 || index >= this.openEditors.length) {
+  closeEditor(editorToClose: EditorData): void {
+    const index = this.openEditors.findIndex(editor => editor === editorToClose);
+    if (index === undefined) {
       return;
     }
-    const msg = this.openEditors[index].msg;
+    const msg = editorToClose.msg;
     if (!checkEmpty(msg)) {
       this.draftMail.saveDraft(msg);
-      // console.log('Editor isn\'t empty!');
     }
     this.openEditors.splice(index, 1);
+    if (this.maximizedEditor !== null && this.maximizedEditor.index > index) {
+      this.maximizedEditor.index--;
+    }
+  }
+
+  maximizeEditor(editorToMaximize: EditorData): void {
+    if (!this.openEditors.includes(editorToMaximize)) {
+      return;
+    }
+    this.unMaximizeEditor();
+    const index = this.openEditors.findIndex(editor => editor === editorToMaximize);
+    this.openEditors.splice(index, 1);
+    this.maximizedEditor = { data: editorToMaximize, index };
+  }
+
+  unMaximizeEditor(): void {
+    if (!this.maximizedEditor) {
+      return;
+    }
+    const { index, data } = this.maximizedEditor;
+    this.openEditors.splice(index, 0, data);
+    this.maximizedEditor = null;
+  }
+
+  closeMaximizedEditor(): void {
+    if (!this.maximizedEditor) {
+      return;
+    }
+    const msg = this.maximizedEditor.data.msg;
+    if (!checkEmpty(msg)) {
+      this.draftMail.saveDraft(msg);
+    }
+    this.maximizedEditor = null;
   }
 
   closeAllEditors(): void {
-    // TODO: Save drafts?
+    // *Doesn't save drafts on purpose*
     this.openEditors = [];
+    this.maximizedEditor = null;
   }
 
   onSend(message: EditorMessage): void {

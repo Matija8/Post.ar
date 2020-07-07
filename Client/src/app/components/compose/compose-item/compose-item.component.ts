@@ -11,43 +11,36 @@ import { SendMailService } from 'src/app/services/mail-services/send-mail.servic
 export class ComposeItemComponent implements OnInit {
 
 
-  @Input() index: number;
   @Input() editorData: EditorData;
 
-  @Output() closeEvent = new EventEmitter<number>();
-  @Output() send = new EventEmitter<EditorMessage>();
+  @Output() closeEvent = new EventEmitter<EditorData>();
+  @Output() maximize = new EventEmitter<EditorData>();
 
-  constructor(private sendMail: SendMailService) { }
+  constructor(private sendMail: SendMailService) {}
 
   ngOnInit(): void {
   }
 
   clickSend(): void {
     const msg = this.editorData.msg;
-    console.log(`
-      send clicked:
-      to = ${msg.to}
-      subject = ${msg.subject}
-      msg = ${msg.messageText}`);
-
-    this.send.emit(msg);
+    this.sendMail.send(msg);
     this.editorData.msg = makeEmptyEditorMsg();
   }
 
-  sendBtnDisabled() {
-    const msg = this.editorData.msg;
-    if (msg.subject && msg.messageText && this.sendMail.validTo(msg.to)) {
-      return false;
-    }
-    return true;
+  sendBtnDisabled(): boolean {
+    return this.sendMail.validMessage(this.editorData.msg);
   }
 
-  closeClick() {
-    this.closeEvent.emit(this.index);
-    // console.log(`closing: ${this.index}`);
+  closeClick(): void {
+    this.closeEvent.emit(this.editorData);
   }
 
-  changeSize(newSize: editorSize) {
+  maximizeClick(): void {
+    this.maximize.emit(this.editorData);
+    console.log('Max', this.editorData);
+  }
+
+  changeSize(newSize: editorSize): void {
     this.editorData.size = newSize;
   }
 

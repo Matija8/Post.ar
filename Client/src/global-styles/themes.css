@@ -52,6 +52,7 @@ body {
 
     /* compose */
     --compose-item-width: 250px;
+    --compose-item-header-background-color: darkslategray;
 }
 
 
@@ -68,4 +69,5 @@ body {
     --border-color1: white;
 
     --mail-item-background-color: rgba(240, 20, 20, 0.1);
+    --compose-item-header-background-color: rgb(50, 50, 50);
 }

@@ -1,0 +1,61 @@
+
+.compose-item-minimized {
+    width: var(--compose-item-width, 250px);
+    bottom:0;
+    margin: 0;
+    background-color: darkslategrey;
+}
+
+.compose-item-medium {
+    width: var(--compose-item-width, 250px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border-bottom: hidden;
+    margin: 0;
+    border: 0.5px gray;
+}
+
+.compose-item-menubar {
+    height: var(--compose-header-height);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: var(--compose-item-header-background-color);
+    padding: 1px;
+}
+
+.compose-item-menubar-left {
+    margin: 5px;
+    float: left;
+    white-space: nowrap;
+    color: white;
+}
+
+.compose-item-menubar-right {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.compose-menubar-button {
+    width: var(--compose-header-height);
+    font-size: 17px;
+    background-color: white;
+}
+
+.compose-item-body {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 0;
+    padding: 20px;
+    color: black;
+    background-color: white;
+}
+
+.compose-textarea {
+    resize: none !important;
+    height: 7rem !important; /* number of rows */
+}

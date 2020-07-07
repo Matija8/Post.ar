@@ -29,7 +29,8 @@
               "src/global-styles/styles.css",
               "src/global-styles/themes.css",
               "src/global-styles/mail-list.css",
-              "src/global-styles/mail-item.css"
+              "src/global-styles/mail-item.css",
+              "src/global-styles/compose-item.css"
             ],
             "scripts": []
           },

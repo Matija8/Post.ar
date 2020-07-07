@@ -1,9 +1,21 @@
+
+<div *ngIf="maximizedEditor !== null">
+  <postar-maximized-compose-item
+    [editorData]="maximizedEditor.data"
+    (unMaximize)="unMaximizeEditor()"
+    (closeMaximized)="closeMaximizedEditor()"
+    (send)="onSend($event)">
+  >
+  </postar-maximized-compose-item>
+</div>
+
+
 <div id="compose-container">
 
   <postar-compose-item
-    *ngFor="let editor of openEditors | slice:(-MAX_OPEN); let i = index;"
-    [index]="i+(openEditors.length > MAX_OPEN ? openEditors.length-MAX_OPEN : 0 )"
+    *ngFor="let editor of openEditors | slice: -MAX_OPEN"
     [editorData]="editor"
+    (maximize)="maximizeEditor($event)"
     (closeEvent)="closeEditor($event)"
     (send)="onSend($event)">
   </postar-compose-item>

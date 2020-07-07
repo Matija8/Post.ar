@@ -17,6 +17,12 @@ export class SendMailService {
     private secretar: SecretarService
   ) {}
 
+  validMessage(message: EditorMessage): boolean {
+    if (message.subject && message.messageText && this.validTo(message.to)) {
+      return false;
+    }
+    return true;
+  }
 
   validTo(to: string): boolean {
     return !!to.match(/^[a-zA-Z][a-zA-Z0-9]*@post\.ar$/);
