@@ -95,7 +95,8 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
   }
 
   onReply(): void {
-    const replyTo = this.msg.to;
+    console.log(this.msg.from);
+    const replyTo = this.msg.from;
     const replySubject: string = 'Re: ' + this.msg.subject;
     const replyContent: string = '\n\n' + '<' + this.msg.content + '>';
 
