@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="registerForm" (ngSubmit)="registerUser()">
   <div class="container wrapper">
     <div class="content-wrapper">
 
@@ -21,10 +21,15 @@
                 class="form-control"
                 id="name"
                 name="name"
+                formControlName="name"
                 placeholder="Your name"
-                [(ngModel)]="name"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
               />
+              <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">First Name is required</div>
+                <div *ngIf="f.name.errors.incorrectFormat">Incorrect format</div>
+              </div>
             </div>
           </div>
         </div>
@@ -38,10 +43,16 @@
                 class="form-control"
                 id="surname"
                 name="surname"
+                formControlName="surname"
                 placeholder="Your last name"
-                [(ngModel)]="surname"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.surname.errors }"
               />
+              <div *ngIf="submitted && f.surname.errors" class="invalid-feedback">
+                <div *ngIf="f.surname.errors.required">Last Name is required</div>
+                <div *ngIf="f.surname.errors.incorrectFormat">Incorrect format</div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -55,10 +66,14 @@
                 class="form-control"
                 id="email"
                 name="email"
+                formControlName="email"
                 placeholder="Your username"
-                [(ngModel)]="email"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
               />
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
+                <div *ngIf="f.email.errors.required"> You must enter a username </div>
+              </div>
               <!-- TODO: Appendovati @post.ar na username/email -->
             </div>
           </div>
@@ -73,10 +88,16 @@
                 class="form-control"
                 id="password"
                 name="password"
+                formControlName="password"
                 placeholder="Your password"
-                [(ngModel)]="password"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
               />
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">You must enter a password</div>
+                <div *ngIf="f.password.errors.minLength">Password must contain at least 8 characters</div>
+                <div *ngIf="f.password.errors.maxLength">Password must contain at most 32 characters</div>
+              </div>
             </div>
           </div>
         </div>
@@ -89,10 +110,15 @@
                 class="form-control"
                 id="retype-password"
                 name="retype-password"
+                formControlName="retypePassword"
                 placeholder="Please retype your password"
-                [(ngModel)]="retypePassword"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.retypePassword.errors }"
               />
+              <div *ngIf="submitted && f.retypePassword.errors" class="invalid-feedback">
+                <div *ngIf="f.retypePassword.errors.required">You must retype your password</div>
+                <div *ngIf="f.retypePassword.errors.mustMatch">Passwords don't match</div>
+              </div>
             </div>
           </div>
         </div>
@@ -106,8 +132,6 @@
             <button
               type="submit"
               class="btn btn-primary login-button"
-              (click)="registerUser()"
-              [disabled]="!validParams()"
             >
               Register
             </button>
