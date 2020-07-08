@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetMailService } from 'src/app/services/mail-services/get-mail.service';
 import { Message } from '../../../models/Messages';
@@ -7,6 +7,8 @@ import { map } from 'rxjs/operators';
 import { Folder } from 'src/app/models/Folder';
 import { OpenComposeService } from 'src/app/services/ui-services/open-compose.service';
 import { EditorMessage, EditorData } from 'src/app/models/Compose';
+import { TagData, makeTagData } from 'src/app/models/TagData/TagData';
+import { TrashMailService } from 'src/app/services/mail-services/trash-mail.service';
 
 @Component({
   selector: 'postar-open-mail-item',
@@ -25,7 +27,8 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
     private getMail: GetMailService,
     private route: ActivatedRoute,
     private router: Router,
-    private openCompose: OpenComposeService
+    private openCompose: OpenComposeService,
+    private trashService: TrashMailService
   ) {
     this.routeSub = combineLatest([
       this.route.data,
@@ -115,7 +118,10 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
   }
 
   onDelete(): void {
-
+    const array: TagData[] = [];
+    const tagData = makeTagData(this.msg);
+    array.push(tagData);
+    this.trashService.moveToTrash(array);
   }
 
 }
