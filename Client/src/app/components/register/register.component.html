@@ -95,8 +95,8 @@
               />
               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                 <div *ngIf="f.password.errors.required">You must enter a password</div>
-                <div *ngIf="f.password.errors.minLength">Password must contain at least 8 characters</div>
-                <div *ngIf="f.password.errors.maxLength">Password must contain at most 32 characters</div>
+                <div *ngIf="f.password.errors.minlength">Password must contain at least 8 characters</div>
+                <div *ngIf="f.password.errors.maxlength">Password must contain at most 32 characters</div>
               </div>
             </div>
           </div>

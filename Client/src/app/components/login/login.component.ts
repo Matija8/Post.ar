@@ -3,6 +3,8 @@ import { LoginData, User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { correctEmail } from './loginValidator.validator';
 
 @Component({
   selector: 'postar-login',
@@ -10,15 +12,26 @@ import { SecretarService } from 'src/app/services/secretar/secretar.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-  // Form data:
-  public email = '';
-  public password = '';
+  public loginForm: FormGroup;
+  public submitted = false;
 
   public warning: 'hidden'|'visible';
   private requestPending: boolean;
 
-  constructor(private auth: AuthService, private router: Router, private secretar: SecretarService) {}
+  constructor(private auth: AuthService,
+              private router: Router,
+              private secretar: SecretarService,
+              private formBuilder: FormBuilder)
+  {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, correctEmail]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
+    });
+  }
+
+  get f() {
+    return this.loginForm.controls;
+  }
 
   public get keepMeLoggedIn(): boolean {
     return this.auth.keepMeLoggedIn;
@@ -38,13 +51,19 @@ export class LoginComponent implements OnInit {
     if (this.requestPending) {
       return;
     }
+    if (!this.submitted) {
+      this.submitted = true;
+    }
+    if (this.loginForm.invalid){
+      return;
+    }
     this.requestPending = true;
     this.warning = 'hidden';
-    const email = this.email.trim();
+    const email = this.f.email.value.trim();
     const username = email.endsWith('@post.ar') ? email : `${email}@post.ar`;
     const loginData: LoginData = {
       username,
-      password: this.password,
+      password: this.f.password.value,
       keepMeLoggedIn: this.keepMeLoggedIn
     };
     this.auth.userLogin(loginData)
@@ -59,12 +78,6 @@ export class LoginComponent implements OnInit {
         this.warning = 'visible';
       }
     );
-  }
-
-  validParams(): boolean {
-    const validEmail = /^[a-zA-Z][a-zA-Z_0-9]*?(@post\.ar)?$/.test(this.email.trim());
-    const validPasswdLen = (this.password.length >= 8) && (this.password.length <= 64);
-    return validEmail && validPasswdLen;
   }
 
 }

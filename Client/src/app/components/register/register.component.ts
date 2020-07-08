@@ -13,12 +13,6 @@ import { correctName, matchingPassword } from './registerValidator.validator';
 })
 export class RegisterComponent implements OnInit {
 
-  // Form data:
-  // public name = '';
-  // public surname = '';
-  // public email = '';
-  // public password = '';
-  // public retypePassword = '';
   public submitted = false;
 
   public warning: 'hidden'|'visible';
@@ -78,16 +72,4 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
-
-  // validParams(): boolean {
-  //   const nameReg = /^[a-zA-Z][a-zA-Z']*$/;
-  //   const validName = nameReg.test(this.name.trim()) && nameReg.test(this.surname.trim());
-  //
-  //   const validPasswdLen = (this.password.length >= 8) && (this.password.length <= 64);
-  //   const validPasswd = validPasswdLen && (this.password === this.retypePassword);
-  //   const validEmail = /^([a-zA-Z][a-zA-Z_0-9]*$)/.test(this.email.trim());
-  //
-  //   return validName && validPasswd && validEmail;
-  // }
-
 }

@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="loginForm" (ngSubmit)="logIn()">
   <div class="container wrapper">
     <div class="content-wrapper">
 
@@ -15,13 +15,22 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label class="label-title" for="exampleInputEmail1">Email address</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              <label class="label-title" for="email">Email address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
                 name="email"
+                formControlName="email"
                 placeholder="username@post.ar"
-                [(ngModel)]="email"
+                aria-describedby="emailHelp"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
               >
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+                <div *ngIf="f.email.errors.incorrectEmail">Incorrect email</div>
+              </div>
             </div>
           </div>
         </div>
@@ -29,13 +38,22 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label class="label-title" for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1"
+              <label class="label-title" for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
                 name="password"
+                formControlName="password"
                 placeholder="Password"
-                [(ngModel)]="this.password"
                 required
+                [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
               >
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+                <div *ngIf="f.password.errors.minlength">Password has at least 8 characters</div>
+                <div *ngIf="f.password.errors.maxlength">Password has at most 32 characters</div>
+              </div>
             </div>
           </div>
         </div>
@@ -59,8 +77,9 @@
 
         <div class="row">
           <div class="col-md-4 text-center button-wrapper">
-            <button type="submit" class="btn btn-primary login-button" (click)="logIn()"
-              [disabled]="!validParams()"
+            <button
+              type="submit"
+              class="btn btn-primary login-button"
             >
               Login
             </button>
