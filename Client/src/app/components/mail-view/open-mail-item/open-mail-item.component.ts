@@ -5,6 +5,8 @@ import { Message } from '../../../models/Messages';
 import { Subscription, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Folder } from 'src/app/models/Folder';
+import { OpenComposeService } from 'src/app/services/ui-services/open-compose.service';
+import { EditorMessage, EditorData } from 'src/app/models/Compose';
 
 @Component({
   selector: 'postar-open-mail-item',
@@ -23,6 +25,7 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
     private getMail: GetMailService,
     private route: ActivatedRoute,
     private router: Router,
+    private openCompose: OpenComposeService
   ) {
     this.routeSub = combineLatest([
       this.route.data,
@@ -92,7 +95,22 @@ export class OpenMailItemComponent implements OnInit, OnDestroy {
   }
 
   onReply(): void {
+    const replyTo = this.msg.to;
+    const replySubject: string = 'Re: ' + this.msg.subject;
+    const replyContent: string = '\n\n' + '<' + this.msg.content + '>';
 
+    const replyMessage: EditorMessage = {
+      to: replyTo,
+      subject: replySubject,
+      messageText: replyContent
+    };
+
+    const replyEditorData: EditorData = {
+      msg: replyMessage,
+      size: 'minimized'
+    };
+
+    this.openCompose.addEditor(replyEditorData);
   }
 
   onDelete(): void {
