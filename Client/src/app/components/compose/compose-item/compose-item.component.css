@@ -10,3 +10,8 @@
     z-index: 1;
     --compose-header-height: 30px;
 }
+@media (max-width: 600px) {
+  .maximized {
+    display: none;
+  }
+}

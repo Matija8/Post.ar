@@ -9,6 +9,14 @@
     right: 200px;
     height: 70%;
 }
+@media (max-width: 600px){
+  :host {
+    top:100px;
+    left: 100px;
+    right: 100px;
+  }
+
+}
 
 #maximized-compose-item-body {
     display: flex;

@@ -9,7 +9,7 @@
         <!-- <mat-icon>maximize</mat-icon> -->
         _
       </button>
-      <button class="compose-menubar-button" (click)="maximizeClick()">
+      <button [ngClass]="['compose-menubar-button', 'maximized']" (click)="maximizeClick()">
         <!-- <mat-icon>open_in_full</mat-icon> -->
         □
       </button>
@@ -35,7 +35,7 @@
         <!-- <mat-icon>minimize</mat-icon> -->
         _
       </button>
-      <button class="compose-menubar-button" (click)="maximizeClick()">
+      <button [ngClass]="['compose-menubar-button', 'maximized']" (click)="maximizeClick()">
         <!-- <mat-icon>open_in_full</mat-icon> -->
         □
       </button>
