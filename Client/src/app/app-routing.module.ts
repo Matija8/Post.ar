@@ -14,6 +14,7 @@ import { FolderGuard } from './services/guards/folder.guard';
 import { TrashComponent } from './components/folders/trashed/trash.component';
 import { AuthFirstGuard } from './services/guards/auth-first.guard';
 import { AllComponent } from './components/folders/all/all.component';
+import { OpenDeletedMailItemComponent } from './components/mail-view/open-deleted-mail-item/open-deleted-mail-item.component';
 
 
 const routes: Routes = [
@@ -62,7 +63,7 @@ const routes: Routes = [
   {
     path: 'trash/:msgId',
     canActivate: [FolderGuard],
-    component: OpenMailItemComponent,
+    component: OpenDeletedMailItemComponent,
     data: {folderName: 'trash'}
   },
 

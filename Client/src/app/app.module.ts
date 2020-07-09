@@ -29,6 +29,7 @@ import { DraftItemComponent } from './components/folders/drafts/draft-item/draft
 import { AllComponent } from './components/folders/all/all.component';
 import { ListTipComponent } from './components/mail-view/list-tip/list-tip.component';
 import { MaximizedComposeItemComponent } from './components/compose/maximized-compose-item/maximized-compose-item.component';
+import { OpenDeletedMailItemComponent } from './components/mail-view/open-deleted-mail-item/open-deleted-mail-item.component';
 
 // Mail services.
 import { AuthService } from './services/mail-services/auth.service';
@@ -88,6 +89,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ListTipComponent,
     SelectedIconComponent,
     MaximizedComposeItemComponent,
+    OpenDeletedMailItemComponent,
   ],
   imports: [
     BrowserModule,
