@@ -1,8 +1,9 @@
-import { FormGroup, AbstractControl } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
+import { validEmailRegex } from 'src/app/models/User';
 
-export function correctEmail(control: AbstractControl){
-  const emailReg = /^[a-zA-Z][a-zA-Z_0-9]*?(@post\.ar)?$/;
-  if(!emailReg.test(control.value)){
+export function correctEmail(control: AbstractControl) {
+  const emailReg = validEmailRegex;
+  if (!emailReg.test(control.value)) {
     return { incorrectEmail: true };
   }
   return null;

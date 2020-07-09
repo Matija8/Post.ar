@@ -39,7 +39,7 @@ export class MaximizedComposeItemComponent implements OnInit {
   }
 
   sendBtnDisabled(): boolean {
-    return this.sendMail.validMessage(this.editorData.msg);
+    return !this.sendMail.validMessage(this.editorData.msg);
   }
 
 }
