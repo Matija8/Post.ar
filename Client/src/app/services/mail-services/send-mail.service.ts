@@ -5,6 +5,8 @@ import { GetMailService } from './get-mail.service';
 import { SecretarService } from '../secretar/secretar.service';
 import { SMessage } from 'src/app/models/Messages';
 import { Endpoint } from 'src/app/endpoint';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from '../snackbar/snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,8 @@ export class SendMailService {
   constructor(
     private http: HttpWrapperService,
     private getMail: GetMailService,
-    private secretar: SecretarService
+    private secretar: SecretarService,
+    private snackBarService: SnackbarService
   ) {}
 
   validMessage(message: EditorMessage): boolean {
@@ -41,9 +44,11 @@ export class SendMailService {
       (res: any) => {
         console.log(res);
         this.getMail.folders.sent.refreshFolder();
+        this.snackBarService.openSnackBar("Message sent successfully");
       },
       (err: any) => {
         console.log(err);
+        this.snackBarService.openSnackBar("Unexpected error, failed to send email. Please try again later");
       }
     );
   }

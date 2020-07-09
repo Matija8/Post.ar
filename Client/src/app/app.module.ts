@@ -60,7 +60,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectedIconComponent } from './components/mail-view/selected-icon/selected-icon.component';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -106,6 +106,7 @@ import { SelectedIconComponent } from './components/mail-view/selected-icon/sele
     MatMenuModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    MatSnackBarModule
   ],
   providers: [
     AuthService,

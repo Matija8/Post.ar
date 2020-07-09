@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators';
 import { EditorMessage } from 'src/app/models/Compose';
 import { SecretarService } from '../secretar/secretar.service';
 import { Endpoint } from 'src/app/endpoint';
+import { SnackbarService } from '../snackbar/snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class DraftMailService {
     private http: HttpWrapperService,
     private getMail: GetMailService,
     private secretar: SecretarService,
+    private snackBarService: SnackbarService
   ) {}
 
   saveDraft(edMsg: EditorMessage): Observable<any> {
@@ -32,9 +34,11 @@ export class DraftMailService {
       (res: any) => {
         // console.log(res);
         this.getMail.folders.drafts.refreshFolder();
+        this.snackBarService.openSnackBar("Successfully saved message as draft");
       },
       (err: any) => {
         console.log(err);
+        this.snackBarService.openSnackBar("Unexpected error, failed to save message as draft. Please try again later");
       }
     );
     return response.pipe(take(1));
@@ -49,6 +53,7 @@ export class DraftMailService {
       (err: any) => {
         console.log(err);
         this.getMail.folders.drafts.refreshFolder();
+        this.snackBarService.openSnackBar("Unexpected error, failed to discard message as draft. Please try again later");
       }
     );
     return response.pipe(take(1));
@@ -67,6 +72,7 @@ export class DraftMailService {
       },
       (err: any) => {
         this.getMail.folders.drafts.refreshFolder();
+        this.snackBarService.openSnackBar("Unexpected error, failed to discard messages as drafts. Please try again later");
         console.log(err);
       }
     );

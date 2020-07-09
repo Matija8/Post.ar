@@ -4,6 +4,7 @@ import { GetMailService } from './get-mail.service';
 import { Observable } from 'rxjs';
 import { TagData } from 'src/app/models/TagData/TagData';
 import { Endpoint } from 'src/app/endpoint';
+import { SnackbarService } from '../snackbar/snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class TrashMailService {
   constructor(
     private http: HttpWrapperService,
     private getMail: GetMailService,
+    private snackBarService: SnackbarService
   ) {}
 
   moveToTrash(messages: TagData[]): Observable<any> {
@@ -25,7 +27,7 @@ export class TrashMailService {
       (err: any): void => {
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
-        // TODO: A pop-up (modal) that informs user that deleting failed!?
+        this.snackBarService.openSnackBar("Unexpected error, failed to move message to trash. Please try again later");
       }
     );
     return response;
@@ -43,6 +45,7 @@ export class TrashMailService {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
+        this.snackBarService.openSnackBar("Unexpected error, failed to restore messages from trash. Please try again later");
       }
     );
     return response;
@@ -54,10 +57,12 @@ export class TrashMailService {
       (res: any): void => {
         console.log('trash-mail-service', res);
         this.getMail.folders.trash.refreshFolder();
+        this.snackBarService.openSnackBar("Messages deleted forever successfully");
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
+        this.snackBarService.openSnackBar("Unexpected error, failed to delete messages forever. Please try again later");
       }
     );
     return response;

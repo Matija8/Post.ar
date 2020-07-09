@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { correctEmail } from './loginValidator.validator';
+import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'postar-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
   constructor(private auth: AuthService,
               private router: Router,
               private secretar: SecretarService,
-              private formBuilder: FormBuilder)
+              private formBuilder: FormBuilder,
+              private snackBarService: SnackbarService)
   {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, correctEmail]],
@@ -76,6 +78,7 @@ export class LoginComponent implements OnInit {
         this.requestPending = false;
         console.log('Error from userLogin:', err);
         this.warning = 'visible';
+        this.snackBarService.openSnackBar("Invalid username or password");
       }
     );
   }
