@@ -45,18 +45,7 @@ export class DraftMailService {
   }
 
   discardDraft(draftId: string): Observable<any> {
-    const response = this.http.post(Endpoint.DRAFTS + '/discard', { messageId: draftId });
-    response.subscribe(
-      (res: any) => {
-        this.getMail.folders.drafts.refreshFolder();
-      },
-      (err: any) => {
-        console.log(err);
-        this.getMail.folders.drafts.refreshFolder();
-        this.snackBarService.openSnackBar('Unexpected error, failed to discard message as draft. Please try again later');
-      }
-    );
-    return response.pipe(take(1));
+    return this.discardDrafts([draftId]);
   }
 
   discardDrafts(draftIds: string[]): Observable<any> {
@@ -64,13 +53,8 @@ export class DraftMailService {
       return;
     }
     const s = draftIds.length > 1 ? 's' : '';
-    const responses = [];
-    for (const draftId of draftIds) {
-      responses.push(this.discardDraft(draftId));
-    }
-    console.log(responses);
-    const zipped = zip(...responses).pipe(take(1));
-    zipped.subscribe(
+    const response = this.http.post(`${Endpoint.DRAFTS}/discard`, { messageIds: draftIds });
+    response.subscribe(
       (res: any) => {
         this.getMail.folders.drafts.refreshFolder();
       },
@@ -80,7 +64,7 @@ export class DraftMailService {
         console.log(err);
       }
     );
-    return zipped;
+    return response.pipe(take(1));
   }
 
 }
