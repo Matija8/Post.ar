@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, getManager } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
 // Utils
@@ -118,7 +118,7 @@ export class DraftController {
         createResponse(response, 200, 2006);
     }
 
-    async discardDraft(request: Request, response: Response) {
+    async discardDrafts(request: Request, response: Response) {
         this.logger.info("/draft/discard");
 
         this.logger.debug("validate user");
@@ -131,7 +131,7 @@ export class DraftController {
         const body = request.body;
 
         this.logger.debug("validate payload");
-        if (PayloadValidator.validate(body, ["messageId"])) {
+        if (PayloadValidator.validate(body, ["messageIds"])) {
             createResponse(response, 400, 1001);
             return;
         }
@@ -146,16 +146,17 @@ export class DraftController {
             return;
         }
 
-        this.logger.debug("discard draft");
+        this.logger.debug("discarding drafts");
         try {
-            await this.draftsRepository.delete({ messageId: body.messageId });
+            await getManager().transaction(async entityManager => {
+                for (const messageId of body.messageIds)
+                    await entityManager.delete(Drafts, { messageId: messageId });
+            });
+            createResponse(response, 200, 2011);
         } catch (err) {
             createResponse(response, 400, 1016);
-            this.logger.fatal("failed to discard draft", err);
-            return;
+            this.logger.fatal("failed to discard drafts", err);
         }
-
-        createResponse(response, 200, 2011);
     }
 
 }

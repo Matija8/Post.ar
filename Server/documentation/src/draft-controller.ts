@@ -71,19 +71,19 @@
   * @apiName discardDraft
   * @apiGroup DraftController
   *
-  * @apiDescription Discard draft.
+  * @apiDescription Discard multiple draft messages.
   * 
   * 
   * To access this route, user needs to have an active session.
   * 
-  * @apiParam {String[]} messageId Unique message id
+  * @apiParam {String[]} messageIds Array of messageIds 
   * 
-  * @apiSuccess (200) {Number} 2011 Successfully saved message as draft
+  * @apiSuccess (200) {Number} 2011 Successfully discarded messages as draft
   * @apiSuccessExample {json} Success response
   *     {
   *         "status": 200,
   *         "statusCode": 2011,
-  *         "message": "User logged out successfully",
+  *         "message": "Successfully discarded messages as draft",
   *         "payload": {}
   *     }
   * 

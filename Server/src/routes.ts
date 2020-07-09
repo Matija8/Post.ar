@@ -86,7 +86,7 @@ export const Routes = [
         controller: DraftController,
         method: "post",
         path: "/drafts/discard",
-        handler: "discardDraft"
+        handler: "discardDrafts"
     },
     // starred controller routes
     {
