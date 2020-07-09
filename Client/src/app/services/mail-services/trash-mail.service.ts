@@ -18,6 +18,10 @@ export class TrashMailService {
   ) {}
 
   moveToTrash(messages: TagData[]): Observable<any> {
+    if (!messages || messages.length < 1) {
+      return;
+    }
+    const s = messages.length > 1 ? 's' : '';
     const response = this.http.post(Endpoint.TRASH + '/delete', {messages});
     response.subscribe(
       (res: any): void => {
@@ -27,13 +31,17 @@ export class TrashMailService {
       (err: any): void => {
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
-        this.snackBarService.openSnackBar('Unexpected error, failed to move messages to trash. Please try again later');
+        this.snackBarService.openSnackBar(`Unexpected error, failed to move message${s} to trash. Please try again later`);
       }
     );
     return response;
   }
 
   restoreFromTrash(messages: TagData[]): Observable<any> {
+    if (!messages || messages.length < 1) {
+      return;
+    }
+    const s = messages.length > 1 ? 's' : '';
     const response = this.http.post(Endpoint.TRASH + '/undoDelete', {messages});
     response.subscribe(
       (res: any): void => {
@@ -45,24 +53,28 @@ export class TrashMailService {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
-        this.snackBarService.openSnackBar('Unexpected error, failed to restore messages from trash. Please try again later');
+        this.snackBarService.openSnackBar(`Unexpected error, failed to restore message${s} from trash. Please try again later`);
       }
     );
     return response;
   }
 
   deleteForever(messages: TagData[]): Observable<any> {
+    if (!messages || messages.length < 1) {
+      return;
+    }
+    const s = messages.length > 1 ? 's' : '';
     const response = this.http.post(Endpoint.TRASH + '/deleteForever', {messages});
     response.subscribe(
       (res: any): void => {
         console.log('trash-mail-service', res);
         this.getMail.folders.trash.refreshFolder();
-        this.snackBarService.openSnackBar('Messages deleted forever successfully');
+        this.snackBarService.openSnackBar(`Message${s} deleted forever successfully`);
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
-        this.snackBarService.openSnackBar('Unexpected error, failed to delete messages forever. Please try again later');
+        this.snackBarService.openSnackBar(`Unexpected error, failed to delete message${s} forever. Please try again later`);
       }
     );
     return response;
