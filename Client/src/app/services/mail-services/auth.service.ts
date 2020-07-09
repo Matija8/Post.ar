@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, LoginData, RegisterData } from '../../models/User';
-import { Observable, BehaviorSubject, throwError, of, zip } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { SecretarService } from '../secretar/secretar.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GetMailService } from './get-mail.service';
@@ -8,6 +8,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { take, flatMap, skipWhile, map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Endpoint } from 'src/app/endpoint';
+import { ChangeThemeService, Theme } from '../ui-services/change-theme.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,30 @@ export class AuthService {
     private cookie: CookieService,
     private getMail: GetMailService,
     private router: Router,
+    private changeTheme: ChangeThemeService,
   ) {
+    // Log out on all tabs when logging out.
     window.addEventListener('storage', this.oneTabLoggedInChange.bind(this));
+
+    // React to unauthorized errors on http requests.
     http.UnauthorizedEmitter.subscribe(() => {
       console.log('Unauthorized! Logging out.');
       if (this.loggedIn()) {
         this.userLogout();
       }
+    });
+
+    // Update theme on login/logout.
+    this.currentUserData.subscribe((userData: User) => {
+      if (userData === null) {
+        // Logout or initial app opening.
+        this.changeTheme.theme = this.changeTheme.defaultTheme;
+        return;
+      }
+      console.log('User: ', userData);
+      const userTheme: Theme = userData.theme ?
+        (`theme-${userData.theme}` as Theme) : 'theme-default';
+      this.changeTheme.theme = userTheme;
     });
   }
 
@@ -75,6 +93,7 @@ export class AuthService {
 
   public oneTabLoggedInChange(): void {
     if (this.oneTabLoggedIn) {
+      // If there was a login on another tab -> login here as well.
       if (!this.loggedIn()) {
         this.tryToLoginBySessionID()
         .pipe(take(1))
@@ -86,6 +105,7 @@ export class AuthService {
         return;
       }
     } else {
+      // If there was a logout on another tab -> logout on this tab also.
       if (this.loggedIn()) {
         this.userLogout()
         .pipe(take(1))

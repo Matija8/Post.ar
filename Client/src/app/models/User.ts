@@ -1,10 +1,8 @@
-export class User {
-
-  constructor(
-    public name: string,
-    public surname: string,
-    public email: string
-  ) {}
+export interface User {
+  name: string;
+  surname: string;
+  email: string;
+  theme: string;
 }
 
 // For the first/last name of a person.
