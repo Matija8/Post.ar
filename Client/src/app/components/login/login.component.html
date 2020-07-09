@@ -28,8 +28,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
               >
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                <div *ngIf="f.email.errors.required">Email is required</div>
-                <div *ngIf="f.email.errors.incorrectEmail">Incorrect email</div>
+                <small *ngIf="f.email.errors.required">Email is required</small>
+                <small *ngIf="f.email.errors.incorrectEmail">Incorrect email</small>
               </div>
             </div>
           </div>
@@ -50,9 +50,9 @@
                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
               >
               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                <div *ngIf="f.password.errors.required">Password is required</div>
-                <div *ngIf="f.password.errors.minlength">Password has at least 8 characters</div>
-                <div *ngIf="f.password.errors.maxlength">Password has at most 32 characters</div>
+                <small *ngIf="f.password.errors.required">Password is required</small>
+                <small *ngIf="f.password.errors.minlength">Password has at least 8 characters</small>
+                <small *ngIf="f.password.errors.maxlength">Password has at most 32 characters</small>
               </div>
             </div>
           </div>

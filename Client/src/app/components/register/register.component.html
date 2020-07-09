@@ -26,10 +26,10 @@
                 required
                 [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
               />
-              <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                <div *ngIf="f.name.errors.required">First Name is required</div>
-                <div *ngIf="f.name.errors.incorrectFormat">Incorrect format</div>
-              </div>
+                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                  <small *ngIf="f.name.errors.required">First Name is required</small>
+                  <small *ngIf="f.name.errors.incorrectFormat">Incorrect format</small>
+                </div>
             </div>
           </div>
         </div>
@@ -49,8 +49,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.surname.errors }"
               />
               <div *ngIf="submitted && f.surname.errors" class="invalid-feedback">
-                <div *ngIf="f.surname.errors.required">Last Name is required</div>
-                <div *ngIf="f.surname.errors.incorrectFormat">Incorrect format</div>
+                <small *ngIf="f.surname.errors.required">Last Name is required</small>
+                <small *ngIf="f.surname.errors.incorrectFormat">Incorrect format</small>
 
               </div>
             </div>
@@ -72,9 +72,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
               />
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
-                <div *ngIf="f.email.errors.required"> You must enter a username </div>
+                <small *ngIf="f.email.errors.required"> You must enter a username </small>
               </div>
-              <!-- TODO: Appendovati @post.ar na username/email -->
             </div>
           </div>
         </div>
@@ -94,9 +93,9 @@
                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
               />
               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                <div *ngIf="f.password.errors.required">You must enter a password</div>
-                <div *ngIf="f.password.errors.minlength">Password must contain at least 8 characters</div>
-                <div *ngIf="f.password.errors.maxlength">Password must contain at most 32 characters</div>
+                <small *ngIf="f.password.errors.required">You must enter a password</small>
+                <small *ngIf="f.password.errors.minlength">Password must contain at least 8 characters</small>
+                <small *ngIf="f.password.errors.maxlength">Password must contain at most 32 characters</small>
               </div>
             </div>
           </div>
@@ -116,8 +115,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.retypePassword.errors }"
               />
               <div *ngIf="submitted && f.retypePassword.errors" class="invalid-feedback">
-                <div *ngIf="f.retypePassword.errors.required">You must retype your password</div>
-                <div *ngIf="f.retypePassword.errors.mustMatch">Passwords don't match</div>
+                <small *ngIf="f.retypePassword.errors.required">You must retype your password</small>
+                <small *ngIf="f.retypePassword.errors.mustMatch">Passwords don't match</small>
               </div>
             </div>
           </div>

@@ -31,7 +31,7 @@ select.form-control:focus {
 
 .wrapper {
   width: 500px;
-  height: 770px;
+  min-height: 640px;
 
   -webkit-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
   -moz-box-shadow: 0px 0px 90px 5px rgba(171,172,173,1);
@@ -102,6 +102,9 @@ select.form-control:focus {
   height: 40px;
   border-radius: 20px;
 }
+small {
+  display: block;
+}
 
 .persistent-placeholder {
   width: 100%;
@@ -117,12 +120,12 @@ select.form-control:focus {
   position: relative;
 }
 
-.placeholder::after
-{
-  position: absolute;
-  left: 83%;
-  top: 60%;
-  content: attr(data-placeholder);
-  pointer-events: none;
-  opacity: 0.6;
-}
+/*.placeholder::after*/
+/*{*/
+/*  position: absolute;*/
+/*  right: 0;*/
+/*  top: 40%;*/
+/*  content: attr(data-placeholder);*/
+/*  pointer-events: none;*/
+/*  opacity: 0.6;*/
+/*}*/
