@@ -37,7 +37,6 @@ export class ComposeItemComponent implements OnInit {
 
   maximizeClick(): void {
     this.maximize.emit(this.editorData);
-    console.log('Max', this.editorData);
   }
 
   changeSize(newSize: editorSize): void {

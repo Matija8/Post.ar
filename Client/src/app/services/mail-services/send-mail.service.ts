@@ -38,7 +38,7 @@ export class SendMailService {
       content,
     }).subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
         this.getMail.folders.sent.refreshFolder();
         this.snackBarService.openSnackBar('Message sent successfully');
       },

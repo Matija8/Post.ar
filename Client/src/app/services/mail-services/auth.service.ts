@@ -47,7 +47,6 @@ export class AuthService {
         this.changeTheme.theme = this.changeTheme.defaultTheme;
         return;
       }
-      console.log('User: ', userData);
       const userTheme: Theme = userData.theme ?
         (`theme-${userData.theme}` as Theme) : 'theme-default';
       this.changeTheme.theme = userTheme;
