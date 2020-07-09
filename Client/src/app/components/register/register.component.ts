@@ -3,7 +3,7 @@ import { RegisterData } from 'src/app/models/User';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { correctName, matchingPassword } from './registerValidator.validator';
+import { correctName, matchingPassword, correctUsername } from './registerValidator.validator';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       name: ['', [Validators.required, correctName]],
       surname: ['', [Validators.required, correctName]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, correctUsername]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
       retypePassword: ['', [Validators.required]]
     },

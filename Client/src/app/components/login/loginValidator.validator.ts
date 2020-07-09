@@ -1,9 +1,8 @@
 import { AbstractControl } from '@angular/forms';
-import { validEmailRegex } from 'src/app/models/User';
+import { validUsernameOrEmailRegex } from 'src/app/models/User';
 
-export function correctEmail(control: AbstractControl) {
-  const emailReg = validEmailRegex;
-  if (!emailReg.test(control.value)) {
+export function correctEmailOrUsername(control: AbstractControl) {
+  if (!validUsernameOrEmailRegex.test(control.value)) {
     return { incorrectEmail: true };
   }
   return null;

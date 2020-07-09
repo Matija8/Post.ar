@@ -1,9 +1,16 @@
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { validNameRegex } from 'src/app/models/User';
+import { validNameRegex, validUsernameRegex } from 'src/app/models/User';
 
 export function correctName(control: AbstractControl) {
   const nameReg = validNameRegex;
   if (!nameReg.test(control.value)) {
+    return { incorrectFormat: true };
+  }
+  return null;
+}
+
+export function correctUsername(control: AbstractControl) {
+  if (!validUsernameRegex.test(control.value)) {
     return { incorrectFormat: true };
   }
   return null;

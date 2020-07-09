@@ -8,9 +8,10 @@ export interface User {
 // For the first/last name of a person.
 export const validNameRegex = /^[a-zA-Z][a-zA-Z']*$/;
 
-const usernameRegexStr = `[a-zA-Z][a-zA-Z._-]*?`;
+const usernameRegexStr = `[a-zA-Z][a-zA-Z0-9._-]*?`;
 export const validUsernameRegex = new RegExp(`^${usernameRegexStr}$`);
 export const validEmailRegex = new RegExp(`^${usernameRegexStr}@post.ar$`);
+export const validUsernameOrEmailRegex = new RegExp(`^${usernameRegexStr}(@post.ar)?$`);
 
 
 export interface RegisterData {

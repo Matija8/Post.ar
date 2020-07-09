@@ -73,6 +73,7 @@
               />
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
                 <small *ngIf="f.email.errors.required"> You must enter a username </small>
+                <small *ngIf="f.surname.errors.incorrectFormat"> Incorrect format </small>
               </div>
             </div>
           </div>

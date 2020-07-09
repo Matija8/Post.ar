@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { correctEmail } from './loginValidator.validator';
+import { correctEmailOrUsername } from './loginValidator.validator';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
               private formBuilder: FormBuilder,
               private snackBarService: SnackbarService) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, correctEmail]],
+      email: ['', [Validators.required, correctEmailOrUsername]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
     });
   }
