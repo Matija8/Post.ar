@@ -27,7 +27,7 @@ export class TrashMailService {
       (err: any): void => {
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
-        this.snackBarService.openSnackBar("Unexpected error, failed to move message to trash. Please try again later");
+        this.snackBarService.openSnackBar('Unexpected error, failed to move messages to trash. Please try again later');
       }
     );
     return response;
@@ -45,7 +45,7 @@ export class TrashMailService {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
         this.getMail.folders.all.refreshFolder();
-        this.snackBarService.openSnackBar("Unexpected error, failed to restore messages from trash. Please try again later");
+        this.snackBarService.openSnackBar('Unexpected error, failed to restore messages from trash. Please try again later');
       }
     );
     return response;
@@ -57,12 +57,12 @@ export class TrashMailService {
       (res: any): void => {
         console.log('trash-mail-service', res);
         this.getMail.folders.trash.refreshFolder();
-        this.snackBarService.openSnackBar("Messages deleted forever successfully");
+        this.snackBarService.openSnackBar('Messages deleted forever successfully');
       },
       (err: any): void => {
         console.log('trash-mail-service', err);
         this.getMail.folders.trash.refreshFolder();
-        this.snackBarService.openSnackBar("Unexpected error, failed to delete messages forever. Please try again later");
+        this.snackBarService.openSnackBar('Unexpected error, failed to delete messages forever. Please try again later');
       }
     );
     return response;

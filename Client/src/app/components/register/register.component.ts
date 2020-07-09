@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterData } from 'src/app/models/User';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
-import { take } from 'rxjs/operators';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { correctName, matchingPassword } from './registerValidator.validator';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
@@ -20,7 +19,12 @@ export class RegisterComponent implements OnInit {
   private requestPending: boolean;
   public registerForm: FormGroup;
 
-  constructor(private auth: AuthService, private router: Router, private formBuilder: FormBuilder, private snackBarService: SnackbarService) {
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private snackBarService: SnackbarService
+  ) {
     this.registerForm = this.formBuilder.group({
       name: ['', [Validators.required, correctName]],
       surname: ['', [Validators.required, correctName]],
@@ -45,7 +49,7 @@ export class RegisterComponent implements OnInit {
     if (this.requestPending) {
       return;
     }
-    if(!this.submitted){
+    if (!this.submitted) {
       this.submitted = true;
     }
     if (this.registerForm.invalid) {
@@ -63,8 +67,7 @@ export class RegisterComponent implements OnInit {
     .subscribe(
       (res: any) => {
         this.requestPending = false;
-        // alert('You have successfuly registered!\nYou will now be redirected to the login page');
-        this.snackBarService.openSnackBar("Successfuly created an account.");
+        this.snackBarService.openSnackBar('Successfuly created an account.');
         this.router.navigate(['/login']);
       },
       (err: any) => {

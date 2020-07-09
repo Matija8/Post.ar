@@ -3,7 +3,7 @@ import { LoginData, User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { correctEmail } from './loginValidator.validator';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
@@ -23,8 +23,7 @@ export class LoginComponent implements OnInit {
               private router: Router,
               private secretar: SecretarService,
               private formBuilder: FormBuilder,
-              private snackBarService: SnackbarService)
-  {
+              private snackBarService: SnackbarService) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, correctEmail]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
@@ -56,7 +55,7 @@ export class LoginComponent implements OnInit {
     if (!this.submitted) {
       this.submitted = true;
     }
-    if (this.loginForm.invalid){
+    if (this.loginForm.invalid) {
       return;
     }
     this.requestPending = true;
@@ -78,7 +77,7 @@ export class LoginComponent implements OnInit {
         this.requestPending = false;
         console.log('Error from userLogin:', err);
         this.warning = 'visible';
-        this.snackBarService.openSnackBar("Invalid username or password");
+        this.snackBarService.openSnackBar('Invalid username or password');
       }
     );
   }
