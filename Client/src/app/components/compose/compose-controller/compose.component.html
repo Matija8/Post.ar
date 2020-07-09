@@ -3,7 +3,7 @@
   <postar-maximized-compose-item
     [editorData]="maximizedEditor.data"
     (unMaximize)="unMaximizeEditor()"
-    (closeMaximized)="closeMaximizedEditor()"
+    (closeMaximized)="closeMaximizedEditor($event)"
     (send)="onSend($event)">
   >
   </postar-maximized-compose-item>

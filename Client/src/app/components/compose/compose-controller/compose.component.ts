@@ -77,12 +77,12 @@ export class ComposeComponent implements OnInit, OnDestroy {
     this.maximizedEditor = null;
   }
 
-  closeMaximizedEditor(): void {
+  closeMaximizedEditor(saveDraft: boolean): void {
     if (!this.maximizedEditor) {
       return;
     }
     const msg = this.maximizedEditor.data.msg;
-    if (!checkEmpty(msg)) {
+    if (saveDraft && !checkEmpty(msg)) {
       this.draftMail.saveDraft(msg);
     }
     this.maximizedEditor = null;

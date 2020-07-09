@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { EditorData, makeEmptyEditorMsg } from 'src/app/models/Compose';
+import { EditorData } from 'src/app/models/Compose';
 import { SendMailService } from 'src/app/services/mail-services/send-mail.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { SendMailService } from 'src/app/services/mail-services/send-mail.servic
 export class MaximizedComposeItemComponent implements OnInit {
   @Input() editorData: EditorData;
   @Output() unMaximize = new EventEmitter<void>();
-  @Output() closeMaximized = new EventEmitter<void>();
+  @Output() closeMaximized = new EventEmitter<boolean>();
 
   constructor(private sendMail: SendMailService) {}
 
@@ -19,9 +19,8 @@ export class MaximizedComposeItemComponent implements OnInit {
 
   clickSend(): void {
     this.sendMail.send(this.editorData.msg);
-    // Delete this editor or just make it empty?
-    // this.editorData.msg = makeEmptyEditorMsg();
-    this.closeMaximized.emit();
+    this.closeMaximized.emit(false);
+    // Emitted bool = whether to save as a draft or not.
   }
 
   unMaximizeClick(): void {
@@ -35,7 +34,7 @@ export class MaximizedComposeItemComponent implements OnInit {
   }
 
   closeClick(): void {
-    this.closeMaximized.emit();
+    this.closeMaximized.emit(true);
   }
 
   sendBtnDisabled(): boolean {
