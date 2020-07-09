@@ -60,6 +60,10 @@ export class DraftMailService {
   }
 
   discardDrafts(draftIds: string[]): Observable<any> {
+    if (!draftIds || draftIds.length < 1) {
+      return;
+    }
+    const s = draftIds.length > 1 ? 's' : '';
     const responses = [];
     for (const draftId of draftIds) {
       responses.push(this.discardDraft(draftId));
@@ -72,7 +76,7 @@ export class DraftMailService {
       },
       (err: any) => {
         this.getMail.folders.drafts.refreshFolder();
-        this.snackBarService.openSnackBar('Unexpected error, failed to discard messages as drafts. Please try again later');
+        this.snackBarService.openSnackBar(`Unexpected error, failed to discard message${s} as drafts. Please try again later`);
         console.log(err);
       }
     );
