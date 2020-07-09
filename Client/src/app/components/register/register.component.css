@@ -105,6 +105,15 @@ select.form-control:focus {
 small {
   display: block;
 }
+.placeholder::after
+{
+  position: absolute;
+  right: 0;
+  top: 35px;
+  content: attr(data-placeholder);
+  pointer-events: none;
+  opacity: 0.6;
+}
 
 .persistent-placeholder {
   width: 100%;
@@ -119,7 +128,9 @@ small {
 {
   position: relative;
 }
-
+.form-control.is-invalid {
+  background-image: none;
+}
 /*.placeholder::after*/
 /*{*/
 /*  position: absolute;*/
