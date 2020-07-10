@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginData, User } from 'src/app/models/User';
+import { LoginData, User, MIN_PASSWD_LEN, MAX_PASSWD_LEN, MAX_EMAIL_LEN } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { Router } from '@angular/router';
 import { SecretarService } from 'src/app/services/secretar/secretar.service';
@@ -19,14 +19,19 @@ export class LoginComponent implements OnInit {
   public warning: 'hidden'|'visible';
   private requestPending: boolean;
 
+  // Constants for string interpolation (html).
+  public readonly MIN_PASSWD_LEN = MIN_PASSWD_LEN;
+  public readonly MAX_PASSWD_LEN = MAX_PASSWD_LEN;
+  public readonly MAX_EMAIL_LEN = MAX_EMAIL_LEN;
+
   constructor(private auth: AuthService,
               private router: Router,
               private secretar: SecretarService,
               private formBuilder: FormBuilder,
               private snackBarService: SnackbarService) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, correctEmailOrUsername]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]]
+      email: ['', [Validators.required, correctEmailOrUsername, Validators.maxLength(MAX_EMAIL_LEN)]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWD_LEN), Validators.maxLength(MAX_PASSWD_LEN)]]
     });
   }
 

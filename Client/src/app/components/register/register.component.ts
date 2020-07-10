@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterData } from 'src/app/models/User';
+import { RegisterData, MAX_NAME_LEN, MIN_PASSWD_LEN, MAX_PASSWD_LEN, MAX_USERNAME_LEN } from 'src/app/models/User';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/mail-services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -19,6 +19,12 @@ export class RegisterComponent implements OnInit {
   private requestPending: boolean;
   public registerForm: FormGroup;
 
+  // Constants for string interpolation (html).
+  public readonly MAX_NAME_LEN = MAX_NAME_LEN;
+  public readonly MIN_PASSWD_LEN = MIN_PASSWD_LEN;
+  public readonly MAX_PASSWD_LEN = MAX_PASSWD_LEN;
+  public readonly MAX_USERNAME_LEN = MAX_USERNAME_LEN;
+
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -26,10 +32,10 @@ export class RegisterComponent implements OnInit {
     private snackBarService: SnackbarService
   ) {
     this.registerForm = this.formBuilder.group({
-      name: ['', [Validators.required, correctName]],
-      surname: ['', [Validators.required, correctName]],
-      email: ['', [Validators.required, correctUsername]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]],
+      name: ['', [Validators.required, correctName, Validators.maxLength(MAX_NAME_LEN)]],
+      surname: ['', [Validators.required, correctName, Validators.maxLength(MAX_NAME_LEN)]],
+      email: ['', [Validators.required, correctUsername, Validators.maxLength(MAX_USERNAME_LEN)]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWD_LEN), Validators.maxLength(MAX_PASSWD_LEN)]],
       retypePassword: ['', [Validators.required]]
     },
       {

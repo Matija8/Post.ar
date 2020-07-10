@@ -30,6 +30,7 @@
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <small *ngIf="f.email.errors.required">Email is required</small>
                 <small *ngIf="f.email.errors.incorrectEmail">Incorrect email</small>
+                <small *ngIf="f.email.errors.maxlength"> Email has at most {{ MAX_EMAIL_LEN }} characters </small>
               </div>
             </div>
           </div>
@@ -51,8 +52,8 @@
               >
               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                 <small *ngIf="f.password.errors.required">Password is required</small>
-                <small *ngIf="f.password.errors.minlength">Password has at least 8 characters</small>
-                <small *ngIf="f.password.errors.maxlength">Password has at most 32 characters</small>
+                <small *ngIf="f.password.errors.minlength">Password has at least {{ MIN_PASSWD_LEN }} characters</small>
+                <small *ngIf="f.password.errors.maxlength">Password has at most {{ MAX_PASSWD_LEN }} characters</small>
               </div>
             </div>
           </div>

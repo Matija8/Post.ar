@@ -29,6 +29,7 @@
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                   <small *ngIf="f.name.errors.required">First Name is required</small>
                   <small *ngIf="f.name.errors.incorrectFormat">Incorrect format</small>
+                  <small *ngIf="f.name.errors.maxlength"> First Name must contain at most {{ MAX_NAME_LEN }} characters </small>
                 </div>
             </div>
           </div>
@@ -51,7 +52,7 @@
               <div *ngIf="submitted && f.surname.errors" class="invalid-feedback">
                 <small *ngIf="f.surname.errors.required">Last Name is required</small>
                 <small *ngIf="f.surname.errors.incorrectFormat">Incorrect format</small>
-
+                <small *ngIf="f.surname.errors.maxlength"> Last Name must contain at most {{ MAX_NAME_LEN }} characters </small>
               </div>
             </div>
           </div>
@@ -73,7 +74,8 @@
               />
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
                 <small *ngIf="f.email.errors.required"> You must enter a username </small>
-                <small *ngIf="f.surname.errors.incorrectFormat"> Incorrect format </small>
+                <small *ngIf="f.email.errors.incorrectFormat"> Incorrect format </small>
+                <small *ngIf="f.email.errors.maxlength"> Username must contain at most {{ MAX_USERNAME_LEN }} characters </small>
               </div>
             </div>
           </div>
@@ -95,8 +97,8 @@
               />
               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                 <small *ngIf="f.password.errors.required">You must enter a password</small>
-                <small *ngIf="f.password.errors.minlength">Password must contain at least 8 characters</small>
-                <small *ngIf="f.password.errors.maxlength">Password must contain at most 32 characters</small>
+                <small *ngIf="f.password.errors.minlength">Password must contain at least {{ MIN_PASSWD_LEN }} characters</small>
+                <small *ngIf="f.password.errors.maxlength">Password must contain at most {{ MAX_PASSWD_LEN }} characters</small>
               </div>
             </div>
           </div>
