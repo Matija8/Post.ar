@@ -140,3 +140,7 @@ small {
 /*  pointer-events: none;*/
 /*  opacity: 0.6;*/
 /*}*/
+
+.create-an-account-label {
+  padding-bottom: 30px;
+}
