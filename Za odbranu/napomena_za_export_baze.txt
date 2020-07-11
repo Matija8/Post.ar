@@ -1,0 +1,4 @@
+Pre pokretanja skripte za unos podataka u bazu (eksporta baze), pokrenuti serversku aplikaciju kako bi
+napravila sve tabele. Zatim obrisati public shemu jer je skripta  za unos podataka u bazu pravi.
+Korisnici koji se mogu koristiti: jane.doe, john.doe i lorem.ipsum
+Lozinka za sve korisnike je password123
